@@ -218,7 +218,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
     <div className="card p-0 relative" role="region" aria-label="Attendance tracker table">
       {/* Action Buttons - Fixed outside scrollable area */}
       {showActions && (
-        <div className="sticky top-0 z-20 bg-dark-surface border-b border-dark-border px-2 md:px-4 py-2 flex flex-wrap items-center gap-2 justify-between">
+        <div className="sticky top-0 z-20 bg-dark-surface border-b border-dark-border px-2 md:px-4 py-1.5 sm:py-2 flex flex-wrap items-center gap-1.5 sm:gap-2 justify-between">
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <button
               onClick={toggleBulkSelectMode}
@@ -292,15 +292,15 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
 
       {/* Scrollable Table Container */}
       <div
-        className={`overflow-auto ${showActions ? 'max-h-[calc(100vh-16.5rem)]' : 'max-h-[calc(100vh-13rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-14`}
+        className={`overflow-auto ${showActions ? 'max-h-[calc(100vh-14rem)]' : 'max-h-[calc(100vh-11rem)]'} sm:${showActions ? 'max-h-[calc(100vh-15rem)]' : 'max-h-[calc(100vh-12rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-12 sm:pb-14`}
         role="table"
         aria-label="Course attendance grid"
       >
         <table className="attendance-table w-full min-w-full">
           <thead className="sticky top-0 z-[5] bg-dark-surface">
             <tr className="border-b border-dark-border" role="row">
-              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-1" scope="col">
-                <span className="text-xs md:text-sm font-semibold text-content-primary">Date</span>
+              <th className="text-left min-w-[60px] md:min-w-[80px] px-2 sm:px-3 md:px-4 py-1 sm:py-1.5" scope="col">
+                <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-content-primary">Date</span>
               </th>
               {courses.map((course, index) => (
                 <CourseHeader
@@ -364,7 +364,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                           `}
                           onClick={() => handleDateClick(day.date)}
                         >
-                          <div className="flex items-center gap-2 px-2">
+                          <div className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2">
                             {bulkSelectMode ? (
                               <div
                                 className={`
@@ -384,14 +384,14 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                                 )}
                               </div>
                             ) : (
-                              <span className="text-lg">{getDayIndicator(day.date)}</span>
+                              <span className="text-base sm:text-lg">{getDayIndicator(day.date)}</span>
                             )}
                             <div>
-                              <div className="text-sm text-content-primary">
+                              <div className="text-xs sm:text-sm text-content-primary">
                                 {day.dayShort} {formatDateShort(day.date).split(' ')[1]}
                               </div>
                               {isToday && (
-                                <div className="text-xs text-accent">Today</div>
+                                <div className="text-[10px] sm:text-xs text-accent">Today</div>
                               )}
                             </div>
                           </div>

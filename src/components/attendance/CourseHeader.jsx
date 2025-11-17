@@ -86,19 +86,19 @@ export default function CourseHeader({
       )}
 
       <div
-        className={`py-1 px-0.5 transition-transform duration-200 relative z-10 bg-dark-surface ${isSwipedOpen ? '-translate-x-[calc(100%+6px)]' : 'translate-x-0'}`}
+        className={`py-0.5 sm:py-1 px-0.5 transition-transform duration-200 relative z-10 bg-dark-surface ${isSwipedOpen ? '-translate-x-[calc(100%+6px)]' : 'translate-x-0'}`}
         {...swipeHandlers}
       >
         {/* Badge Style with Status - Modern & Polished */}
 
         {/* Course name with colored dot - TOP */}
-        <div className="flex items-center justify-center gap-1 min-w-0 mb-0.5">
+        <div className="flex items-center justify-center gap-0.5 sm:gap-1 min-w-0 mb-0.5">
           <div
-            className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full flex-shrink-0"
+            className="w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 rounded-full flex-shrink-0"
             style={{ backgroundColor: course.colorHex || courseColor?.hex || '#6366f1' }}
           />
           <div
-            className="text-[11px] md:text-sm font-bold truncate text-content-primary max-w-[48px] md:max-w-[58px]"
+            className="text-[10px] sm:text-[11px] md:text-sm font-bold truncate text-content-primary max-w-[44px] sm:max-w-[48px] md:max-w-[58px]"
             title={course.name || 'Course'}
           >
             {course.shortName || course.name || 'N/A'}
@@ -110,7 +110,7 @@ export default function CourseHeader({
 
         {/* Stats with status background - MIDDLE */}
         <div className={`
-          px-1.5 py-0.5 rounded-md mb-0.5 text-[10px] md:text-xs font-bold tabular-nums
+          px-1 sm:px-1.5 py-0.5 rounded-md mb-0.5 text-[9px] sm:text-[10px] md:text-xs font-bold tabular-nums
           ${percentage < 60
             ? 'bg-attendance-safe/15 text-attendance-safe border border-attendance-safe/20'
             : percentage < 85
@@ -122,7 +122,7 @@ export default function CourseHeader({
         </div>
 
         {/* Action buttons - BOTTOM */}
-        <div className="flex items-center justify-center gap-1">
+        <div className="flex items-center justify-center gap-0.5 sm:gap-1">
           {reorderMode ? (
             <>
               {/* Reorder arrows */}

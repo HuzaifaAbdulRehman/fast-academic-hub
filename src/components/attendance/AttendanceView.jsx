@@ -135,8 +135,8 @@ export default function AttendanceView() {
     <div className="relative">
       {/* App Tagline - Always visible */}
       {courses.length > 0 && (
-        <div className="mb-1 flex items-center justify-center py-1">
-          <p className="text-xs md:text-sm text-content-tertiary font-medium leading-relaxed">
+        <div className="mb-0.5 sm:mb-1 flex items-center justify-center py-0.5 sm:py-1">
+          <p className="text-[10px] sm:text-xs md:text-sm text-content-tertiary font-medium leading-tight">
             Plan Smart. Skip Smart. Stay Above 80%
           </p>
         </div>
@@ -148,20 +148,20 @@ export default function AttendanceView() {
           vibrate([10])
           setShowAllControls(!showAllControls)
         }}
-        className="mb-2 flex items-center justify-center gap-2 py-2 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all group"
+        className="mb-1 sm:mb-2 flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all group"
         title={showAllControls ? "Hide controls" : "Show controls"}
       >
         {showAllControls ? (
           <>
-            <ChevronUp className="w-4 h-4 text-accent group-hover:text-accent-hover transition-colors" />
-            <span className="text-xs text-content-secondary group-hover:text-content-primary transition-colors">
+            <ChevronUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent group-hover:text-accent-hover transition-colors" />
+            <span className="text-[10px] sm:text-xs text-content-secondary group-hover:text-content-primary transition-colors">
               Collapse
             </span>
           </>
         ) : (
           <>
-            <ChevronDown className="w-4 h-4 text-accent group-hover:text-accent-hover transition-colors" />
-            <span className="text-xs text-content-secondary group-hover:text-content-primary transition-colors">
+            <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent group-hover:text-accent-hover transition-colors" />
+            <span className="text-[10px] sm:text-xs text-content-secondary group-hover:text-content-primary transition-colors">
               Expand
             </span>
           </>
@@ -170,7 +170,7 @@ export default function AttendanceView() {
 
       {/* Unified Controls Row - Semester + Weeks */}
       {showAllControls && (
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      <div className="mb-2 sm:mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
         {/* Compact Semester Selector */}
         <SemesterSelector compact />
 
@@ -178,7 +178,7 @@ export default function AttendanceView() {
         <select
           value={weeksToShow}
           onChange={(e) => setWeeksToShow(Number(e.target.value))}
-          className="bg-dark-surface-raised border border-dark-border rounded-lg px-2 py-1.5 text-content-primary text-xs focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all flex-shrink-0"
+          className="bg-dark-surface-raised border border-dark-border rounded-lg px-1.5 sm:px-2 py-1 sm:py-1.5 text-content-primary text-[10px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all flex-shrink-0"
         >
           <option value={4}>4w</option>
           <option value={8}>8w</option>
