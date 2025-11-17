@@ -14,6 +14,8 @@ export default function NotificationSettings({ onClose }) {
   const [testSent, setTestSent] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [canInstall, setCanInstall] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false)
+  const [deleteConfirmation, setDeleteConfirmation] = useState('')
 
   // Mobile detection
   const isMobile = window.innerWidth < 768
@@ -135,27 +137,19 @@ export default function NotificationSettings({ onClose }) {
     }
   }
 
-  // Handle data reset
+  // Handle data reset - Show modal
   const handleResetData = () => {
-    const confirmation = prompt(
-      '⚠️ WARNING: This will PERMANENTLY delete all your data!\n\n' +
-      'This includes:\n' +
-      '• All courses\n' +
-      '• All attendance records\n' +
-      '• All semesters\n' +
-      '• All settings\n\n' +
-      'Type "DELETE" (all caps) to confirm:'
-    )
+    setShowResetModal(true)
+  }
 
-    if (confirmation === 'DELETE') {
+  // Confirm and execute reset
+  const confirmResetData = () => {
+    if (deleteConfirmation === 'DELETE') {
       // Clear all localStorage
       localStorage.clear()
 
       // Reload the page to start fresh
-      alert('✅ All data has been erased. The app will reload with a fresh start.')
       window.location.reload()
-    } else if (confirmation !== null) {
-      alert('Reset cancelled. Your data is safe.')
     }
   }
 
@@ -336,6 +330,108 @@ export default function NotificationSettings({ onClose }) {
           </button>
         </div>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      {showResetModal && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => {
+            setShowResetModal(false)
+            setDeleteConfirmation('')
+          }}
+        >
+          <div
+            className={`bg-dark-surface-raised rounded-2xl shadow-2xl border border-attendance-danger/50 max-w-md w-full ${
+              isMobile ? 'animate-slide-up' : 'animate-scale-in'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 md:p-5 border-b border-attendance-danger/30 bg-attendance-danger/5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-attendance-danger/20 rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-attendance-danger animate-pulse" />
+                </div>
+                <h2 className="text-lg md:text-xl font-bold text-attendance-danger">
+                  Confirm Data Deletion
+                </h2>
+              </div>
+              <button
+                onClick={() => {
+                  setShowResetModal(false)
+                  setDeleteConfirmation('')
+                }}
+                className="p-1.5 rounded-lg hover:bg-dark-surface transition-colors text-content-secondary hover:text-content-primary"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 md:p-5 space-y-4">
+              <div className="bg-attendance-danger/10 border border-attendance-danger/30 rounded-lg p-4">
+                <p className="text-sm font-semibold text-attendance-danger mb-2">
+                  ⚠️ WARNING: This action cannot be undone!
+                </p>
+                <p className="text-xs text-content-secondary leading-relaxed">
+                  This will permanently delete:
+                </p>
+                <ul className="text-xs text-content-secondary mt-2 space-y-1 list-disc list-inside">
+                  <li>All courses and their details</li>
+                  <li>All attendance records</li>
+                  <li>All semesters</li>
+                  <li>All settings and preferences</li>
+                </ul>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-content-primary">
+                  Type <span className="font-mono font-bold text-attendance-danger">DELETE</span> to confirm:
+                </label>
+                <input
+                  type="text"
+                  value={deleteConfirmation}
+                  onChange={(e) => setDeleteConfirmation(e.target.value)}
+                  placeholder="Type DELETE here"
+                  className="w-full bg-dark-surface border-2 border-dark-border rounded-lg px-4 py-3 text-content-primary font-mono focus:outline-none focus:ring-2 focus:ring-attendance-danger/30 focus:border-attendance-danger/50 transition-all placeholder:text-content-tertiary placeholder:font-sans"
+                  autoFocus
+                />
+                {deleteConfirmation && deleteConfirmation !== 'DELETE' && (
+                  <p className="text-xs text-attendance-warning">
+                    Please type exactly "DELETE" in all caps
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex gap-2 p-4 md:p-5 border-t border-dark-border">
+              <button
+                onClick={() => {
+                  vibrate([10])
+                  setShowResetModal(false)
+                  setDeleteConfirmation('')
+                }}
+                className="flex-1 bg-dark-surface border border-dark-border rounded-lg px-4 py-2.5 text-content-primary font-medium hover:bg-dark-surface-raised transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  vibrate([10, 100, 10])
+                  confirmResetData()
+                }}
+                disabled={deleteConfirmation !== 'DELETE'}
+                className="flex-1 bg-gradient-to-br from-attendance-danger to-red-700 text-white font-bold rounded-lg px-4 py-2.5 transition-all hover:shadow-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                Erase All Data
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
