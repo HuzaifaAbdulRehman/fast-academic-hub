@@ -55,14 +55,14 @@ export default function QuickMarkToday({ inline = false }) {
             vibrate(15)
             setIsOpen(true)
           }}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30 flex-shrink-0"
+          className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30 flex-shrink-0 relative"
           aria-label="Quick mark today"
           title="Quick mark today's attendance"
         >
           <Calendar className="w-3.5 h-3.5" />
           <span className="whitespace-nowrap">Mark Today</span>
           {unmarkedCount > 0 && (
-            <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-accent/20 text-accent text-[10px] font-semibold tabular-nums">
+            <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-accent text-dark-bg text-[9px] font-bold tabular-nums">
               {unmarkedCount}
             </span>
           )}

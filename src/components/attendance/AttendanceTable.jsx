@@ -206,12 +206,12 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
             {/* Row 1: Action Buttons */}
             <tr>
               <th colSpan={courses.length + 1} className="py-1.5 border-b border-dark-border bg-dark-surface">
-                <div className="flex items-center justify-between gap-2 px-3 md:px-4">
-                  <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1.5 px-2 md:px-4">
+                  <div className="flex items-center gap-1 flex-1 min-w-0">
                     <button
                       onClick={toggleBulkSelectMode}
                       className={`
-                        flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex-shrink-0
+                        flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 flex-shrink-0
                         ${bulkSelectMode
                           ? 'bg-accent text-dark-bg shadow-accent'
                           : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
@@ -221,12 +221,12 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       {bulkSelectMode ? (
                         <>
                           <CheckSquare className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap">Bulk Select Active</span>
+                          <span className="whitespace-nowrap">Bulk Select</span>
                         </>
                       ) : (
                         <>
                           <Square className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap">Select Multiple</span>
+                          <span className="whitespace-nowrap">Select</span>
                         </>
                       )}
                     </button>
@@ -243,7 +243,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                           setReorderMode(!reorderMode)
                         }}
                         className={`
-                          flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex-shrink-0
+                          flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 flex-shrink-0
                           ${reorderMode
                             ? 'bg-accent text-dark-bg shadow-accent'
                             : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
