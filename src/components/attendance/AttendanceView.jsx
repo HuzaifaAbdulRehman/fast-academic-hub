@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useApp } from '../../context/AppContext'
 import AttendanceTable from './AttendanceTable'
 import CourseForm from '../courses/CourseForm'
@@ -10,6 +10,7 @@ import { getTodayISO } from '../../utils/dateHelpers'
 import { DEFAULT_WEEKS_TO_SHOW } from '../../utils/constants'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import Confetti, { celebratePerfectAttendance, celebrateMilestone } from '../shared/Confetti'
+import { vibrate } from '../../utils/uiHelpers'
 
 export default function AttendanceView() {
   const { courses, undoHistory, undo, addCourse } = useApp()
@@ -19,13 +20,6 @@ export default function AttendanceView() {
   const [editingCourse, setEditingCourse] = useState(null)
   const [toast, setToast] = useState(null) // { message, type, action }
   const [showAllControls, setShowAllControls] = useState(true) // Track if ALL controls are visible - default to true
-
-  // Haptic feedback
-  const vibrate = (pattern) => {
-    if ('vibrate' in navigator) {
-      navigator.vibrate(pattern)
-    }
-  }
 
   // Show undo toast when action is performed
   useEffect(() => {
@@ -89,22 +83,32 @@ export default function AttendanceView() {
     })
   }
 
-  // Calculate semester length in weeks
-  const getSemesterWeeks = () => {
-    if (courses.length === 0) return 16
+  // Calculate semester length in weeks - memoized
+  const semesterWeeks = useMemo(() => {
+    if (!courses || courses.length === 0) return 16
 
     const today = new Date()
-    const endDates = courses.map(c => new Date(c.endDate))
+    const endDates = courses
+      .filter(c => c && c.endDate) // Filter out invalid courses
+      .map(c => new Date(c.endDate))
+
+    if (endDates.length === 0) return 16
+
     const latestEndDate = new Date(Math.max(...endDates))
 
     const diffTime = latestEndDate - today
     const diffWeeks = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7))
 
     return Math.max(diffWeeks, 1) // At least 1 week
-  }
+  }, [courses]) // Recalculate only when courses change
 
   // Default to End of Semester
-  const [weeksToShow, setWeeksToShow] = useState(getSemesterWeeks())
+  const [weeksToShow, setWeeksToShow] = useState(semesterWeeks)
+
+  // Update weeksToShow when semesterWeeks changes
+  useEffect(() => {
+    setWeeksToShow(semesterWeeks)
+  }, [semesterWeeks])
 
   if (courses.length === 0) {
     return (
@@ -263,7 +267,7 @@ export default function AttendanceView() {
           <option value={8}>8w</option>
           <option value={12}>12w</option>
           <option value={16}>16w</option>
-          <option value={getSemesterWeeks()}>All ({getSemesterWeeks()}w)</option>
+          <option value={semesterWeeks}>All ({semesterWeeks}w)</option>
         </select>
 
         {/* Add Course Buttons */}

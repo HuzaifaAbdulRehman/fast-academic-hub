@@ -4,6 +4,7 @@ import Header from './components/shared/Header'
 import AttendanceView from './components/attendance/AttendanceView'
 import InstallPrompt from './components/shared/InstallPrompt'
 import NotificationPrompt from './components/shared/NotificationPrompt'
+import ErrorBoundary from './components/shared/ErrorBoundary'
 
 function AppContent() {
   return (
@@ -23,11 +24,13 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AppProvider>
-        <AppContent />
-      </AppProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AppProvider>
+          <AppContent />
+        </AppProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }
 

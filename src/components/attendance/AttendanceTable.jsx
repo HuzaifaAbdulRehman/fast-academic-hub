@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useApp } from '../../context/AppContext'
 import { generateWeeks, formatDateShort, courseHasClassOnDate } from '../../utils/dateHelpers'
 import { getDayStatus, getSessionStatus } from '../../utils/attendanceCalculator'
@@ -6,13 +6,7 @@ import { SESSION_STATUS } from '../../utils/constants'
 import { Check, X, Minus, Circle, Trash2, CheckSquare, Square, ArrowLeftRight } from 'lucide-react'
 import QuickMarkToday from './QuickMarkToday'
 import CourseHeader from './CourseHeader'
-
-// Haptic feedback utility
-const vibrate = (pattern = [10]) => {
-  if ('vibrate' in navigator) {
-    navigator.vibrate(pattern)
-  }
-}
+import { vibrate } from '../../utils/uiHelpers'
 
 export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, onDeleteCourse, onBulkMarkComplete, showActions = false }) {
   const { courses, attendance, toggleDay, toggleSession, deleteCourse, markDaysAbsent, reorderCourse } = useApp()
@@ -44,25 +38,33 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
     }
   }, [swipedCourse])
 
-  // Get latest course end date
-  const getLatestEndDate = () => {
-    if (courses.length === 0) return null
-    const endDates = courses.map(c => new Date(c.endDate))
+  // Get latest course end date - memoized
+  const latestEndDate = useMemo(() => {
+    if (!courses || courses.length === 0) return null
+    const endDates = courses
+      .filter(c => c && c.endDate) // Filter out invalid courses
+      .map(c => new Date(c.endDate))
+
+    if (endDates.length === 0) return null
+
     return new Date(Math.max(...endDates))
-  }
+  }, [courses])
 
-  const latestEndDate = getLatestEndDate()
+  // Generate weeks with dates - memoized
+  const weeks = useMemo(() => {
+    // Generate weeks
+    let generatedWeeks = generateWeeks(startDate, weeksToShow)
 
-  // Generate weeks with dates
-  let weeks = generateWeeks(startDate, weeksToShow)
+    // Filter out dates beyond course end dates
+    if (latestEndDate) {
+      generatedWeeks = generatedWeeks.map(week => ({
+        ...week,
+        days: week.days.filter(day => new Date(day.date) <= latestEndDate)
+      })).filter(week => week.days.length > 0) // Remove empty weeks
+    }
 
-  // Filter out dates beyond course end dates
-  if (latestEndDate) {
-    weeks = weeks.map(week => ({
-      ...week,
-      days: week.days.filter(day => new Date(day.date) <= latestEndDate)
-    })).filter(week => week.days.length > 0) // Remove empty weeks
-  }
+    return generatedWeeks
+  }, [startDate, weeksToShow, latestEndDate])
 
   // Handle day toggle (mark all classes on that date)
   const handleDayClick = (date) => {
@@ -213,13 +215,15 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   }
 
   return (
-    <div className="card p-0 relative">
+    <div className="card p-0 relative" role="region" aria-label="Attendance tracker table">
       {/* Action Buttons - Fixed outside scrollable area */}
       {showActions && (
         <div className="sticky top-0 z-20 bg-dark-surface border-b border-dark-border px-2 md:px-4 py-2 flex flex-wrap items-center gap-2 justify-between">
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <button
               onClick={toggleBulkSelectMode}
+              aria-label={bulkSelectMode ? "Exit bulk select mode" : "Enter bulk select mode"}
+              aria-pressed={bulkSelectMode}
               className={`
                 flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 flex-shrink-0
                 ${bulkSelectMode
@@ -251,6 +255,9 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                   }
                   setReorderMode(!reorderMode)
                 }}
+                aria-label={reorderMode ? "Exit reorder mode" : "Enter reorder mode"}
+                aria-pressed={reorderMode}
+                title="Reorder courses"
                 className={`
                   flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 flex-shrink-0
                   ${reorderMode
@@ -258,7 +265,6 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                     : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
                   }
                 `}
-                title="Reorder courses"
               >
                 <ArrowLeftRight className="w-3.5 h-3.5" />
                 <span className="whitespace-nowrap">Reorder</span>
@@ -285,11 +291,15 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
       )}
 
       {/* Scrollable Table Container */}
-      <div className={`overflow-auto ${showActions ? 'max-h-[calc(100vh-16.5rem)]' : 'max-h-[calc(100vh-13rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-14`}>
+      <div
+        className={`overflow-auto ${showActions ? 'max-h-[calc(100vh-16.5rem)]' : 'max-h-[calc(100vh-13rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-14`}
+        role="table"
+        aria-label="Course attendance grid"
+      >
         <table className="attendance-table w-full min-w-full">
           <thead className="sticky top-0 z-[5] bg-dark-surface">
-            <tr className="border-b border-dark-border">
-              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-1">
+            <tr className="border-b border-dark-border" role="row">
+              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-1" scope="col">
                 <span className="text-xs md:text-sm font-semibold text-content-primary">Date</span>
               </th>
               {courses.map((course, index) => (

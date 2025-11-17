@@ -29,19 +29,38 @@ export function AppProvider({ children }) {
 
   // Initialize default semester if none exists
   useEffect(() => {
+    // Avoid race condition by checking both conditions in one effect
+    let shouldUpdate = false
+    let newSemesters = semesters
+    let newActiveSemesterId = activeSemesterId
+
     if (semesters.length === 0) {
+      // No semesters exist, create default
       const defaultSemester = {
         id: generateId('semester'),
         name: 'Current Semester',
         createdAt: Date.now(),
         isActive: true
       }
-      setSemesters([defaultSemester])
-      setActiveSemesterId(defaultSemester.id)
+      newSemesters = [defaultSemester]
+      newActiveSemesterId = defaultSemester.id
+      shouldUpdate = true
     } else if (!activeSemesterId) {
-      setActiveSemesterId(semesters[0].id)
+      // Semesters exist but no active one, select first
+      newActiveSemesterId = semesters[0].id
+      shouldUpdate = true
     }
-  }, [semesters.length, activeSemesterId])
+
+    if (shouldUpdate) {
+      // Batch updates to avoid race condition
+      if (newSemesters !== semesters) {
+        setSemesters(newSemesters)
+      }
+      if (newActiveSemesterId !== activeSemesterId) {
+        setActiveSemesterId(newActiveSemesterId)
+      }
+    }
+  }, []) // Only run once on mount
 
   // Filter data by active semester
   const courses = allCourses.filter(c => c.semesterId === activeSemesterId)
@@ -138,6 +157,52 @@ export function AppProvider({ children }) {
   // ============================================
 
   const addCourse = useCallback((courseData) => {
+    // Validate required fields
+    if (!courseData || typeof courseData !== 'object') {
+      console.error('Invalid course data: must be an object')
+      return null
+    }
+
+    if (!courseData.name || typeof courseData.name !== 'string' || courseData.name.trim() === '') {
+      console.error('Invalid course data: name is required')
+      return null
+    }
+
+    // Validate weekdays array
+    if (!courseData.weekdays || !Array.isArray(courseData.weekdays) || courseData.weekdays.length === 0) {
+      console.error('Invalid course data: weekdays must be a non-empty array')
+      return null
+    }
+
+    // Validate weekday values (0-6)
+    const validWeekdays = courseData.weekdays.every(day =>
+      typeof day === 'number' && day >= 0 && day <= 6
+    )
+    if (!validWeekdays) {
+      console.error('Invalid course data: weekdays must be numbers between 0-6')
+      return null
+    }
+
+    // Validate dates if provided
+    if (courseData.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(courseData.startDate)) {
+      console.error('Invalid course data: startDate must be in YYYY-MM-DD format')
+      return null
+    }
+
+    if (courseData.endDate && !/^\d{4}-\d{2}-\d{2}$/.test(courseData.endDate)) {
+      console.error('Invalid course data: endDate must be in YYYY-MM-DD format')
+      return null
+    }
+
+    // Validate credit hours
+    if (courseData.creditHours !== undefined) {
+      const creditHours = Number(courseData.creditHours)
+      if (isNaN(creditHours) || creditHours < 0 || creditHours > 10) {
+        console.error('Invalid course data: creditHours must be a number between 0-10')
+        return null
+      }
+    }
+
     // Find the first available color not currently in use
     const usedColors = courses.map(c => c.color)
     let assignedColor = COURSE_COLORS[0] // Default to first color

@@ -1,16 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
-
-// Haptic feedback
-const vibrate = (pattern = [10]) => {
-  if ('vibrate' in navigator) {
-    navigator.vibrate(pattern)
-  }
-}
-
-// Mobile detection
-const isMobile = () => window.innerWidth < 768
+import { vibrate, isMobile } from '../../utils/uiHelpers'
 
 // Convert 24-hour time to 12-hour format
 const formatTimeTo12Hour = (time24) => {
@@ -209,22 +200,35 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
   }
 
   const handleSearch = () => {
-    if (!section.trim() || !timetable) {
+    if (!section || !section.trim() || !timetable) {
       setFilteredCourses([])
       return
     }
 
     const sectionUpper = section.toUpperCase().trim()
     console.log('🔍 Searching for section:', sectionUpper)
-    console.log('📚 Available sections:', Object.keys(timetable))
+    console.log('📚 Available sections:', timetable ? Object.keys(timetable) : [])
     console.log('📖 Timetable data:', timetable)
 
-    const courses = timetable[sectionUpper] || []
+    const courses = (timetable && timetable[sectionUpper]) || []
     console.log('✅ Found courses:', courses)
+
+    // Validate courses is an array
+    if (!Array.isArray(courses)) {
+      console.error('Invalid courses data, expected array')
+      setFilteredCourses([])
+      return
+    }
 
     // Group courses by course code and collect all sessions
     const uniqueCourses = {}
     courses.forEach(course => {
+      // Validate course has required fields
+      if (!course || !course.courseCode || !course.courseName) {
+        console.warn('Skipping invalid course entry:', course)
+        return
+      }
+
       if (!uniqueCourses[course.courseCode]) {
         uniqueCourses[course.courseCode] = {
           ...course,
@@ -263,23 +267,52 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
   }
 
   const handleAddCourses = () => {
-    if (selectedCourses.length === 0) return
+    if (!selectedCourses || selectedCourses.length === 0) return
 
-    // Convert to app format
-    const appCourses = selectedCourses.map(course => convertToAppFormat(course))
+    // Convert to app format and filter out any null results
+    const appCourses = selectedCourses
+      .map(course => convertToAppFormat(course))
+      .filter(course => course !== null)
+
+    // Only proceed if we have valid courses
+    if (appCourses.length === 0) {
+      console.error('No valid courses to add')
+      return
+    }
+
     onCoursesSelected(appCourses)
     vibrate([10, 50, 10])
   }
 
   const convertToAppFormat = (course) => {
+    // Validate course object
+    if (!course || !course.courseName || !course.courseCode) {
+      console.error('Invalid course data in convertToAppFormat:', course)
+      return null
+    }
+
     // Get all sessions for this course
-    const sessions = course.sessions || [course]
+    const sessions = Array.isArray(course.sessions) && course.sessions.length > 0
+      ? course.sessions
+      : [course]
 
-    // Extract unique weekdays
-    const weekdays = [...new Set(sessions.map(s => dayToWeekday(s.day)))].sort()
+    // Extract unique weekdays, with null checks
+    const weekdays = [...new Set(
+      sessions
+        .filter(s => s && s.day) // Filter out invalid sessions
+        .map(s => dayToWeekday(s.day))
+        .filter(day => day !== undefined && day !== null) // Filter out invalid weekdays
+    )].sort()
 
-    // Get time slot (use first session)
-    const timeSlot = sessions[0].timeSlot
+    // Validate we have at least one valid weekday
+    if (weekdays.length === 0) {
+      console.error('No valid weekdays found for course:', course)
+      return null
+    }
+
+    // Get time slot (use first valid session)
+    const firstValidSession = sessions.find(s => s && s.timeSlot)
+    const timeSlot = firstValidSession ? firstValidSession.timeSlot : '08:00-09:00'
 
     return {
       name: course.courseName,
@@ -287,12 +320,14 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
       creditHours: course.creditHours || sessions.length,
       weekdays,
 
-      // Additional metadata
-      section: course.section,
-      roomNumber: course.room,
-      instructor: course.instructor,
+      // Additional metadata with null checks
+      section: course.section || '',
+      roomNumber: course.room || 'TBA',
+      instructor: course.instructor || 'TBA',
       timeSlot,
-      building: course.room?.includes('-') ? course.room.split('-')[0] : 'Academic Block'
+      building: course.room && course.room.includes('-')
+        ? course.room.split('-')[0]
+        : 'Academic Block'
     }
   }
 
