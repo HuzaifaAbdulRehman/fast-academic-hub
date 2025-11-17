@@ -55,7 +55,7 @@ export default function QuickMarkToday({ inline = false }) {
             vibrate(15)
             setIsOpen(true)
           }}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30 flex-shrink-0"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30 flex-shrink-0"
           aria-label="Quick mark today"
           title="Quick mark today's attendance"
         >
