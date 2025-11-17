@@ -278,7 +278,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
         <table className="attendance-table w-full min-w-full">
           <thead className="sticky top-0 z-10 bg-dark-surface border-b border-dark-border">
             <tr>
-              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-2">
+              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-1.5">
                 <span className="text-xs md:text-sm font-semibold text-content-primary">Date</span>
               </th>
               {courses.map((course, index) => {
@@ -334,11 +334,11 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       </div>
                     )}
 
-                    <div className={`py-2 px-0.5 transition-transform duration-200 ${isSwipedOpen ? '-translate-x-full' : 'translate-x-0'}`}>
+                    <div className={`py-1.5 px-0.5 transition-transform duration-200 ${isSwipedOpen ? '-translate-x-full' : 'translate-x-0'}`}>
                       {/* Badge Style with Status - Modern & Polished */}
 
                       {/* Course name with colored dot - TOP */}
-                      <div className="flex items-center justify-center gap-1 min-w-0 mb-1.5">
+                      <div className="flex items-center justify-center gap-1 min-w-0 mb-1">
                         <div
                           className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full flex-shrink-0"
                           style={{ backgroundColor: courseColor.hex }}
@@ -352,11 +352,11 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       </div>
 
                       {/* Horizontal divider */}
-                      <div className="w-full h-px bg-dark-border/40 mb-1.5"></div>
+                      <div className="w-full h-px bg-dark-border/40 mb-1"></div>
 
                       {/* Stats with status background - MIDDLE */}
                       <div className={`
-                        px-1.5 py-1 md:py-1.5 rounded-md mb-1.5 text-[10px] md:text-xs font-bold tabular-nums
+                        px-1.5 py-0.5 md:py-1 rounded-md mb-1 text-[10px] md:text-xs font-bold tabular-nums
                         ${percentage < 60
                           ? 'bg-attendance-safe/15 text-attendance-safe border border-attendance-safe/20'
                           : percentage < 85
