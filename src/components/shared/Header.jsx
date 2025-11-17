@@ -24,10 +24,11 @@ export default function Header() {
                 <Calendar className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-accent" />
               </div>
               <div className="min-w-0 flex-1 overflow-hidden">
-                <div className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-content-primary whitespace-nowrap overflow-hidden text-ellipsis">
-                  FAST Absence & Timetable Tracker
+                <div className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-content-primary leading-tight">
+                  <span className="block sm:inline">FAST Absence &</span>
+                  <span className="block sm:inline"> Timetable Tracker</span>
                 </div>
-                <p className="text-xs sm:text-xs md:text-sm text-content-tertiary hidden sm:block truncate">
+                <p className="text-xs sm:text-xs md:text-sm text-content-tertiary hidden sm:block truncate mt-0.5">
                   Track absences • Stay above 80%
                 </p>
               </div>
