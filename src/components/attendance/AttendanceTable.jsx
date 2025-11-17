@@ -201,8 +201,8 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   return (
     <div className="card p-0">
       {/* Bulk Select Mode Toggle */}
-      <div className="px-3 md:px-4 py-2.5 border-b border-dark-border bg-dark-surface">
-        <div className="flex items-center justify-between gap-3">
+      <div className="py-2.5 border-b border-dark-border bg-dark-surface">
+        <div className="flex items-center justify-between gap-3 px-3 md:px-4">
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <button
               onClick={toggleBulkSelectMode}
