@@ -131,6 +131,7 @@ export function AppProvider({ children }) {
     const newCourse = {
       id: crypto.randomUUID(),
       name: courseData.name,
+      shortName: courseData.shortName,
       creditHours: courseData.creditHours || 2,
       weekdays: courseData.weekdays,
       startDate: courseData.startDate,

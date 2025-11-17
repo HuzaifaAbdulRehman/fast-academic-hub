@@ -221,14 +221,12 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       {bulkSelectMode ? (
                         <>
                           <CheckSquare className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap hidden sm:inline">Bulk Select Active</span>
-                          <span className="whitespace-nowrap sm:hidden">Selecting</span>
+                          <span className="whitespace-nowrap hidden md:inline">Bulk Select Active</span>
                         </>
                       ) : (
                         <>
                           <Square className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap hidden sm:inline">Select Multiple</span>
-                          <span className="whitespace-nowrap sm:hidden">Select</span>
+                          <span className="whitespace-nowrap hidden md:inline">Select Multiple</span>
                         </>
                       )}
                     </button>
@@ -254,7 +252,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                         title="Reorder courses"
                       >
                         <ArrowLeftRight className="w-3.5 h-3.5" />
-                        <span className="whitespace-nowrap hidden sm:inline">Reorder</span>
+                        <span className="whitespace-nowrap hidden md:inline">Reorder</span>
                       </button>
                     )}
                   </div>
