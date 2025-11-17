@@ -221,12 +221,14 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       {bulkSelectMode ? (
                         <>
                           <CheckSquare className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap">Bulk Select Active</span>
+                          <span className="whitespace-nowrap hidden sm:inline">Bulk Select Active</span>
+                          <span className="whitespace-nowrap sm:hidden">Selecting</span>
                         </>
                       ) : (
                         <>
                           <Square className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap">Select Multiple</span>
+                          <span className="whitespace-nowrap hidden sm:inline">Select Multiple</span>
+                          <span className="whitespace-nowrap sm:hidden">Select</span>
                         </>
                       )}
                     </button>
