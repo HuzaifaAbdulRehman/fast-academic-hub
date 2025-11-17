@@ -14,7 +14,7 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState('courses')
 
   return (
-    <div className="min-h-screen bg-dark-bg dark:bg-dark-bg light:bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-dark-bg dark:bg-dark-bg light:bg-gray-50 flex flex-col w-full overflow-x-hidden" style={{ minWidth: '100%', width: '100%' }}>
       <Header />
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
