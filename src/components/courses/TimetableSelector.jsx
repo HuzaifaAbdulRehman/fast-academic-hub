@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react'
+import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
 import { vibrate, isMobile } from '../../utils/uiHelpers'
 import { useApp } from '../../context/AppContext'
 import { getTodayISO } from '../../utils/dateHelpers'
+import CourseForm from './CourseForm'
 
 // Convert 24-hour time to 12-hour format
 const formatTimeTo12Hour = (time24) => {
@@ -28,7 +29,7 @@ const DEPARTMENTS = [
   { code: 'BSFBA', name: 'Finance & Business Analytics' }
 ]
 
-export default function TimetableSelector({ onCoursesSelected, onClose }) {
+export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false }) {
   const { addCourse } = useApp()
   const [step, setStep] = useState('select') // 'select' or 'configure'
   const [department, setDepartment] = useState('BCS') // Default to BCS
@@ -38,6 +39,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
   const [selectedCourses, setSelectedCourses] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showManualForm, setShowManualForm] = useState(false)
   const [isMobileDevice] = useState(isMobile())
 
   // Date configuration state (Step 2)
@@ -392,33 +394,46 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
       return
     }
 
-    // Add courses using context
+    // Add courses using context - batch add all courses
     console.log('🚀 Adding courses to context:', appCourses)
     console.log(`📊 Total courses to add: ${appCourses.length}`)
     
-    // Add all courses sequentially
-    appCourses.forEach((course, index) => {
-      console.log(`  📝 Course ${index + 1}/${appCourses.length}:`, {
-        name: course.name,
-        courseCode: course.courseCode,
-        hasSchedule: !!course.schedule,
-        scheduleLength: Array.isArray(course.schedule) ? course.schedule.length : 'N/A',
-        schedule: course.schedule
-      })
-      try {
-        const added = addCourse(course)
-        console.log(`  ✅ Successfully added course ${index + 1}:`, added?.name || added?.id || 'Unknown')
-      } catch (error) {
-        console.error(`  ❌ Error adding course ${index + 1} (${course.name}):`, error)
+    // Add all courses - use a small delay between each to ensure state updates properly
+    let addedCount = 0
+    const addCoursesSequentially = async () => {
+      for (let index = 0; index < appCourses.length; index++) {
+        const course = appCourses[index]
+        console.log(`  📝 Course ${index + 1}/${appCourses.length}:`, {
+          name: course.name,
+          courseCode: course.courseCode,
+          hasSchedule: !!course.schedule,
+          scheduleLength: Array.isArray(course.schedule) ? course.schedule.length : 'N/A',
+          schedule: course.schedule
+        })
+        try {
+          const added = addCourse(course)
+          if (added) {
+            addedCount++
+            console.log(`  ✅ Successfully added course ${index + 1}:`, added.name || added.id || 'Unknown')
+          } else {
+            console.error(`  ❌ Failed to add course ${index + 1} (${course.name}): Validation failed`)
+          }
+        } catch (error) {
+          console.error(`  ❌ Error adding course ${index + 1} (${course.name}):`, error)
+        }
+        
+        // Small delay to ensure state updates are processed
+        if (index < appCourses.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 50))
+        }
       }
-    })
-
-    // Wait a bit to ensure all courses are added before closing
-    setTimeout(() => {
-      console.log('✅ All courses added, closing modal')
+      
+      console.log(`✅ Added ${addedCount}/${appCourses.length} courses, closing modal`)
       onCoursesSelected(appCourses)
       vibrate([10, 50, 10])
-    }, 100)
+    }
+    
+    addCoursesSequentially()
   }
 
   const convertToAppFormat = (course) => {
@@ -550,14 +565,24 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
                 </p>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-dark-surface-raised rounded-lg transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5 text-content-secondary" />
-            </button>
-          </div>
+            <div className="flex items-center gap-2">
+              {showManualOption && (
+                <button
+                  onClick={() => setShowManualForm(true)}
+                  className="px-3 py-2 text-sm bg-dark-bg border border-dark-border rounded-lg text-content-primary hover:bg-dark-surface-raised transition-all flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Manually
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-dark-surface-raised rounded-lg transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5 text-content-secondary" />
+              </button>
+            </div>
 
           {/* Department and Section Search */}
           <div className="space-y-2.5 mb-2">
@@ -1006,6 +1031,17 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
           </div>
         </div>
       </div>
+
+      {/* Manual Course Form Modal */}
+      {showManualForm && (
+        <CourseForm
+          onClose={() => setShowManualForm(false)}
+          onSave={() => {
+            setShowManualForm(false)
+            onCoursesSelected([]) // Close timetable selector after manual add
+          }}
+        />
+      )}
     </div>
   )
 }
