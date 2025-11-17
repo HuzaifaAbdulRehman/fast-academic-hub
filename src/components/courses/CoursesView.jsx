@@ -138,17 +138,17 @@ export default function CoursesView() {
             <div className="flex flex-col gap-3 w-full max-w-md">
               <button
                 onClick={() => setShowTimetableSelector(true)}
-                className="px-8 py-4 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent text-white rounded-xl font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-200 flex items-center justify-center gap-3 text-base"
+                className="px-4 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent text-white rounded-xl font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-200 flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
               >
-                <BookOpen className="w-5 h-5" />
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
                 Select from Timetable
               </button>
 
               <button
                 onClick={() => setShowCourseForm(true)}
-                className="px-8 py-4 bg-dark-card border-2 border-dark-border hover:border-accent/50 text-content-primary rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 text-base hover:scale-[1.02] active:scale-95"
+                className="px-4 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 bg-dark-card border-2 border-dark-border hover:border-accent/50 text-content-primary rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base hover:scale-[1.02] active:scale-95"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                 Add Course Manually
               </button>
             </div>
@@ -208,7 +208,7 @@ export default function CoursesView() {
               {courses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-dark-card rounded-xl p-4 border border-dark-border hover:border-accent/30 transition-all group"
+                  className="bg-dark-card rounded-xl p-3 sm:p-4 border border-dark-border hover:border-accent/30 transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">

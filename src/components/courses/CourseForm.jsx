@@ -233,7 +233,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
         )}
 
         {/* Header - Sticky */}
-        <div className={`sticky top-0 bg-dark-surface/95 backdrop-blur-xl border-b border-dark-border/50 p-5 z-10 ${isMobileDevice ? 'rounded-t-3xl' : 'rounded-t-2xl'}`}>
+        <div className={`sticky top-0 bg-dark-surface/95 backdrop-blur-xl border-b border-dark-border/50 p-3 sm:p-4 md:p-5 z-10 ${isMobileDevice ? 'rounded-t-3xl' : 'rounded-t-2xl'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl border border-accent/20">
@@ -258,7 +258,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
         </div>
 
         {/* Form - Scrollable */}
-        <form id="course-form" onSubmit={handleSubmit} className={`p-5 space-y-5 overflow-y-auto ${isMobileDevice ? 'max-h-[calc(100vh-16rem)]' : 'max-h-[calc(100vh-16rem)]'} pb-4`}>
+        <form id="course-form" onSubmit={handleSubmit} className={`p-3 sm:p-4 md:p-5 space-y-4 sm:space-y-5 overflow-y-auto ${isMobileDevice ? 'max-h-[calc(100vh-16rem)]' : 'max-h-[calc(100vh-16rem)]'} pb-4`}>
           {/* Course Name */}
           <div>
             <label className="block text-sm font-medium text-content-primary mb-2">

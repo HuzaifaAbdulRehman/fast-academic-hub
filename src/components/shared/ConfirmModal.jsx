@@ -92,7 +92,7 @@ export default function ConfirmModal({
         )}
 
         {/* Header */}
-        <div className="p-5 md:p-6 border-b border-dark-border/50">
+        <div className="p-3 sm:p-4 md:p-6 border-b border-dark-border/50">
           <div className="flex items-start gap-4">
             <div
               className={`p-3 rounded-xl flex-shrink-0 ${
@@ -126,7 +126,7 @@ export default function ConfirmModal({
         </div>
 
         {/* Content */}
-        <div className="p-5 md:p-6 flex-1">
+        <div className="p-3 sm:p-4 md:p-6 flex-1">
           {requiresTyping && (
             <div className="mb-4">
               <label className="block text-sm font-medium text-content-primary mb-2">
@@ -150,17 +150,17 @@ export default function ConfirmModal({
         </div>
 
         {/* Footer */}
-        <div className="p-5 md:p-6 border-t border-dark-border/50 flex gap-3">
+        <div className="p-3 sm:p-4 md:p-6 border-t border-dark-border/50 flex gap-2 sm:gap-3">
           <button
             onClick={handleCancel}
-            className="flex-1 px-5 py-3 bg-dark-bg border border-dark-border rounded-xl text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95"
+            className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95"
           >
             {cancelText}
           </button>
           <button
             onClick={handleConfirm}
             disabled={!canConfirm}
-            className={`flex-1 px-5 py-3 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 ${
+            className={`flex-1 px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 ${
               isDanger
                 ? 'bg-gradient-to-br from-attendance-danger to-red-600 text-white hover:shadow-lg hover:shadow-attendance-danger/30'
                 : 'bg-gradient-to-br from-yellow-500 to-yellow-600 text-dark-bg hover:shadow-lg hover:shadow-yellow-500/30'
