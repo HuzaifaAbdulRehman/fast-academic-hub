@@ -1,0 +1,317 @@
+@import "tailwindcss";
+
+/* Tailwind v4 Custom Theme */
+/* stylelint-disable-next-line unknownAtRules */
+@theme {
+  /* Attendance colors (Professional palette) */
+  --color-attendance-safe: #10B981; /* Emerald green */
+  --color-attendance-warning: #F59E0B; /* Amber */
+  --color-attendance-danger: #DC2626; /* Deep red (not pinkish) */
+
+  /* Primary Accent (Professional Blue) */
+  --color-accent: #3B82F6; /* Blue 500 */
+  --color-accent-hover: #2563EB; /* Blue 600 */
+  --color-accent-light: #DBEAFE; /* Blue 100 */
+
+  /* Secondary Accent (Indigo for special features) */
+  --color-secondary: #6366F1; /* Indigo 500 */
+  --color-secondary-hover: #4F46E5; /* Indigo 600 */
+  --color-secondary-light: #E0E7FF; /* Indigo 100 */
+
+  /* Dark theme backgrounds */
+  --color-dark-bg: #09090b;
+  --color-dark-bg-secondary: #18181b;
+  --color-dark-bg-tertiary: #27272a;
+
+  /* Dark theme surfaces */
+  --color-dark-surface: #18181b;
+  --color-dark-surface-raised: #27272a;
+  --color-dark-surface-overlay: #3f3f46;
+  --color-dark-surface-hover: #52525b;
+
+  /* Dark theme borders */
+  --color-dark-border: #27272a;
+  --color-dark-border-muted: #3f3f46;
+  --color-dark-border-strong: #52525b;
+
+  /* Content/Text colors */
+  --color-content-primary: #fafafa;
+  --color-content-secondary: #a1a1aa;
+  --color-content-tertiary: #71717a;
+  --color-content-disabled: #52525b;
+
+  /* Light mode backgrounds */
+  --color-light-bg: #ffffff;
+  --color-light-bg-secondary: #f9fafb;
+  --color-light-bg-tertiary: #f3f4f6;
+
+  /* Light mode surfaces */
+  --color-light-surface: #ffffff;
+  --color-light-surface-raised: #f9fafb;
+  --color-light-surface-overlay: #e5e7eb;
+  --color-light-surface-hover: #d1d5db;
+
+  /* Light mode borders */
+  --color-light-border: #e5e7eb;
+  --color-light-border-muted: #d1d5db;
+  --color-light-border-strong: #9ca3af;
+
+  /* Light mode content/text colors */
+  --color-light-content-primary: #18181b;
+  --color-light-content-secondary: #52525b;
+  --color-light-content-tertiary: #71717a;
+  --color-light-content-disabled: #a1a1aa;
+
+  /* Box shadows */
+  --shadow-glass: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-glass-lg: 0 0 0 1px rgb(255 255 255 / 0.05), 0 10px 25px -5px rgb(0 0 0 / 0.2);
+  --shadow-accent: 0 0 0 1px rgb(59 130 246 / 0.15), 0 0 20px -10px rgb(59 130 246 / 0.25); /* Blue shadow */
+  --shadow-secondary: 0 0 0 1px rgb(99 102 241 / 0.15), 0 0 20px -10px rgb(99 102 241 / 0.25); /* Indigo shadow */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Animation utility classes */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease-out 0.2s both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Mode Overrides */
+.light {
+  /* Override background colors */
+  --color-dark-bg: var(--color-light-bg);
+  --color-dark-bg-secondary: var(--color-light-bg-secondary);
+  --color-dark-bg-tertiary: var(--color-light-bg-tertiary);
+
+  /* Override surfaces */
+  --color-dark-surface: var(--color-light-surface);
+  --color-dark-surface-raised: var(--color-light-surface-raised);
+  --color-dark-surface-overlay: var(--color-light-surface-overlay);
+  --color-dark-surface-hover: var(--color-light-surface-hover);
+
+  /* Override borders */
+  --color-dark-border: var(--color-light-border);
+  --color-dark-border-muted: var(--color-light-border-muted);
+  --color-dark-border-strong: var(--color-light-border-strong);
+
+  /* Override text/content colors */
+  --color-content-primary: var(--color-light-content-primary);
+  --color-content-secondary: var(--color-light-content-secondary);
+  --color-content-tertiary: var(--color-light-content-tertiary);
+  --color-content-disabled: var(--color-light-content-disabled);
+
+  /* Override shadows for light mode */
+  --shadow-glass: 0 0 0 1px rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-glass-lg: 0 0 0 1px rgb(0 0 0 / 0.05), 0 10px 25px -5px rgb(0 0 0 / 0.2);
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: var(--color-content-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--color-content-primary);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-dark-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-dark-surface-overlay);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-content-tertiary);
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Table sticky header - vertical scroll */
+.attendance-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--color-dark-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.attendance-table thead th {
+  border-bottom: 1px solid var(--color-dark-border);
+  background: var(--color-dark-surface); /* Ensure opaque background */
+}
+
+/* Sticky date column - horizontal scroll */
+.attendance-table thead th:first-child,
+.attendance-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  background: var(--color-dark-surface);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-table thead th:first-child {
+  z-index: 40; /* Higher than tbody sticky cells and course headers */
+  background: var(--color-dark-surface);
+}
+
+.attendance-table tbody td:first-child {
+  background: var(--color-dark-surface); /* Ensure opaque background */
+}
+
+.attendance-table tbody tr:hover td:first-child {
+  background: var(--color-dark-surface-raised);
+}
+
+/* Sticky week labels - horizontal scroll */
+.attendance-table tbody tr.week-header-row td.sticky-week-label {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  background: var(--color-dark-bg);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth cell transitions */
+.attendance-table tbody td {
+  transition: all 0.15s ease;
+  position: relative;
+  min-height: 44px; /* Touch target minimum */
+  padding: 8px 4px; /* Better touch area */
+}
+
+.attendance-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .attendance-table tbody td {
+    min-height: 48px; /* Larger touch targets on mobile */
+    padding: 10px 6px;
+  }
+
+  .attendance-table thead th {
+    padding: 12px 8px;
+  }
+}
+
+/* Cell click animation */
+@keyframes cell-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.attendance-table tbody td:active {
+  animation: cell-pulse 0.2s ease;
+}
+
+/* Smooth scroll behavior for table container */
+.attendance-table {
+  scroll-behavior: smooth;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Professional scrollbar for table container */
+.card > div {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-dark-surface-overlay) transparent;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.card > div::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.card > div::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card > div::-webkit-scrollbar-thumb {
+  background-color: var(--color-dark-surface-overlay);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.card > div::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-content-tertiary);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
