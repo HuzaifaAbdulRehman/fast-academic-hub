@@ -124,30 +124,33 @@ export default function AttendanceView() {
         {/* Content */}
         <div className="text-center max-w-sm space-y-4 animate-slide-in">
           <h2 className="text-2xl font-bold text-content-primary">
-            Welcome to Absence Tracker
+            FAST Absence Planner
           </h2>
+          <p className="text-lg font-semibold text-accent">
+            + Timetable Scheduler
+          </p>
           <p className="text-content-secondary leading-relaxed">
-            Take the days you need. Plan strategically, stay above 80%, and maximize your flexibility.
+            Import your timetable, track absences smartly, and stay above 80%. Plan your leaves strategically.
           </p>
 
           {/* Features list */}
           <div className="pt-4 pb-6 space-y-3 text-left">
             <div className="flex items-start gap-3">
+              <div className="p-1.5 bg-accent/10 rounded-lg mt-0.5 flex-shrink-0">
+                <BookOpen className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-content-primary">Complete Timetable</p>
+                <p className="text-xs text-content-tertiary">Import all courses with rooms, times, and instructors</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
               <div className="p-1.5 bg-attendance-safe/10 rounded-lg mt-0.5 flex-shrink-0">
                 <CheckCircle2 className="w-4 h-4 text-attendance-safe" />
               </div>
               <div>
-                <p className="text-sm font-medium text-content-primary">Real-time tracking</p>
-                <p className="text-xs text-content-tertiary">See exactly how many absences you have left</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="p-1.5 bg-accent/10 rounded-lg mt-0.5 flex-shrink-0">
-                <Calendar className="w-4 h-4 text-accent" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-content-primary">Date-based marking</p>
-                <p className="text-xs text-content-tertiary">Mark entire days absent with one tap</p>
+                <p className="text-sm font-medium text-content-primary">Smart Absence Planning</p>
+                <p className="text-xs text-content-tertiary">See exactly how many absences you have left per course</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -155,8 +158,8 @@ export default function AttendanceView() {
                 <AlertTriangle className="w-4 h-4 text-attendance-warning" />
               </div>
               <div>
-                <p className="text-sm font-medium text-content-primary">Smart alerts</p>
-                <p className="text-xs text-content-tertiary">Get warned when you're approaching the limit</p>
+                <p className="text-sm font-medium text-content-primary">80% Alerts</p>
+                <p className="text-xs text-content-tertiary">Get warned when approaching attendance limits</p>
               </div>
             </div>
           </div>
@@ -171,7 +174,7 @@ export default function AttendanceView() {
               className="w-full bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold px-6 py-4 rounded-xl transition-all duration-200 shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
             >
               <BookOpen className="w-5 h-5" />
-              Import from Timetable
+              Select from Timetable
             </button>
 
             <button
@@ -182,7 +185,7 @@ export default function AttendanceView() {
               className="w-full bg-dark-surface-raised border border-dark-border hover:border-accent/50 text-content-primary font-medium px-6 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
             >
               <Plus className="w-5 h-5" />
-              Add Manually
+              Add Course Manually
             </button>
           </div>
         </div>
@@ -230,7 +233,7 @@ export default function AttendanceView() {
       {courses.length > 0 && (
         <div className="mb-3 text-center">
           <p className="text-xs md:text-sm text-content-tertiary/80 font-medium">
-            Stay home when you need. Plan smart. Still hit 80%.
+            Your Complete Timetable + Smart Absence Planner. Stay Above 80%.
           </p>
         </div>
       )}

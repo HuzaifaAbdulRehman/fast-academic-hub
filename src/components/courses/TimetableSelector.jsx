@@ -12,7 +12,22 @@ const formatTimeTo12Hour = (time24) => {
   return `${hour12}:${minutes} ${ampm}`
 }
 
+// Available departments in FAST NUCES
+const DEPARTMENTS = [
+  { code: 'BCS', name: 'Computer Science' },
+  { code: 'BSE', name: 'Software Engineering' },
+  { code: 'BAI', name: 'Artificial Intelligence' },
+  { code: 'BSEE', name: 'Electrical Engineering' },
+  { code: 'BCY', name: 'Cyber Security' },
+  { code: 'BDS', name: 'Data Science' },
+  { code: 'BSCE', name: 'Computer Engineering' },
+  { code: 'BSFT', name: 'FinTech' },
+  { code: 'BSBA', name: 'Business Analytics' },
+  { code: 'BSFBA', name: 'Finance & Business Analytics' }
+]
+
 export default function TimetableSelector({ onCoursesSelected, onClose }) {
+  const [department, setDepartment] = useState('BCS') // Default to BCS
   const [section, setSection] = useState('')
   const [timetable, setTimetable] = useState(null)
   const [filteredCourses, setFilteredCourses] = useState([])
@@ -200,17 +215,18 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
   }
 
   const handleSearch = () => {
-    if (!section || !section.trim() || !timetable) {
+    if (!section || !section.trim() || !timetable || !department) {
       setFilteredCourses([])
       return
     }
 
-    const sectionUpper = section.toUpperCase().trim()
-    console.log('🔍 Searching for section:', sectionUpper)
+    // Combine department and section (e.g., BCS + 5F = BCS-5F)
+    const fullSection = `${department}-${section.toUpperCase().trim()}`
+    console.log('🔍 Searching for section:', fullSection)
     console.log('📚 Available sections:', timetable ? Object.keys(timetable) : [])
     console.log('📖 Timetable data:', timetable)
 
-    const courses = (timetable && timetable[sectionUpper]) || []
+    const courses = (timetable && timetable[fullSection]) || []
     console.log('✅ Found courses:', courses)
 
     // Validate courses is an array
@@ -362,10 +378,10 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
               </div>
               <div>
                 <h2 className="text-lg md:text-xl font-bold text-content-primary">
-                  Select from Timetable
+                  Select Courses from Timetable
                 </h2>
                 <p className="text-xs text-content-tertiary">
-                  Search by section (e.g., BCS-5F, BSE-5A)
+                  Choose your department and enter section
                 </p>
               </div>
             </div>
@@ -378,27 +394,56 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
             </button>
           </div>
 
-          {/* Search Bar */}
-          <div className="flex gap-2 mb-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-content-tertiary" />
-              <input
-                type="text"
-                value={section}
-                onChange={(e) => setSection(e.target.value.toUpperCase())}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Enter section (e.g., BCS-5F)"
-                className="w-full pl-10 pr-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-content-primary placeholder-content-tertiary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all uppercase"
-                autoFocus
-              />
+          {/* Department and Section Search */}
+          <div className="space-y-2.5 mb-2">
+            {/* Department Dropdown */}
+            <div>
+              <label className="text-xs font-medium text-content-secondary mb-1.5 block">
+                Department
+              </label>
+              <select
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                className="w-full px-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+              >
+                {DEPARTMENTS.map(dept => (
+                  <option key={dept.code} value={dept.code}>
+                    {dept.code} - {dept.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <button
-              onClick={handleSearch}
-              disabled={!section.trim() || loading}
-              className="px-5 py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              Search
-            </button>
+
+            {/* Section Input + Search Button */}
+            <div>
+              <label className="text-xs font-medium text-content-secondary mb-1.5 block">
+                Section (e.g., 5F, 3A, 7B)
+              </label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-content-tertiary" />
+                  <input
+                    type="text"
+                    value={section}
+                    onChange={(e) => setSection(e.target.value.toUpperCase())}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder="e.g., 5F"
+                    className="w-full pl-10 pr-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-content-primary placeholder-content-tertiary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all uppercase"
+                    autoFocus
+                  />
+                </div>
+                <button
+                  onClick={handleSearch}
+                  disabled={!section.trim() || loading}
+                  className="px-5 py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
+                >
+                  Search
+                </button>
+              </div>
+              <p className="text-xs text-content-tertiary mt-1.5">
+                Searching: <span className="text-accent font-medium">{department}-{section || '___'}</span>
+              </p>
+            </div>
           </div>
 
           {/* Clear Cache Button */}
