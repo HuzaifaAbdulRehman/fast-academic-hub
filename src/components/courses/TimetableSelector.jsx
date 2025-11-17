@@ -30,7 +30,7 @@ const DEPARTMENTS = [
 ]
 
 export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false }) {
-  const { addCourse } = useApp()
+  const { addCourse, addMultipleCourses } = useApp()
   const [step, setStep] = useState('select') // 'select' or 'configure'
   const [department, setDepartment] = useState('BCS') // Default to BCS
   const [section, setSection] = useState('')
@@ -394,46 +394,31 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       return
     }
 
-    // Add courses using context - batch add all courses
+    // Add courses using context - use batch add function for multiple courses
     console.log('🚀 Adding courses to context:', appCourses)
     console.log(`📊 Total courses to add: ${appCourses.length}`)
     
-    // Add all courses - use a small delay between each to ensure state updates properly
-    let addedCount = 0
-    const addCoursesSequentially = async () => {
-      for (let index = 0; index < appCourses.length; index++) {
-        const course = appCourses[index]
-        console.log(`  📝 Course ${index + 1}/${appCourses.length}:`, {
-          name: course.name,
-          courseCode: course.courseCode,
-          hasSchedule: !!course.schedule,
-          scheduleLength: Array.isArray(course.schedule) ? course.schedule.length : 'N/A',
-          schedule: course.schedule
-        })
-        try {
-          const added = addCourse(course)
-          if (added) {
-            addedCount++
-            console.log(`  ✅ Successfully added course ${index + 1}:`, added.name || added.id || 'Unknown')
-          } else {
-            console.error(`  ❌ Failed to add course ${index + 1} (${course.name}): Validation failed`)
-          }
-        } catch (error) {
-          console.error(`  ❌ Error adding course ${index + 1} (${course.name}):`, error)
-        }
-        
-        // Small delay to ensure state updates are processed
-        if (index < appCourses.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 50))
-        }
-      }
+    try {
+      // Use batch add function if multiple courses, single add if one course
+      const addedCourses = appCourses.length > 1 
+        ? addMultipleCourses(appCourses)
+        : [addCourse(appCourses[0])].filter(Boolean)
       
-      console.log(`✅ Added ${addedCount}/${appCourses.length} courses, closing modal`)
-      onCoursesSelected(appCourses)
-      vibrate([10, 50, 10])
+      if (addedCourses.length > 0) {
+        console.log(`✅ Successfully added ${addedCourses.length}/${appCourses.length} courses:`, 
+          addedCourses.map(c => ({ id: c.id, name: c.name, courseCode: c.courseCode }))
+        )
+        
+        onCoursesSelected(appCourses)
+        vibrate([10, 50, 10])
+      } else {
+        console.error('❌ Failed to add any courses')
+        setError('Failed to add courses. Please check the console for details.')
+      }
+    } catch (error) {
+      console.error('❌ Error adding courses:', error)
+      setError('An error occurred while adding courses. Please try again.')
     }
-    
-    addCoursesSequentially()
   }
 
   const convertToAppFormat = (course) => {
@@ -583,6 +568,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 <X className="w-5 h-5 text-content-secondary" />
               </button>
             </div>
+          </div>
 
           {/* Department and Section Search */}
           <div className="space-y-2.5 mb-2">

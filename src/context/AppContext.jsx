@@ -203,23 +203,6 @@ export function AppProvider({ children }) {
       }
     }
 
-    // Find the first available color not currently in use
-    const usedColors = courses.map(c => c.color)
-    let assignedColor = COURSE_COLORS[0] // Default to first color
-
-    // Try to find an unused color
-    for (let i = 0; i < COURSE_COLORS.length; i++) {
-      if (!usedColors.includes(COURSE_COLORS[i].name)) {
-        assignedColor = COURSE_COLORS[i]
-        break
-      }
-    }
-
-    // If all colors are used, cycle through based on course count
-    if (usedColors.includes(assignedColor.name) && courses.length >= COURSE_COLORS.length) {
-      assignedColor = COURSE_COLORS[courses.length % COURSE_COLORS.length]
-    }
-
     const normalizedStartDate = courseData.startDate || courseData.endDate || getTodayISO()
     const normalizedEndDate = courseData.endDate || normalizedStartDate
 
@@ -239,35 +222,161 @@ export function AppProvider({ children }) {
 
     const semesterIdForCourse = ensureActiveSemester()
 
-    const newCourse = {
-      id: generateId('course'),
-      name: courseData.name,
-      shortName: courseData.shortName,
-      creditHours: courseData.creditHours || 2,
-      weekdays: courseData.weekdays,
-      startDate: normalizedStartDate,
-      endDate: normalizedEndDate,
-      initialAbsences: courseData.initialAbsences || 0,
-      allowedAbsences: computedAllowedAbsences,
-      color: courseData.color || assignedColor.name,
-      colorHex: assignedColor.hex,
-      semesterId: semesterIdForCourse,
-      createdAt: Date.now(),
-      
-      // Preserve timetable metadata for TimetableView
-      schedule: courseData.schedule || [],
-      instructor: courseData.instructor,
-      room: courseData.room || courseData.roomNumber,
-      roomNumber: courseData.roomNumber || courseData.room,
-      building: courseData.building,
-      courseCode: courseData.courseCode,
-      section: courseData.section,
-      timeSlot: courseData.timeSlot,
+    // Use functional updater to get current courses state for color assignment
+    // This ensures we always see the latest state, even when called multiple times
+    let newCourse = null
+    setCourses(prev => {
+      // Find the first available color not currently in use
+      const usedColors = prev.map(c => c.color)
+      let assignedColor = COURSE_COLORS[0] // Default to first color
+
+      // Try to find an unused color
+      for (let i = 0; i < COURSE_COLORS.length; i++) {
+        if (!usedColors.includes(COURSE_COLORS[i].name)) {
+          assignedColor = COURSE_COLORS[i]
+          break
+        }
+      }
+
+      // If all colors are used, cycle through based on course count
+      if (usedColors.includes(assignedColor.name) && prev.length >= COURSE_COLORS.length) {
+        assignedColor = COURSE_COLORS[prev.length % COURSE_COLORS.length]
+      }
+
+      newCourse = {
+        id: generateId('course'),
+        name: courseData.name,
+        shortName: courseData.shortName,
+        creditHours: courseData.creditHours || 2,
+        weekdays: courseData.weekdays,
+        startDate: normalizedStartDate,
+        endDate: normalizedEndDate,
+        initialAbsences: courseData.initialAbsences || 0,
+        allowedAbsences: computedAllowedAbsences,
+        color: courseData.color || assignedColor.name,
+        colorHex: assignedColor.hex,
+        semesterId: semesterIdForCourse,
+        createdAt: Date.now(),
+        
+        // Preserve timetable metadata for TimetableView
+        schedule: courseData.schedule || [],
+        instructor: courseData.instructor,
+        room: courseData.room || courseData.roomNumber,
+        roomNumber: courseData.roomNumber || courseData.room,
+        building: courseData.building,
+        courseCode: courseData.courseCode,
+        section: courseData.section,
+        timeSlot: courseData.timeSlot,
+      }
+
+      return [...prev, newCourse]
+    })
+    
+    return newCourse
+  }, [setCourses, ensureActiveSemester])
+
+  const addMultipleCourses = useCallback((coursesData) => {
+    if (!Array.isArray(coursesData) || coursesData.length === 0) {
+      console.error('Invalid courses data: must be a non-empty array')
+      return []
     }
 
-    setCourses(prev => [...prev, newCourse])
-    return newCourse
-  }, [setCourses, courses, ensureActiveSemester])
+    // Validate all courses first
+    const validCourses = []
+    coursesData.forEach((courseData, index) => {
+      if (!courseData || typeof courseData !== 'object') {
+        console.error(`Invalid course data at index ${index}: must be an object`)
+        return
+      }
+      if (!courseData.name || typeof courseData.name !== 'string' || courseData.name.trim() === '') {
+        console.error(`Invalid course data at index ${index}: name is required`)
+        return
+      }
+      if (!courseData.weekdays || !Array.isArray(courseData.weekdays) || courseData.weekdays.length === 0) {
+        console.error(`Invalid course data at index ${index}: weekdays must be a non-empty array`)
+        return
+      }
+      validCourses.push(courseData)
+    })
+
+    if (validCourses.length === 0) {
+      console.error('No valid courses to add')
+      return []
+    }
+
+    const semesterIdForCourse = ensureActiveSemester()
+    const addedCourses = []
+
+    // Add all courses in a single state update
+    setCourses(prev => {
+      const usedColors = prev.map(c => c.color)
+      const newCourses = validCourses.map((courseData, index) => {
+        // Find available color
+        let assignedColor = COURSE_COLORS[0]
+        const currentIndex = prev.length + index
+        for (let i = 0; i < COURSE_COLORS.length; i++) {
+          if (!usedColors.includes(COURSE_COLORS[i].name)) {
+            assignedColor = COURSE_COLORS[i]
+            usedColors.push(COURSE_COLORS[i].name) // Mark as used for next course
+            break
+          }
+        }
+        if (usedColors.includes(assignedColor.name) && currentIndex >= COURSE_COLORS.length) {
+          assignedColor = COURSE_COLORS[currentIndex % COURSE_COLORS.length]
+        }
+
+        const normalizedStartDate = courseData.startDate || courseData.endDate || getTodayISO()
+        const normalizedEndDate = courseData.endDate || normalizedStartDate
+
+        let totalClassesEstimate = courseData.creditHours * 16
+        try {
+          totalClassesEstimate = calculateTotalClasses({
+            ...courseData,
+            startDate: normalizedStartDate,
+            endDate: normalizedEndDate
+          })
+        } catch (error) {
+          console.error('Failed to calculate total classes, falling back to heuristic value.', error)
+        }
+
+        const computedAllowedAbsences = courseData.allowedAbsences ??
+          Math.floor(totalClassesEstimate * DEFAULT_ALLOWED_ABSENCE_PERCENTAGE)
+
+        const newCourse = {
+          id: generateId('course'),
+          name: courseData.name,
+          shortName: courseData.shortName,
+          creditHours: courseData.creditHours || 2,
+          weekdays: courseData.weekdays,
+          startDate: normalizedStartDate,
+          endDate: normalizedEndDate,
+          initialAbsences: courseData.initialAbsences || 0,
+          allowedAbsences: computedAllowedAbsences,
+          color: courseData.color || assignedColor.name,
+          colorHex: assignedColor.hex,
+          semesterId: semesterIdForCourse,
+          createdAt: Date.now(),
+          
+          // Preserve timetable metadata for TimetableView
+          schedule: courseData.schedule || [],
+          instructor: courseData.instructor,
+          room: courseData.room || courseData.roomNumber,
+          roomNumber: courseData.roomNumber || courseData.room,
+          building: courseData.building,
+          courseCode: courseData.courseCode,
+          section: courseData.section,
+          timeSlot: courseData.timeSlot,
+        }
+
+        addedCourses.push(newCourse)
+        return newCourse
+      })
+
+      return [...prev, ...newCourses]
+    })
+
+    return addedCourses
+  }, [setCourses, ensureActiveSemester])
 
   const updateCourse = useCallback((courseId, updates) => {
     setCourses(prev =>
@@ -590,6 +699,7 @@ export function AppProvider({ children }) {
 
     // Course management
     addCourse,
+    addMultipleCourses,
     updateCourse,
     deleteCourse,
     deleteAllCourses,

@@ -261,6 +261,7 @@ export default function CoursesView() {
             setShowTimetableSelector(false)
           }}
           onClose={() => setShowTimetableSelector(false)}
+          showManualOption={true}
         />
       )}
 
