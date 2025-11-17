@@ -96,14 +96,8 @@ export default function NotificationSettings({ onClose }) {
 
   const handleInstall = async () => {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent)
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
 
-    // Check if already installed
-    if (isStandalone || window.navigator.standalone) {
-      alert('✅ App is already installed! You can find it on your home screen.')
-      return
-    }
-
+    // iOS installation instructions
     if (isIOS) {
       alert('📱 To install on iOS/Safari:\n\n1. Tap the Share button (⬆️) at the bottom\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm\n\nThe app icon will appear on your home screen!')
       return
