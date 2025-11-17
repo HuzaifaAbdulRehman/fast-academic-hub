@@ -587,7 +587,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               {showManualOption && (
                 <button
                   onClick={() => setShowManualForm(true)}
-                  className="px-2 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs md:text-sm bg-dark-bg border border-dark-border rounded-lg text-content-primary hover:bg-dark-surface-raised transition-all flex items-center gap-1 sm:gap-2"
+                  className="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-xs md:text-sm bg-dark-bg border border-dark-border rounded-lg text-content-primary hover:bg-dark-surface-raised transition-all flex items-center gap-1 sm:gap-2"
                 >
                   <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">Add Manually</span>
@@ -608,7 +608,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           <div className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-1 sm:mb-2">
             {/* Department Dropdown */}
             <div>
-              <label className="text-[10px] sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
+              <label className="text-xs sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
                 Department
               </label>
               <select
@@ -626,7 +626,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
             {/* Section Input + Search Button */}
             <div>
-              <label className="text-[10px] sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
+              <label className="text-xs sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
                 Section (e.g., 5F, 3A, 7B)
               </label>
               <div className="flex gap-1.5 sm:gap-2">
@@ -655,7 +655,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                   Search
                 </button>
               </div>
-              <p className="text-[10px] sm:text-xs text-content-tertiary mt-1 sm:mt-1.5">
+              <p className="text-xs sm:text-xs text-content-tertiary mt-1 sm:mt-1.5">
                 Searching: <span className="text-accent font-medium">{department}-{section || '___'}</span>
               </p>
             </div>
@@ -664,9 +664,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           {/* Clear Cache Button */}
           <button
             onClick={clearCache}
-            className="text-[10px] sm:text-xs text-content-tertiary hover:text-accent transition-colors flex items-center gap-1"
+            className="text-xs sm:text-xs text-content-tertiary hover:text-accent transition-colors flex items-center gap-1"
           >
-            <RefreshCw className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+            <RefreshCw className="w-3 h-3 sm:w-3 sm:h-3" />
             <span className="hidden sm:inline">Clear cache & reload timetable</span>
             <span className="sm:hidden">Clear cache</span>
           </button>
@@ -930,7 +930,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                   <div
                     key={course.courseCode}
                     onClick={() => toggleCourse(course)}
-                    className={`relative bg-dark-surface-raised border-2 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 cursor-pointer transition-all ${
+                    className={`relative bg-dark-surface-raised border-2 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 cursor-pointer transition-all ${
                       isSelected
                         ? 'border-accent/50 bg-accent/5'
                         : 'border-dark-border hover:border-accent/30'
@@ -1022,7 +1022,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           <div className="flex gap-1.5 sm:gap-2 md:gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-2 py-2 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-[10px] sm:text-xs md:text-sm text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95"
+              className="flex-1 px-3 py-2.5 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-xs md:text-sm text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95"
             >
               Cancel
             </button>
@@ -1030,27 +1030,27 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 <button
                   onClick={handleNextToConfiguration}
                   disabled={selectedCourses.length === 0}
-                  className="flex-1 px-2 py-2 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-[10px] sm:text-xs md:text-sm rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-1 sm:gap-2"
+                  className="flex-1 px-3 py-2.5 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-xs sm:text-xs md:text-sm rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-1 sm:gap-2"
                 >
                   <span className="hidden sm:inline">Next: Configure Dates</span>
                   <span className="sm:hidden">Next</span>
-                  <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                 </button>
             ) : (
               <>
                 <button
                   onClick={handleBackToSelection}
-                  className="flex-1 px-2 py-2 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-[10px] sm:text-xs md:text-sm text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-1 sm:gap-2"
+                  className="flex-1 px-3 py-2.5 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-xs md:text-sm text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-1 sm:gap-2"
                 >
-                  <ArrowLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                  <ArrowLeft className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                   Back
                 </button>
                 <button
                   onClick={handleFinalSubmit}
                   disabled={selectedCourses.length === 0}
-                  className="flex-1 px-2 py-2 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-[10px] sm:text-xs md:text-sm rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-1 sm:gap-2"
+                  className="flex-1 px-3 py-2.5 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-xs sm:text-xs md:text-sm rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-1 sm:gap-2"
                 >
-                  <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                  <Check className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                   <span className="hidden sm:inline">Add {selectedCourses.length} Course{selectedCourses.length > 1 ? 's' : ''}</span>
                   <span className="sm:hidden">Add {selectedCourses.length}</span>
                 </button>
