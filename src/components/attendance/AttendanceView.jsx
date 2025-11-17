@@ -135,9 +135,9 @@ export default function AttendanceView() {
     <div className="relative">
       {/* App Tagline - Always visible */}
       {courses.length > 0 && (
-        <div className="mb-4 flex items-center justify-center">
+        <div className="mb-1 flex items-center justify-center py-1">
           <p className="text-xs md:text-sm text-content-tertiary font-medium leading-relaxed">
-            Plan Smart. Take Leaves. Chill at Home. Still Hit 80%.
+            Plan Smart. Skip Smart. Stay Above 80%
           </p>
         </div>
       )}
