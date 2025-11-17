@@ -477,7 +477,15 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
       room: course.room || 'TBA',
       roomNumber: course.room || 'TBA',
       instructor: course.instructor || 'TBA',
-      timeSlot,
+      // Convert timeSlot to 12-hour format for display
+      timeSlot: (() => {
+        if (!timeSlot || timeSlot.includes('AM') || timeSlot.includes('PM')) {
+          return timeSlot
+        }
+        const [start, end] = timeSlot.split('-')
+        if (!start || !end) return timeSlot
+        return `${formatTimeTo12Hour(start.trim())} - ${formatTimeTo12Hour(end.trim())}`
+      })(),
       building: course.room && course.room.includes('-')
         ? course.room.split('-')[0]
         : 'Academic Block',

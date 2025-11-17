@@ -230,7 +230,20 @@ export default function TimetableView() {
                         {classInfo.timeSlot && (
                           <div className="px-2 py-1 bg-accent/10 rounded-lg ml-2 flex-shrink-0">
                             <p className="text-xs font-medium text-accent">
-                              {classInfo.timeSlot}
+                              {(() => {
+                                // Convert timeSlot from 24-hour to 12-hour format
+                                const [start, end] = classInfo.timeSlot.split('-')
+                                if (!start || !end) return classInfo.timeSlot
+                                
+                                const start12 = start.includes('AM') || start.includes('PM')
+                                  ? start.trim()
+                                  : formatTimeTo12Hour(start.trim())
+                                const end12 = end.includes('AM') || end.includes('PM')
+                                  ? end.trim()
+                                  : formatTimeTo12Hour(end.trim())
+                                
+                                return `${start12} - ${end12}`
+                              })()}
                             </p>
                           </div>
                         )}
