@@ -34,7 +34,9 @@ export default function TimetableView() {
       schedule[day] = []
     })
 
-    console.log('TimetableView - Total courses:', courses.length)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('TimetableView - Total courses:', courses.length)
+    }
     
     courses.forEach((course, index) => {
       // Build schedule from timetable data if available, otherwise from weekdays
@@ -79,7 +81,9 @@ export default function TimetableView() {
             }
           })
         
-        console.log(`Course "${course.name}" - Built schedule from weekdays:`, courseSchedule)
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Course "${course.name}" - Built schedule from weekdays:`, courseSchedule)
+        }
       }
       
       if (courseSchedule.length > 0) {

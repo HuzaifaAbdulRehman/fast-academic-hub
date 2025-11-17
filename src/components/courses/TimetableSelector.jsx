@@ -273,26 +273,34 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
     // Combine department and section (e.g., BCS + 5F = BCS-5F)
     const fullSection = `${department}-${section.toUpperCase().trim()}`
-    console.log('Searching for section:', fullSection)
-    console.log('Available sections:', timetable ? Object.keys(timetable) : [])
-    console.log('Timetable data:', timetable)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Searching for section:', fullSection)
+      console.log('Available sections:', timetable ? Object.keys(timetable) : [])
+    }
 
     const courses = (timetable && timetable[fullSection]) || []
-    console.log('Found courses:', courses)
-
-    // Validate courses is an array
-    if (!Array.isArray(courses)) {
-      console.error('Invalid courses data, expected array')
-      setFilteredCourses([])
-      return
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Found courses:', courses)
     }
+
+      // Validate courses is an array
+      if (!Array.isArray(courses)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Invalid courses data, expected array')
+        }
+        setFilteredCourses([])
+        return
+      }
 
     // Group courses by course code and collect all sessions
     const uniqueCourses = {}
     courses.forEach(course => {
       // Validate course has required fields
       if (!course || !course.courseCode || !course.courseName) {
-        console.warn('Skipping invalid course entry:', course)
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Skipping invalid course entry:', course)
+        }
         return
       }
 
@@ -307,7 +315,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       }
     })
 
-    console.log('Filtered courses:', Object.values(uniqueCourses))
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Filtered courses:', Object.values(uniqueCourses))
+    }
     setFilteredCourses(Object.values(uniqueCourses))
     vibrate([10])
   }
@@ -395,13 +405,17 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
     // Only proceed if we have valid courses
     if (appCourses.length === 0) {
-      console.error('No valid courses to add')
+      if (process.env.NODE_ENV === 'development') {
+        console.error('No valid courses to add')
+      }
       return
     }
 
     // Add courses using context - use batch add function for multiple courses
-    console.log('Adding courses to context:', appCourses)
-    console.log(`Total courses to add: ${appCourses.length}`)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Adding courses to context:', appCourses)
+      console.log(`Total courses to add: ${appCourses.length}`)
+    }
     
     try {
       // Use batch add function if multiple courses, single add if one course
@@ -410,18 +424,24 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         : [addCourse(appCourses[0])].filter(Boolean)
       
       if (addedCourses.length > 0) {
-        console.log(`Successfully added ${addedCourses.length}/${appCourses.length} courses:`, 
-          addedCourses.map(c => ({ id: c.id, name: c.name, courseCode: c.courseCode }))
-        )
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Successfully added ${addedCourses.length}/${appCourses.length} courses:`, 
+            addedCourses.map(c => ({ id: c.id, name: c.name, courseCode: c.courseCode }))
+          )
+        }
         
         onCoursesSelected(appCourses)
         vibrate([10, 50, 10])
       } else {
-        console.error('Failed to add any courses')
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to add any courses')
+        }
         setError('Failed to add courses. Please check the console for details.')
       }
     } catch (error) {
-      console.error('Error adding courses:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error adding courses:', error)
+      }
       setError('An error occurred while adding courses. Please try again.')
     }
   }
@@ -429,7 +449,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   const convertToAppFormat = (course) => {
     // Validate course object
     if (!course || !course.courseName || !course.courseCode) {
-      console.error('Invalid course data in convertToAppFormat:', course)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Invalid course data in convertToAppFormat:', course)
+      }
       return null
     }
 
@@ -448,7 +470,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
     // Validate we have at least one valid weekday
     if (weekdays.length === 0) {
-      console.error('No valid weekdays found for course:', course)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('No valid weekdays found for course:', course)
+      }
       return null
     }
 
@@ -470,22 +494,26 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           startTime: formatTimeTo12Hour(startTime.trim()),
           endTime: formatTimeTo12Hour(endTime.trim())
         }
-        console.log('Creating schedule slot:', {
-          originalDay: s.day,
-          normalizedDay: dayName,
-          timeSlot: s.timeSlot,
-          formatted: formatted
-        })
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Creating schedule slot:', {
+            originalDay: s.day,
+            normalizedDay: dayName,
+            timeSlot: s.timeSlot,
+            formatted: formatted
+          })
+        }
         return formatted
       })
       .filter(s => s.day && s.startTime && s.endTime) // Ensure all fields are valid
 
-    console.log('Course schedule array created:', {
-      courseName: course.courseName,
-      courseCode: course.courseCode,
-      scheduleLength: schedule.length,
-      schedule: schedule
-    })
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Course schedule array created:', {
+        courseName: course.courseName,
+        courseCode: course.courseCode,
+        scheduleLength: schedule.length,
+        schedule: schedule
+      })
+    }
 
     return {
       name: course.courseName,

@@ -14,9 +14,9 @@ export default defineConfig({
       injectRegister: 'auto',
       manifest: {
         id: '/',
-        name: 'Absence Tracker',
-        short_name: 'Absence Tracker',
-        description: 'Track your university course absences and stay above 80% attendance',
+        name: 'FAST Absence Planner + Timetable',
+        short_name: 'FAST Planner',
+        description: 'Your complete FAST NUCES timetable + smart absence tracker. Plan your leaves strategically, chill at home, and still hit 80%!',
         theme_color: '#3B82F6',
         background_color: '#1a1a1e',
         display: 'standalone',

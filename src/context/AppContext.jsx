@@ -60,7 +60,8 @@ export function AppProvider({ children }) {
         setActiveSemesterId(newActiveSemesterId)
       }
     }
-  }, []) // Only run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run once on mount - intentionally omitting dependencies
 
   // Filter data by active semester
   const courses = allCourses.filter(c => c.semesterId === activeSemesterId)

@@ -1,10 +1,16 @@
 import { Component } from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
+import ConfirmModal from './ConfirmModal'
 
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
-    this.state = { hasError: false, error: null, errorInfo: null }
+    this.state = { 
+      hasError: false, 
+      error: null, 
+      errorInfo: null,
+      showClearDataModal: false
+    }
   }
 
   static getDerivedStateFromError(error) {
@@ -14,8 +20,10 @@ class ErrorBoundary extends Component {
   componentDidCatch(error, errorInfo) {
     this.setState({ error, errorInfo })
 
-    // Log to console in development
-    console.error('Error caught by boundary:', error, errorInfo)
+    // Log to console in development only
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error caught by boundary:', error, errorInfo)
+    }
 
     // TODO: Send to error tracking service (Sentry, LogRocket, etc.)
     // Example: Sentry.captureException(error, { extra: errorInfo })
@@ -27,10 +35,12 @@ class ErrorBoundary extends Component {
   }
 
   handleClearData = () => {
-    if (confirm('This will clear all app data and reload. Continue?')) {
-      localStorage.clear()
-      window.location.reload()
-    }
+    this.setState({ showClearDataModal: true })
+  }
+
+  confirmClearData = () => {
+    localStorage.clear()
+    window.location.reload()
   }
 
   render() {
@@ -101,7 +111,21 @@ class ErrorBoundary extends Component {
       )
     }
 
-    return this.props.children
+    return (
+      <>
+        {this.props.children}
+        <ConfirmModal
+          isOpen={this.state.showClearDataModal}
+          onClose={() => this.setState({ showClearDataModal: false })}
+          onConfirm={this.confirmClearData}
+          title="Clear All Data"
+          message="This will permanently delete all your courses, attendance records, and settings. This action cannot be undone."
+          confirmText="Clear & Reload"
+          cancelText="Cancel"
+          variant="danger"
+        />
+      </>
+    )
   }
 }
 

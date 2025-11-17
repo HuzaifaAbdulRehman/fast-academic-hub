@@ -28,11 +28,15 @@ export default function NotificationSettings({ onClose }) {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent)
     const isIOSStandalone = window.navigator.standalone
 
-    console.log('PWA Install Detection:', { isStandalone, isIOS, isIOSStandalone })
+    if (process.env.NODE_ENV === 'development') {
+      console.log('PWA Install Detection:', { isStandalone, isIOS, isIOSStandalone })
+    }
 
     // Don't show install button if already installed
     if (isStandalone || isIOSStandalone) {
-      console.log('App already installed, hiding button')
+      if (process.env.NODE_ENV === 'development') {
+        console.log('App already installed, hiding button')
+      }
       setCanInstall(false)
       return
     }

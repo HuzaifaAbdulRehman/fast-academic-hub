@@ -25,7 +25,7 @@ export default function Header() {
               </div>
               <div className="min-w-0">
                 <h1 className="text-sm md:text-base font-semibold text-content-primary truncate">
-                  Absence Tracker
+                  FAST Absence & Timetable Tracker
                 </h1>
                 <p className="text-[9px] md:text-[10px] text-content-tertiary truncate hidden sm:block">
                   Track absences • Stay above 80%

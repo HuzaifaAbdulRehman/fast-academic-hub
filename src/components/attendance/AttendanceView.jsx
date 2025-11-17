@@ -135,7 +135,7 @@ export default function AttendanceView() {
     <div className="relative">
       {/* App Tagline - Always visible */}
       {courses.length > 0 && (
-        <div className="mb-4 text-center">
+        <div className="mb-4 flex items-center justify-center">
           <p className="text-xs md:text-sm text-content-tertiary font-medium leading-relaxed">
             Plan Smart. Take Leaves. Chill at Home. Still Hit 80%.
           </p>
@@ -148,13 +148,23 @@ export default function AttendanceView() {
           vibrate([10])
           setShowAllControls(!showAllControls)
         }}
-        className="mb-2 flex items-center justify-center py-1 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all group"
+        className="mb-2 flex items-center justify-center gap-2 py-2 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all group"
         title={showAllControls ? "Hide controls" : "Show controls"}
       >
         {showAllControls ? (
-          <ChevronUp className="w-4 h-4 text-accent group-hover:text-accent-hover transition-colors" />
+          <>
+            <ChevronUp className="w-4 h-4 text-accent group-hover:text-accent-hover transition-colors" />
+            <span className="text-xs text-content-secondary group-hover:text-content-primary transition-colors">
+              Collapse
+            </span>
+          </>
         ) : (
-          <ChevronDown className="w-4 h-4 text-accent group-hover:text-accent-hover transition-colors" />
+          <>
+            <ChevronDown className="w-4 h-4 text-accent group-hover:text-accent-hover transition-colors" />
+            <span className="text-xs text-content-secondary group-hover:text-content-primary transition-colors">
+              Expand
+            </span>
+          </>
         )}
       </div>
 
