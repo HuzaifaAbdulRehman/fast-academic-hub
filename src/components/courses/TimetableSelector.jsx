@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader } from 'lucide-react'
+import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
 
 // Haptic feedback
@@ -34,10 +34,18 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
       // Try to get from localStorage first (for local development)
       const stored = localStorage.getItem('timetable')
       if (stored) {
-        const data = JSON.parse(stored)
-        setTimetable(data)
-        setLoading(false)
-        return
+        try {
+          const data = JSON.parse(stored)
+          // Validate it's actually timetable data
+          if (data && typeof data === 'object' && !Array.isArray(data)) {
+            setTimetable(data)
+            setLoading(false)
+            return
+          }
+        } catch (parseError) {
+          console.warn('Invalid localStorage data, clearing:', parseError)
+          localStorage.removeItem('timetable')
+        }
       }
 
       // Try to fetch from API (production on Vercel)
@@ -53,6 +61,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
       }
     } catch (err) {
       console.error('Error fetching timetable:', err)
+      // Clear corrupted localStorage
+      localStorage.removeItem('timetable')
 
       // Use mock data for development
       const mockData = {
@@ -196,7 +206,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
     }
 
     const sectionUpper = section.toUpperCase().trim()
+    console.log('🔍 Searching for section:', sectionUpper)
+    console.log('📚 Available sections:', Object.keys(timetable))
+    console.log('📖 Timetable data:', timetable)
+
     const courses = timetable[sectionUpper] || []
+    console.log('✅ Found courses:', courses)
 
     // Group courses by course code to avoid duplicates
     const uniqueCourses = {}
@@ -204,14 +219,27 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
       if (!uniqueCourses[course.courseCode]) {
         uniqueCourses[course.courseCode] = {
           ...course,
-          sessions: [course]
+          sessions: course.sessions || [course]
         }
       } else {
-        uniqueCourses[course.courseCode].sessions.push(course)
+        // Only add to sessions if not already using sessions array
+        if (!course.sessions) {
+          uniqueCourses[course.courseCode].sessions.push(course)
+        }
       }
     })
 
+    console.log('🎯 Filtered courses:', Object.values(uniqueCourses))
     setFilteredCourses(Object.values(uniqueCourses))
+    vibrate([10])
+  }
+
+  const clearCache = () => {
+    localStorage.removeItem('timetable')
+    setTimetable(null)
+    setFilteredCourses([])
+    setSection('')
+    fetchTimetable()
     vibrate([10])
   }
 
@@ -309,7 +337,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
           </div>
 
           {/* Search Bar */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-content-tertiary" />
               <input
@@ -330,6 +358,15 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
               Search
             </button>
           </div>
+
+          {/* Clear Cache Button */}
+          <button
+            onClick={clearCache}
+            className="text-xs text-content-tertiary hover:text-accent transition-colors flex items-center gap-1"
+          >
+            <RefreshCw className="w-3 h-3" />
+            Clear cache & reload timetable
+          </button>
         </div>
 
         {/* Content */}
