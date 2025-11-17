@@ -15,7 +15,7 @@ export default defineConfig({
       manifest: {
         id: '/',
         name: 'Absence Tracker',
-        short_name: 'Absence',
+        short_name: 'Absence Tracker',
         description: 'Track your university course absences and stay above 80% attendance',
         theme_color: '#3B82F6',
         background_color: '#1a1a1e',
