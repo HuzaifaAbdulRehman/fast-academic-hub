@@ -205,13 +205,13 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
           <thead className="sticky top-0 z-10 bg-dark-surface">
             {/* Row 1: Action Buttons */}
             <tr>
-              <th colSpan={courses.length + 1} className="py-2.5 border-b border-dark-border bg-dark-surface">
-                <div className="flex items-center justify-between gap-3 px-3 md:px-4">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
+              <th colSpan={courses.length + 1} className="py-1.5 border-b border-dark-border bg-dark-surface">
+                <div className="flex items-center justify-between gap-2 px-3 md:px-4">
+                  <div className="flex items-center gap-1.5 flex-1 min-w-0">
                     <button
                       onClick={toggleBulkSelectMode}
                       className={`
-                        flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 flex-shrink-0
+                        flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex-shrink-0
                         ${bulkSelectMode
                           ? 'bg-accent text-dark-bg shadow-accent'
                           : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
@@ -243,7 +243,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                           setReorderMode(!reorderMode)
                         }}
                         className={`
-                          flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 flex-shrink-0
+                          flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex-shrink-0
                           ${reorderMode
                             ? 'bg-accent text-dark-bg shadow-accent'
                             : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
@@ -280,7 +280,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
 
             {/* Row 2: Date and Course Headers */}
             <tr className="border-b border-dark-border">
-              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-1.5">
+              <th className="text-left min-w-[60px] md:min-w-[80px] px-3 md:px-4 py-1">
                 <span className="text-xs md:text-sm font-semibold text-content-primary">Date</span>
               </th>
               {courses.map((course, index) => {
@@ -336,11 +336,11 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       </div>
                     )}
 
-                    <div className={`py-1.5 px-0.5 transition-transform duration-200 ${isSwipedOpen ? '-translate-x-full' : 'translate-x-0'}`}>
+                    <div className={`py-1 px-0.5 transition-transform duration-200 ${isSwipedOpen ? '-translate-x-full' : 'translate-x-0'}`}>
                       {/* Badge Style with Status - Modern & Polished */}
 
                       {/* Course name with colored dot - TOP */}
-                      <div className="flex items-center justify-center gap-1 min-w-0 mb-1">
+                      <div className="flex items-center justify-center gap-1 min-w-0 mb-0.5">
                         <div
                           className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full flex-shrink-0"
                           style={{ backgroundColor: courseColor.hex }}
@@ -354,11 +354,11 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       </div>
 
                       {/* Horizontal divider */}
-                      <div className="w-full h-px bg-dark-border/40 mb-1"></div>
+                      <div className="w-full h-px bg-dark-border/40 mb-0.5"></div>
 
                       {/* Stats with status background - MIDDLE */}
                       <div className={`
-                        px-1.5 py-0.5 md:py-1 rounded-md mb-1 text-[10px] md:text-xs font-bold tabular-nums
+                        px-1.5 py-0.5 rounded-md mb-0.5 text-[10px] md:text-xs font-bold tabular-nums
                         ${percentage < 60
                           ? 'bg-attendance-safe/15 text-attendance-safe border border-attendance-safe/20'
                           : percentage < 85
