@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext'
 import { generateWeeks, formatDateShort, courseHasClassOnDate } from '../../utils/dateHelpers'
 import { getDayStatus, getSessionStatus, calculateAttendanceStats } from '../../utils/attendanceCalculator'
 import { SESSION_STATUS, COURSE_COLORS } from '../../utils/constants'
-import { Check, X, Minus, Circle, Edit2, Trash2, CheckSquare, Square, MoreVertical, ArrowLeft, ArrowRight, ArrowLeftRight } from 'lucide-react'
+import { Check, X, Minus, Circle, Edit2, Trash2, CheckSquare, Square, MoreVertical, ArrowLeft, ArrowRight, ArrowLeftRight, Menu, ChevronUp } from 'lucide-react'
 import { useSwipeable } from 'react-swipeable'
 import QuickMarkToday from './QuickMarkToday'
 
@@ -29,6 +29,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   const [swipedCourse, setSwipedCourse] = useState(null) // Track swiped course for delete reveal
   const [openMenuCourse, setOpenMenuCourse] = useState(null) // Track which course menu is open
   const [reorderMode, setReorderMode] = useState(false) // Track reorder mode
+  const [showActions, setShowActions] = useState(false) // Track if action buttons are visible
 
   // Close swipe when clicking outside
   useEffect(() => {
@@ -220,11 +221,31 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   }
 
   return (
-    <div className="card p-0">
+    <div className="card p-0 relative">
+      {/* Floating Action Button to toggle actions */}
+      <button
+        onClick={() => {
+          vibrate([10])
+          setShowActions(!showActions)
+        }}
+        className={`
+          absolute top-2 right-2 z-20 p-2 rounded-full shadow-lg transition-all duration-200
+          ${showActions
+            ? 'bg-accent text-dark-bg rotate-180'
+            : 'bg-dark-surface-raised text-accent border border-accent/30'
+          }
+        `}
+        title={showActions ? "Hide actions" : "Show actions"}
+        aria-label={showActions ? "Hide actions" : "Show actions"}
+      >
+        {showActions ? <ChevronUp className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+      </button>
+
       <div className="overflow-auto max-h-[calc(100vh-13rem)] md:max-h-[calc(100vh-14rem)] scroll-smooth pb-4">
         <table className="attendance-table w-full min-w-full">
           <thead className="sticky top-0 z-10 bg-dark-surface">
-            {/* Row 1: Action Buttons */}
+            {/* Row 1: Action Buttons - Collapsible */}
+            {showActions && (
             <tr>
               <th colSpan={courses.length + 1} className="py-1.5 border-b border-dark-border bg-dark-surface">
                 <div className="flex items-center justify-between gap-1.5 px-2 md:px-4">
@@ -298,6 +319,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                 </div>
               </th>
             </tr>
+            )}
 
             {/* Row 2: Date and Course Headers */}
             <tr className="border-b border-dark-border">
