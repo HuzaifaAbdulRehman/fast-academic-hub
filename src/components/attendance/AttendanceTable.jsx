@@ -285,7 +285,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
       )}
 
       {/* Scrollable Table Container */}
-      <div className={`overflow-auto ${showActions ? 'max-h-[calc(100vh-16.5rem)]' : 'max-h-[calc(100vh-13rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-20`}>
+      <div className={`overflow-auto ${showActions ? 'max-h-[calc(100vh-16.5rem)]' : 'max-h-[calc(100vh-13rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-14`}>
         <table className="attendance-table w-full min-w-full">
           <thead className="sticky top-0 z-[5] bg-dark-surface">
             <tr className="border-b border-dark-border">
