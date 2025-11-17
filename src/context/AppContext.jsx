@@ -283,6 +283,11 @@ export function AppProvider({ children }) {
     setAttendance(prev => prev.filter(record => record.courseId !== courseId))
   }, [setCourses, setAttendance])
 
+  const deleteAllCourses = useCallback(() => {
+    setCourses([])
+    setAttendance([])
+  }, [setCourses, setAttendance])
+
   /**
    * Reorder course columns (move left or right)
    */
@@ -587,6 +592,7 @@ export function AppProvider({ children }) {
     addCourse,
     updateCourse,
     deleteCourse,
+    deleteAllCourses,
     reorderCourse,
 
     // Attendance management
