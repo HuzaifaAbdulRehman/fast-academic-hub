@@ -948,14 +948,14 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
               Cancel
             </button>
             {step === 'select' ? (
-              <button
-                onClick={handleNextToConfiguration}
-                disabled={selectedCourses.length === 0}
-                className="flex-1 px-5 py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-bold rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-              >
-                Next: Configure Dates
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                <button
+                  onClick={handleNextToConfiguration}
+                  disabled={selectedCourses.length === 0}
+                  className="flex-1 px-5 py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                >
+                  Next: Configure Dates
+                  <ArrowRight className="w-4 h-4" />
+                </button>
             ) : (
               <>
                 <button
@@ -967,7 +967,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
                 </button>
                 <button
                   onClick={handleFinalSubmit}
-                  className="flex-1 px-5 py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-bold rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
+                  disabled={selectedCourses.length === 0}
+                  className="flex-1 px-5 py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                 >
                   <Check className="w-4 h-4" />
                   Add {selectedCourses.length} Course{selectedCourses.length > 1 ? 's' : ''}
