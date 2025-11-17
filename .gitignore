@@ -33,3 +33,17 @@ dev-dist
 
 # OS files
 Thumbs.db
+Desktop.ini
+ehthumbs.db
+ehthumbs_vista.db
+*.lnk
+$RECYCLE.BIN/
+
+# Vercel
+.vercel
+
+# Temporary documentation files
+DESIGN_ANALYSIS.md
+MOBILE_REVIEW.md
+MOBILE_UX_RECOMMENDATIONS.md
+RECOMMENDATIONS.md
