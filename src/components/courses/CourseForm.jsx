@@ -317,7 +317,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
                     className="flex-1 px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                   >
                     <option value="">Select day...</option>
-                    {[1, 2, 3, 4, 5].map(dayIndex => (
+                    {[1, 2, 3, 4, 5, 6, 0].map(dayIndex => (
                       <option key={dayIndex} value={dayIndex}>
                         {WEEKDAY_FULL_NAMES[dayIndex]}
                       </option>
