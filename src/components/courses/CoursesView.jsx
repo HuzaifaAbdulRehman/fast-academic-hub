@@ -9,17 +9,25 @@ export default function CoursesView() {
   const [showTimetableSelector, setShowTimetableSelector] = useState(false)
   const [showCourseForm, setShowCourseForm] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deletingCourseId, setDeletingCourseId] = useState(null)
 
   const handleEditCourse = (course) => {
     setEditingCourse(course)
     setShowCourseForm(true)
   }
 
+  const handleDeleteCourse = (courseId) => {
+    setDeletingCourseId(courseId)
+    // Smooth delete without alert - just delete directly
+    setTimeout(() => {
+      deleteCourse(courseId)
+      setDeletingCourseId(null)
+    }, 100)
+  }
+
   const handleDeleteAll = () => {
     if (window.confirm('Are you sure you want to delete all courses? This action cannot be undone.')) {
       deleteAllCourses()
-      setShowDeleteConfirm(false)
     }
   }
 
@@ -168,15 +176,18 @@ export default function CoursesView() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleEditCourse(course)}
-                        className="p-1.5 bg-dark-bg hover:bg-accent/10 text-content-secondary hover:text-accent rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                        className="p-2 bg-dark-bg hover:bg-accent/10 text-content-secondary hover:text-accent rounded-lg transition-all"
                         title="Edit course"
+                        aria-label="Edit course"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => deleteCourse(course.id)}
-                        className="p-1.5 bg-dark-bg hover:bg-red-500/10 text-content-secondary hover:text-red-400 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                        onClick={() => handleDeleteCourse(course.id)}
+                        disabled={deletingCourseId === course.id}
+                        className="p-2 bg-dark-bg hover:bg-red-500/10 text-content-secondary hover:text-red-400 rounded-lg transition-all disabled:opacity-50"
                         title="Delete course"
+                        aria-label="Delete course"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

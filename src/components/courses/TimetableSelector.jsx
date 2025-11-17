@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft } from 'lucide-react'
+import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
 import { vibrate, isMobile } from '../../utils/uiHelpers'
 import { useApp } from '../../context/AppContext'
@@ -340,10 +340,29 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
   const handleFinalSubmit = () => {
     if (!selectedCourses || selectedCourses.length === 0) return
 
+    // Validate required fields - Start Date is mandatory
+    if (!startDate.year || !startDate.month || !startDate.day) {
+      setError('Please select a start date')
+      return
+    }
+
+    // Validate absences fields
+    if (allowedAbsences !== null && (isNaN(allowedAbsences) || allowedAbsences < 0)) {
+      setError('Maximum allowed absences must be a positive number')
+      return
+    }
+
+    if (initialAbsences < 0 || isNaN(initialAbsences)) {
+      setError('Absences so far must be a positive number')
+      return
+    }
+
+    setError(null)
+
     // Build date strings
-    const startDateISO = `${startDate.year}-${startDate.month.padStart(2, '0')}-${startDate.day.padStart(2, '0')}`
+    const startDateISO = `${startDate.year}-${String(startDate.month).padStart(2, '0')}-${String(startDate.day).padStart(2, '0')}`
     const endDateISO = endDate.year && endDate.month && endDate.day
-      ? `${endDate.year}-${endDate.month.padStart(2, '0')}-${endDate.day.padStart(2, '0')}`
+      ? `${endDate.year}-${String(endDate.month).padStart(2, '0')}-${String(endDate.day).padStart(2, '0')}`
       : null
 
     // Convert to app format and add date configuration
@@ -406,16 +425,20 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
     const timeSlot = firstValidSession ? firstValidSession.timeSlot : '08:00-09:00'
 
     // Build schedule array for TimetableView
+    // Ensure day names match exactly what TimetableView expects (Monday, Tuesday, etc.)
     const schedule = sessions
       .filter(s => s && s.day && s.timeSlot)
       .map(s => {
         const [startTime, endTime] = s.timeSlot.split('-')
+        // Normalize day name to match TimetableView format
+        const dayName = s.day.charAt(0).toUpperCase() + s.day.slice(1).toLowerCase()
         return {
-          day: s.day,
-          startTime: formatTimeTo12Hour(startTime),
-          endTime: formatTimeTo12Hour(endTime)
+          day: dayName,
+          startTime: formatTimeTo12Hour(startTime.trim()),
+          endTime: formatTimeTo12Hour(endTime.trim())
         }
       })
+      .filter(s => s.day && s.startTime && s.endTime) // Ensure all fields are valid
 
     return {
       name: course.courseName,
@@ -553,6 +576,14 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
           {step === 'configure' ? (
             // Step 2: Date Configuration
             <div className="space-y-5">
+              {/* Error Display */}
+              {error && (
+                <div className="bg-attendance-danger/10 border border-attendance-danger/30 rounded-xl p-3 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-attendance-danger flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-attendance-danger">{error}</p>
+                </div>
+              )}
+
               {/* Selected Courses Summary */}
               <div className="bg-dark-surface-raised border border-dark-border rounded-xl p-4">
                 <p className="text-sm font-medium text-content-primary mb-2">
@@ -704,7 +735,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
 
               {/* Absences Configuration */}
               <div className="grid grid-cols-2 gap-4">
-                <div>
+                <div className="flex flex-col">
                   <label className="text-sm font-medium text-content-primary mb-2 block">
                     Maximum Allowed Absences
                   </label>
@@ -716,11 +747,11 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
                     className="w-full px-4 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                     placeholder="Auto-calculated"
                   />
-                  <p className="text-xs text-content-tertiary mt-1">
+                  <p className="text-xs text-content-tertiary mt-1.5">
                     Total for all {selectedCourses.length} courses
                   </p>
                 </div>
-                <div>
+                <div className="flex flex-col">
                   <label className="text-sm font-medium text-content-primary mb-2 block">
                     Absences So Far
                   </label>
@@ -732,7 +763,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose }) {
                     className="w-full px-4 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                     placeholder="0"
                   />
-                  <p className="text-xs text-content-tertiary mt-1">
+                  <p className="text-xs text-content-tertiary mt-1.5">
                     Already taken
                   </p>
                 </div>
