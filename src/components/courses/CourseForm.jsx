@@ -258,7 +258,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
         </div>
 
         {/* Form - Scrollable */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-5 max-h-[calc(100vh-12rem)] overflow-y-auto">
+        <form id="course-form" onSubmit={handleSubmit} className={`p-5 space-y-5 overflow-y-auto ${isMobileDevice ? 'max-h-[calc(100vh-16rem)]' : 'max-h-[calc(100vh-16rem)]'} pb-4`}>
           {/* Course Name */}
           <div>
             <label className="block text-sm font-medium text-content-primary mb-2">
@@ -585,32 +585,27 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
               Classes missed before using this app
             </p>
           </div>
-
-        {/* Actions */}
-        <div
-          className={`${
-            isMobileDevice
-              ? 'sticky bottom-0 bg-gradient-to-t from-dark-surface via-dark-surface to-transparent pt-4 pb-1 -mx-5 px-5'
-              : 'border-t border-dark-border/50 mt-6 pt-4'
-          }`}
-        >
-            <div className="flex gap-3">
-              <button
-                type="submit"
-                className="flex-1 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-medium px-5 py-3 rounded-xl transition-all duration-200 shadow-accent hover:shadow-accent hover:scale-[1.02]"
-              >
-                {existingCourse ? 'Update Course' : 'Add Course'}
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-5 py-3 bg-dark-bg/50 hover:bg-dark-surface-raised text-content-primary border border-dark-border/30 rounded-xl transition-all"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
         </form>
+
+        {/* Actions - Fixed at bottom */}
+        <div className={`sticky bottom-0 bg-dark-surface/98 backdrop-blur-lg border-t border-dark-border/50 p-5 ${isMobileDevice ? 'rounded-b-3xl' : 'rounded-b-2xl'} shadow-2xl z-10`}>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              form="course-form"
+              className="flex-1 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-medium px-5 py-3 rounded-xl transition-all duration-200 shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95"
+            >
+              {existingCourse ? 'Update Course' : 'Add Course'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-3 bg-dark-bg/50 hover:bg-dark-surface-raised text-content-primary border border-dark-border/30 rounded-xl transition-all hover:scale-[1.02] active:scale-95"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
         </div>
       </div>
     ),
