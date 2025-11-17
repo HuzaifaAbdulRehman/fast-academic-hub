@@ -60,7 +60,7 @@ export default function QuickMarkToday({ inline = false }) {
           title="Quick mark today's attendance"
         >
           <Calendar className="w-3.5 h-3.5" />
-          <span className="whitespace-nowrap hidden md:inline">Mark Today</span>
+          <span className="whitespace-nowrap">Mark Today</span>
           {unmarkedCount > 0 && (
             <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-accent/20 text-accent text-[10px] font-semibold tabular-nums">
               {unmarkedCount}
@@ -72,7 +72,7 @@ export default function QuickMarkToday({ inline = false }) {
       {/* Bottom Sheet Modal */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center md:justify-center animate-fade-in"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end md:items-center md:justify-center animate-fade-in"
           onClick={() => setIsOpen(false)}
         >
           <div
