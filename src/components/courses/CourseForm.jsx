@@ -232,20 +232,20 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
     </div>
   )
 
-  // Footer with action buttons
+  // Footer with action buttons - Mobile optimized
   const footer = (
-    <div className="flex gap-3">
+    <div className="flex gap-2 sm:gap-3">
       <button
         type="submit"
         form="course-form"
-        className="flex-1 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-medium px-5 py-3 rounded-xl transition-all duration-200 shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95"
+        className="flex-1 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-medium px-3 py-2.5 sm:px-5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-200 shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95"
       >
         {existingCourse ? 'Update Course' : 'Add Course'}
       </button>
       <button
         type="button"
         onClick={onClose}
-        className="px-5 py-3 bg-dark-bg/50 hover:bg-dark-surface-raised text-content-primary border border-dark-border/30 rounded-xl transition-all hover:scale-[1.02] active:scale-95"
+        className="px-3 py-2.5 sm:px-5 sm:py-3 text-sm sm:text-base bg-dark-bg/50 hover:bg-dark-surface-raised text-content-primary border border-dark-border/30 rounded-lg sm:rounded-xl transition-all hover:scale-[1.02] active:scale-95"
       >
         Cancel
       </button>

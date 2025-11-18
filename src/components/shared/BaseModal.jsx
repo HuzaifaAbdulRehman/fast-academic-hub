@@ -5,6 +5,7 @@ import { vibrate } from '../../utils/uiHelpers'
 
 /**
  * Standardized Base Modal Component
+ * Mobile-first responsive design optimized for screens as small as 320px
  * Provides consistent styling, animations, and behavior across all modals
  *
  * @param {Object} props
@@ -12,13 +13,19 @@ import { vibrate } from '../../utils/uiHelpers'
  * @param {Function} props.onClose - Close handler
  * @param {string} props.title - Modal title
  * @param {React.ReactNode} props.children - Modal content
- * @param {string} props.size - Modal size: 'sm' (400px), 'md' (540px), 'lg' (720px), 'xl' (900px), 'full' (95vw)
+ * @param {string} props.size - Modal size: 'sm' (420px), 'md' (540px), 'lg' (680px), 'xl' (900px), 'full' (98vw)
  * @param {boolean} props.showCloseButton - Show X button in header (default: true)
  * @param {boolean} props.closeOnBackdrop - Close on backdrop click (default: true)
  * @param {boolean} props.closeOnEscape - Close on Escape key (default: true)
  * @param {React.ReactNode} props.footer - Custom footer content (buttons, actions)
  * @param {string} props.headerIcon - Optional icon component for header
  * @param {string} props.variant - Modal variant: 'default', 'danger', 'success', 'warning'
+ *
+ * Mobile Optimizations:
+ * - Max height 88vh to accommodate on-screen keyboard
+ * - Reduced padding on <640px (3px vs 6px)
+ * - Overscroll containment prevents body scroll
+ * - Consistent 96vw max width on mobile for edge margins
  */
 export default function BaseModal({
   isOpen,
@@ -137,13 +144,13 @@ export default function BaseModal({
     onClose()
   }
 
-  // Size classes
+  // Size classes - Mobile-first responsive sizing
   const sizeClasses = {
-    sm: 'max-w-[90vw] sm:max-w-[400px]',
-    md: 'max-w-[90vw] sm:max-w-[540px]',
-    lg: 'max-w-[90vw] sm:max-w-[720px]',
-    xl: 'max-w-[90vw] sm:max-w-[900px]',
-    full: 'max-w-[95vw] sm:max-w-[95vw]'
+    sm: 'w-full max-w-[96vw] sm:max-w-[420px]',      // Small modals (confirmations, simple dialogs)
+    md: 'w-full max-w-[96vw] sm:max-w-[540px]',      // Standard modals (forms, quick actions)
+    lg: 'w-full max-w-[96vw] sm:max-w-[680px]',      // Large modals (section selectors, lists)
+    xl: 'w-full max-w-[96vw] sm:max-w-[900px]',      // Extra large (complex forms)
+    full: 'w-full max-w-[98vw] sm:max-w-[96vw]'      // Full width (timetable selector)
   }
 
   // Variant classes
@@ -173,14 +180,14 @@ export default function BaseModal({
         ref={modalRef}
         className={`
           ${sizeClasses[size]}
-          w-full md:mx-auto
+          md:mx-auto
           bg-dark-surface/95 backdrop-blur-xl
           border ${variantClasses[variant]}
           shadow-glass-lg
           rounded-t-3xl md:rounded-2xl
           animate-slide-up md:animate-slide-in
           flex flex-col
-          max-h-[90vh] md:max-h-[85vh]
+          max-h-[88vh] md:max-h-[85vh]
         `}
         onClick={(e) => e.stopPropagation()}
       >
@@ -191,8 +198,8 @@ export default function BaseModal({
 
         {/* Header */}
         <div className={`
-          flex items-center justify-between gap-3
-          px-4 sm:px-6 py-3 sm:py-4
+          flex items-center justify-between gap-2 sm:gap-3
+          px-3 sm:px-6 py-2.5 sm:py-4
           border-b ${variantClasses[variant]}
           ${variantHeaderClasses[variant]}
           flex-shrink-0
@@ -222,15 +229,15 @@ export default function BaseModal({
           )}
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-5">
+        {/* Content - Optimized scrolling area with keyboard consideration */}
+        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-3 sm:py-5 overscroll-contain">
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
           <div className="
-            px-4 sm:px-6 py-3 sm:py-4
+            px-3 sm:px-6 py-2.5 sm:py-4
             border-t border-dark-border
             bg-dark-surface-raised/50
             flex-shrink-0

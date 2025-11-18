@@ -60,14 +60,14 @@ export default function QuickMarkToday({ inline = false }) {
     </div>
   )
 
-  // Footer with Done button
+  // Footer with Done button - Mobile optimized
   const footer = (
     <button
       onClick={() => {
         vibrate(15)
         setIsOpen(false)
       }}
-      className="w-full bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold rounded-lg px-4 py-3 transition-all shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95"
+      className="w-full bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base transition-all shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95"
     >
       Done
     </button>

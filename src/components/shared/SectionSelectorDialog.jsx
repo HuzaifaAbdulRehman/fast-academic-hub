@@ -53,21 +53,21 @@ export default function SectionSelectorDialog({
     </div>
   )
 
-  // Footer with action buttons
+  // Footer with action buttons - Mobile optimized
   const footer = (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center justify-end gap-2 sm:gap-3">
       <button
         onClick={onClose}
-        className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-content-secondary hover:text-content-primary bg-dark-surface hover:bg-dark-surface-raised rounded-lg transition-all border border-dark-border"
+        className="px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base font-medium text-content-secondary hover:text-content-primary bg-dark-surface hover:bg-dark-surface-raised rounded-lg sm:rounded-xl transition-all border border-dark-border"
       >
         Cancel
       </button>
       <button
         onClick={handleConfirm}
         disabled={!selectedSection}
-        className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-all hover:scale-[1.02] active:scale-95 ${
+        className={`px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base font-medium rounded-lg sm:rounded-xl transition-all hover:scale-[1.02] active:scale-95 ${
           selectedSection
-            ? 'bg-accent hover:bg-accent-hover text-dark-bg'
+            ? 'bg-gradient-to-br from-accent to-accent-hover text-dark-bg shadow-accent hover:shadow-accent-lg'
             : 'bg-dark-surface text-content-tertiary cursor-not-allowed opacity-50'
         }`}
       >

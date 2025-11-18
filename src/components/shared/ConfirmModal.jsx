@@ -43,19 +43,19 @@ export default function ConfirmModal({
     </div>
   )
 
-  // Footer with action buttons
+  // Footer with action buttons - Mobile optimized
   const footer = (
     <div className="flex gap-2 sm:gap-3">
       <button
         onClick={handleCancel}
-        className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95"
+        className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-sm sm:text-base text-content-primary font-medium hover:bg-dark-surface-raised transition-all hover:scale-[1.02] active:scale-95"
       >
         {cancelText}
       </button>
       <button
         onClick={handleConfirm}
         disabled={!canConfirm}
-        className={`flex-1 px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm md:text-base transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 ${
+        className={`flex-1 px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 ${
           isDanger
             ? 'bg-gradient-to-br from-attendance-danger to-red-600 text-white hover:shadow-lg hover:shadow-attendance-danger/30'
             : 'bg-gradient-to-br from-yellow-500 to-yellow-600 text-dark-bg hover:shadow-lg hover:shadow-yellow-500/30'
@@ -84,19 +84,19 @@ export default function ConfirmModal({
 
       {requiresTyping && (
         <div>
-          <label className="block text-sm font-medium text-content-primary mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-content-primary mb-2">
             Type <span className="font-mono text-attendance-danger">{confirmationText}</span> to confirm:
           </label>
           <input
             type="text"
             value={typedText}
             onChange={(e) => setTypedText(e.target.value.toUpperCase())}
-            className="w-full px-4 py-3 bg-dark-bg border-2 border-dark-border rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all uppercase font-mono"
+            className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-dark-bg border-2 border-dark-border rounded-xl text-content-primary text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all uppercase font-mono"
             placeholder={confirmationText}
             autoFocus
           />
           {typedText && typedText !== confirmationText && (
-            <p className="text-xs text-attendance-danger mt-2">
+            <p className="text-xs text-attendance-danger mt-1.5">
               Text doesn't match. Please type exactly "{confirmationText}"
             </p>
           )}
