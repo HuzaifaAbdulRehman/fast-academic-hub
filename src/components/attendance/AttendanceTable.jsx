@@ -297,10 +297,10 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
         aria-label="Course attendance grid"
       >
         <table className="attendance-table w-full min-w-full">
-          <thead className="sticky top-0 z-[5] bg-dark-surface">
+          <thead className="sticky top-0 z-[15] bg-dark-surface shadow-sm">
             <tr className="border-b border-dark-border" role="row">
-              <th className="text-left min-w-[60px] md:min-w-[80px] px-2 sm:px-3 md:px-4 py-1 sm:py-1.5" scope="col">
-                <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-content-primary">Date</span>
+              <th className="text-left min-w-[52px] sm:min-w-[60px] md:min-w-[80px] px-1 sm:px-2 md:px-4 py-0.5 sm:py-1 md:py-1.5 sticky left-0 z-[20] bg-dark-surface" scope="col">
+                <span className="text-[9px] sm:text-[10px] md:text-sm font-semibold text-content-primary">Date</span>
               </th>
               {courses.map((course, index) => (
                 <CourseHeader
@@ -325,8 +325,8 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
               <React.Fragment key={week.weekNumber}>
                 {/* Week Header Row */}
                 <tr className="bg-dark-bg week-header-row">
-                  <td className="py-2 px-4 sticky-week-label">
-                    <span className="text-xs uppercase tracking-wider text-content-tertiary font-medium">
+                  <td className="py-1 sm:py-1.5 md:py-2 px-1 sm:px-2 md:px-4 sticky-week-label sticky left-0 z-[8] bg-dark-bg">
+                    <span className="text-[9px] sm:text-[10px] md:text-xs uppercase tracking-wider text-content-tertiary font-medium">
                       {week.label}
                     </span>
                   </td>
@@ -358,17 +358,17 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                         {/* Date Column - Click to toggle whole day or select in bulk mode */}
                         <td
                           className={`
-                            text-left cursor-pointer
+                            text-left cursor-pointer sticky left-0 z-[10] bg-dark-surface
                             ${isToday ? 'font-semibold' : ''}
                             ${bulkSelectMode ? 'relative' : ''}
                           `}
                           onClick={() => handleDateClick(day.date)}
                         >
-                          <div className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2">
+                          <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 px-1 sm:px-1.5 md:px-2">
                             {bulkSelectMode ? (
                               <div
                                 className={`
-                                  w-5 h-5 rounded border-2 flex items-center justify-center transition-all
+                                  w-4 h-4 sm:w-5 sm:h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0
                                   ${selectedDates.includes(day.date)
                                     ? ''
                                     : 'border-content-disabled/30'
@@ -380,18 +380,18 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                                 } : {}}
                               >
                                 {selectedDates.includes(day.date) && (
-                                  <Check className="w-3.5 h-3.5 text-white" />
+                                  <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
                                 )}
                               </div>
                             ) : (
-                              <span className="text-base sm:text-lg">{getDayIndicator(day.date)}</span>
+                              <span className="text-sm sm:text-base md:text-lg flex-shrink-0">{getDayIndicator(day.date)}</span>
                             )}
-                            <div>
-                              <div className="text-xs sm:text-sm text-content-primary">
+                            <div className="min-w-0">
+                              <div className="text-[10px] sm:text-xs md:text-sm text-content-primary truncate">
                                 {day.dayShort} {formatDateShort(day.date).split(' ')[1]}
                               </div>
                               {isToday && (
-                                <div className="text-[10px] sm:text-xs text-accent">Today</div>
+                                <div className="text-[8px] sm:text-[10px] md:text-xs text-accent">Today</div>
                               )}
                             </div>
                           </div>

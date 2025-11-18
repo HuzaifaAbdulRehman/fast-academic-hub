@@ -67,7 +67,7 @@ export default function CourseHeader({
     <th
       key={course.id}
       data-course-id={course.id}
-      className="min-w-[64px] max-w-[64px] md:min-w-[74px] md:max-w-[74px] text-center px-1 md:px-1.5 relative overflow-hidden"
+      className="min-w-[56px] max-w-[56px] sm:min-w-[64px] sm:max-w-[64px] md:min-w-[74px] md:max-w-[74px] text-center px-0.5 sm:px-1 md:px-1.5 relative overflow-hidden"
     >
       {/* Swipe reveal delete button background */}
       {isSwipedOpen && (
@@ -78,7 +78,7 @@ export default function CourseHeader({
               setDeleteConfirm(course)
               setSwipedCourse(null)
             }}
-            className="text-white font-medium text-xs uppercase tracking-wider"
+            className="text-white font-medium text-[10px] sm:text-xs uppercase tracking-wider"
           >
             Delete
           </button>
@@ -89,7 +89,7 @@ export default function CourseHeader({
         className={`py-0.5 sm:py-1 px-0.5 transition-transform duration-200 relative z-10 bg-dark-surface ${isSwipedOpen ? '-translate-x-[calc(100%+6px)]' : 'translate-x-0'}`}
         {...swipeHandlers}
       >
-        {/* Badge Style with Status - Modern & Polished */}
+        {/* Badge Style with Status - Compact Mobile Design */}
 
         {/* Course name with colored dot - TOP */}
         <div className="flex items-center justify-center gap-0.5 sm:gap-1 min-w-0 mb-0.5">
@@ -98,19 +98,19 @@ export default function CourseHeader({
             style={{ backgroundColor: course.colorHex || courseColor?.hex || '#6366f1' }}
           />
           <div
-            className="text-[10px] sm:text-[11px] md:text-sm font-bold truncate text-content-primary max-w-[44px] sm:max-w-[48px] md:max-w-[58px]"
+            className="text-[9px] sm:text-[10px] md:text-sm font-bold truncate text-content-primary max-w-[38px] sm:max-w-[44px] md:max-w-[58px]"
             title={course.name || 'Course'}
           >
             {course.shortName || course.name || 'N/A'}
           </div>
         </div>
 
-        {/* Horizontal divider */}
-        <div className="w-full h-px bg-dark-border/40 mb-0.5"></div>
+        {/* Horizontal divider - thinner on mobile */}
+        <div className="w-full h-px bg-dark-border/30 mb-0.5"></div>
 
-        {/* Stats with status background - MIDDLE */}
+        {/* Stats with status background - MIDDLE - More compact on mobile */}
         <div className={`
-          px-1 sm:px-1.5 py-0.5 rounded-md mb-0.5 text-[9px] sm:text-[10px] md:text-xs font-bold tabular-nums
+          px-0.5 sm:px-1 md:px-1.5 py-0.5 rounded-md mb-0.5 text-[8px] sm:text-[9px] md:text-xs font-bold tabular-nums
           ${percentage < 60
             ? 'bg-attendance-safe/15 text-attendance-safe border border-attendance-safe/20'
             : percentage < 85
@@ -121,8 +121,8 @@ export default function CourseHeader({
           {absencesUsed}/{absencesAllowed}
         </div>
 
-        {/* Action buttons - BOTTOM */}
-        <div className="flex items-center justify-center gap-0.5 sm:gap-1">
+        {/* Action buttons - BOTTOM - Hidden on mobile (<640px), shown on larger screens */}
+        <div className="hidden sm:flex items-center justify-center gap-0.5 sm:gap-1">
           {reorderMode ? (
             <>
               {/* Reorder arrows */}
@@ -183,6 +183,13 @@ export default function CourseHeader({
             </>
           )}
         </div>
+
+        {/* Mobile tap hint - Only show on mobile when not in reorder mode */}
+        {!reorderMode && (
+          <div className="sm:hidden text-[7px] text-content-tertiary/60 text-center mt-0.5">
+            Swipe
+          </div>
+        )}
       </div>
     </th>
   )
