@@ -48,3 +48,16 @@ MOBILE_REVIEW.md
 MOBILE_UX_RECOMMENDATIONS.md
 RECOMMENDATIONS.md
 nul
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# Testing
+coverage/
+*.tsbuildinfo
+.nyc_output/
+
+# Environment
+.env.local
+.env.*.local
