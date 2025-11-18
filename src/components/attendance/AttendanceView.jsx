@@ -10,6 +10,7 @@ import { DEFAULT_WEEKS_TO_SHOW } from '../../utils/constants'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import Confetti, { celebratePerfectAttendance, celebrateMilestone } from '../shared/Confetti'
 import { vibrate } from '../../utils/uiHelpers'
+import { useScrollCollapse } from '../../hooks/useScrollCollapse'
 
 export default function AttendanceView() {
   const { courses, undoHistory, undo } = useApp()
@@ -18,6 +19,12 @@ export default function AttendanceView() {
   const [editingCourse, setEditingCourse] = useState(null)
   const [toast, setToast] = useState(null) // { message, type, action }
   const [showAllControls, setShowAllControls] = useState(true) // Track if ALL controls are visible - default to true
+
+  // Scroll-based collapse hook - always enabled
+  const { isVisible: scrollVisible } = useScrollCollapse({
+    threshold: 50,
+    enabled: true
+  })
 
   // Show undo toast when action is performed
   useEffect(() => {
@@ -131,24 +138,35 @@ export default function AttendanceView() {
     )
   }
 
+  const handleToggleControls = () => {
+    vibrate([10])
+    setShowAllControls(!showAllControls)
+  }
+
   const renderContent = () => (
     <div className="relative">
-      {/* App Tagline - Always visible - More compact on mobile */}
+      {/* App Tagline - More compact on mobile - with smooth transition */}
       {courses.length > 0 && (
-        <div className="mb-0.5 sm:mb-1 flex items-center justify-center py-0.5">
+        <div
+          className={`
+            mb-0.5 sm:mb-1 flex items-center justify-center py-0.5
+            transition-all duration-200 ease-out
+            ${scrollVisible ? 'opacity-100 translate-y-0 max-h-20' : 'opacity-0 -translate-y-2 max-h-0 overflow-hidden'}
+          `}
+        >
           <p className="text-[9px] sm:text-[10px] md:text-sm text-content-tertiary font-medium leading-tight">
             Plan Smart. Skip Smart. Stay Above 80%
           </p>
         </div>
       )}
 
-      {/* Unified Toggle Bar for ALL controls - More compact on mobile */}
+      {/* Unified Toggle Bar - More compact on mobile - with smooth transition */}
       <div
-        onClick={() => {
-          vibrate([10])
-          setShowAllControls(!showAllControls)
-        }}
-        className="mb-1 sm:mb-2 flex items-center justify-center gap-1 sm:gap-1.5 py-1 sm:py-1.5 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all group"
+        onClick={handleToggleControls}
+        className={`
+          mb-1 sm:mb-2 flex items-center justify-center gap-1 sm:gap-1.5 py-1 sm:py-1.5 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all duration-200 ease-out group
+          ${scrollVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}
+        `}
         title={showAllControls ? "Hide controls" : "Show controls"}
       >
         {showAllControls ? (
@@ -168,9 +186,15 @@ export default function AttendanceView() {
         )}
       </div>
 
-      {/* Unified Controls Row - Semester + Weeks - More compact on mobile */}
+      {/* Unified Controls Row - Semester + Weeks - More compact on mobile - with smooth transition */}
       {showAllControls && (
-      <div className="mb-1.5 sm:mb-2 md:mb-3 flex flex-wrap items-center gap-1 sm:gap-1.5 md:gap-2">
+      <div
+        className={`
+          mb-1.5 sm:mb-2 md:mb-3 flex flex-wrap items-center gap-1 sm:gap-1.5 md:gap-2
+          transition-all duration-200 ease-out
+          ${scrollVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}
+        `}
+      >
         {/* Compact Semester Selector */}
         <SemesterSelector compact />
 
