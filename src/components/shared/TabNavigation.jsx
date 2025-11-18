@@ -1,10 +1,11 @@
-import { Table, GraduationCap, Calendar } from 'lucide-react'
+import { Table, GraduationCap, Calendar, Compass } from 'lucide-react'
 import { vibrate } from '../../utils/uiHelpers'
 
 export default function TabNavigation({ activeTab, onTabChange }) {
   const tabs = [
     { id: 'courses', label: 'Courses', shortLabel: 'Courses', icon: GraduationCap },
-    { id: 'timetable', label: 'Timetable', shortLabel: 'Schedule', icon: Calendar },
+    { id: 'explore', label: 'Explore', shortLabel: 'Explore', icon: Compass },
+    { id: 'timetable', label: 'My Schedule', shortLabel: 'Schedule', icon: Calendar },
     { id: 'attendance', label: 'Attendance', shortLabel: 'Track', icon: Table },
   ]
 

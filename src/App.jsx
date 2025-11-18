@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext'
 import Header from './components/shared/Header'
 import TabNavigation from './components/shared/TabNavigation'
 import CoursesView from './components/courses/CoursesView'
+import ExploreClassesView from './components/explore/ExploreClassesView'
 import TimetableView from './components/timetable/TimetableView'
 import AttendanceView from './components/attendance/AttendanceView'
 import InstallPrompt from './components/shared/InstallPrompt'
@@ -41,6 +42,7 @@ function AppContent() {
 
       <main className="flex-1 flex flex-col overflow-hidden">
         {activeTab === 'courses' && <CoursesView />}
+        {activeTab === 'explore' && <ExploreClassesView />}
         {activeTab === 'timetable' && <TimetableView />}
         {activeTab === 'attendance' && <AttendanceView />}
       </main>
