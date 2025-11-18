@@ -13,7 +13,7 @@ const vibrate = (pattern = [10]) => {
   }
 }
 
-export default function CourseForm({ onClose, onSave, existingCourse = null }) {
+export default function CourseForm({ onClose, onSave, existingCourse = null, isNewCourse = false }) {
   const { addCourse, updateCourse } = useApp()
   const [toast, setToast] = useState(null)
 
@@ -35,6 +35,15 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
     weekdays: existingCourse?.weekdays || [],
     initialAbsences: existingCourse?.initialAbsences || 0,
     allowedAbsences: existingCourse?.allowedAbsences || null,
+    // Preserve timetable metadata if passed from ExploreClassesView
+    instructor: existingCourse?.instructor,
+    schedule: existingCourse?.schedule,
+    room: existingCourse?.room,
+    roomNumber: existingCourse?.roomNumber,
+    building: existingCourse?.building,
+    courseCode: existingCourse?.courseCode,
+    section: existingCourse?.section,
+    timeSlot: existingCourse?.timeSlot,
   })
 
   const [userModifiedAbsences, setUserModifiedAbsences] = useState(!!existingCourse?.allowedAbsences)
@@ -134,8 +143,8 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
       newErrors.shortName = 'Short name is required'
     } else if (formData.shortName.length < 2) {
       newErrors.shortName = 'Short name must be at least 2 characters'
-    } else if (formData.shortName.length > 6) {
-      newErrors.shortName = 'Short name must not exceed 6 characters'
+    } else if (formData.shortName.length > 12) {
+      newErrors.shortName = 'Short name must not exceed 12 characters'
     }
     if (formData.weekdays.length !== formData.creditHours) {
       newErrors.weekdays = `Select ${formData.creditHours} session day(s)`
@@ -160,7 +169,8 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
       allowedAbsences: formData.allowedAbsences || 0,
     }
 
-    if (existingCourse) {
+    if (existingCourse && existingCourse.id && !isNewCourse) {
+      // Updating existing course
       updateCourse(existingCourse.id, courseData)
       vibrate([10, 50, 10]) // Success pattern
 
@@ -171,6 +181,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
         onClose()
       }
     } else {
+      // Adding new course
       const result = addCourse(courseData)
 
       if (result.success) {
@@ -240,7 +251,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
         form="course-form"
         className="flex-1 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-medium px-3 py-2.5 sm:px-5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-200 shadow-accent hover:shadow-accent-lg hover:scale-[1.02] active:scale-95"
       >
-        {existingCourse ? 'Update Course' : 'Add Course'}
+        {existingCourse && existingCourse.id && !isNewCourse ? 'Update Course' : 'Add Course to Your List'}
       </button>
       <button
         type="button"
@@ -288,21 +299,21 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
           {/* Short Name */}
           <div>
             <label className="block text-sm font-medium text-content-primary mb-2">
-              Short Name * <span className="text-content-tertiary font-normal text-xs">({formData.shortName.length}/6 characters)</span>
+              Short Name * <span className="text-content-tertiary font-normal text-xs">({formData.shortName.length}/12 characters)</span>
             </label>
             <input
               type="text"
               value={formData.shortName}
               onChange={(e) => {
-                const value = e.target.value.toUpperCase().slice(0, 6)
+                const value = e.target.value.toUpperCase().slice(0, 12)
                 setFormData({ ...formData, shortName: value })
               }}
-              maxLength={6}
+              maxLength={12}
               className="w-full px-4 py-2.5 bg-dark-bg/50 border border-dark-border/50 rounded-xl text-content-primary placeholder-content-disabled focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all uppercase"
-              placeholder="e.g., DSA or TOA"
+              placeholder="e.g., DSA or TOA LAB"
             />
             <p className="text-xs text-content-tertiary mt-1.5">
-              Short form for column display (2-6 characters)
+              Short form for column display (2-12 characters)
             </p>
             {errors.shortName && (
               <p className="text-xs text-attendance-danger mt-1.5">{errors.shortName}</p>

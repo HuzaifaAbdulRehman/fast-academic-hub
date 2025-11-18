@@ -41,10 +41,18 @@ function AppContent() {
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
       <main className="flex-1 flex flex-col overflow-hidden">
-        {activeTab === 'courses' && <CoursesView />}
-        {activeTab === 'explore' && <ExploreClassesView />}
-        {activeTab === 'timetable' && <TimetableView />}
-        {activeTab === 'attendance' && <AttendanceView />}
+        <div className={activeTab === 'courses' ? 'flex flex-col flex-1 overflow-hidden' : 'hidden'}>
+          <CoursesView onNavigate={setActiveTab} />
+        </div>
+        <div className={activeTab === 'explore' ? 'flex flex-col flex-1 overflow-hidden' : 'hidden'}>
+          <ExploreClassesView />
+        </div>
+        <div className={activeTab === 'timetable' ? 'flex flex-col flex-1 overflow-hidden' : 'hidden'}>
+          <TimetableView />
+        </div>
+        <div className={activeTab === 'attendance' ? 'flex flex-col flex-1 overflow-hidden' : 'hidden'}>
+          <AttendanceView />
+        </div>
       </main>
 
       {/* Install and notification prompts */}

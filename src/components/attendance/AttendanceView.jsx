@@ -215,7 +215,7 @@ export default function AttendanceView() {
         {/* Unified Toggle Bar - More compact on mobile */}
         <div
           onClick={handleToggleControls}
-          className="mb-1 sm:mb-2 flex items-center justify-center gap-1 sm:gap-1.5 py-1 sm:py-1.5 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all duration-200 ease-out group"
+          className="mb-1 sm:mb-2 mx-2 sm:mx-3 md:mx-4 flex items-center justify-center gap-1 sm:gap-1.5 py-1 sm:py-1.5 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all duration-200 ease-out group"
           title={showAllControls ? "Hide controls" : "Show controls"}
         >
           {showAllControls ? (
@@ -237,7 +237,7 @@ export default function AttendanceView() {
 
         {/* Unified Controls Row - Semester + Weeks - More compact on mobile */}
         {showAllControls && (
-        <div className="mb-1.5 sm:mb-2 md:mb-3 space-y-1.5 sm:space-y-2">
+        <div className="mb-1.5 sm:mb-2 md:mb-3 space-y-1.5 sm:space-y-2 px-2 sm:px-3 md:px-4">
           {/* Row 1: Semester + Weeks */}
           <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 md:gap-2">
             <SemesterSelector compact />

@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Plus, Check, Clock, MapPin, User, BookOpen, AlertTriangle, ChevronDown, ChevronUp, Ban } from 'lucide-react'
+import { Plus, Check, Clock, MapPin, User, BookOpen, AlertTriangle, ChevronDown, ChevronUp, CheckCheck, CheckSquare, Square } from 'lucide-react'
 import { vibrate } from '../../utils/uiHelpers'
 import { getHighlightedText } from '../../hooks/useClassSearch'
+import { formatTimeTo12Hour } from '../../utils/dateHelpers'
 
 /**
  * Day color mapping for left border accent
@@ -46,10 +47,14 @@ export default function ClassCard({
   onAdd,
   isAdded,
   isExactMatch,
+  enrolledCourse,
   isAdding,
   hasConflict,
   conflictMessage,
-  searchTerm
+  searchTerm,
+  multiSelectMode = false,
+  isSelected = false,
+  selectedDifferentSection = null
 }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -60,7 +65,9 @@ export default function ClassCard({
 
   const handleAdd = (e) => {
     e.stopPropagation()
-    if (isAdded || isAdding) return
+    // In multi-select mode, allow selecting (will be filtered out during bulk add)
+    // In normal mode, prevent adding if already added or currently adding
+    if (!multiSelectMode && (isAdded || isAdding)) return
     vibrate(15)
     onAdd(classData)
   }
@@ -162,6 +169,16 @@ export default function ClassCard({
               </div>
             )}
 
+            {/* Section Conflict Warning (Multiselect) */}
+            {multiSelectMode && selectedDifferentSection && !isSelected && (
+              <div className="flex items-center gap-1.5 mt-2 px-2 py-1 rounded-md bg-orange-500/10 border border-orange-400/30">
+                <AlertTriangle className="w-3 h-3 flex-shrink-0 text-orange-400" />
+                <span className="text-xs text-orange-400 font-medium">
+                  Section {selectedDifferentSection.section} selected
+                </span>
+              </div>
+            )}
+
             {/* Expand Indicator */}
             <div className="flex items-center gap-1 mt-2 text-xs text-content-tertiary group-hover:text-accent transition-colors">
               {isExpanded ? (
@@ -178,51 +195,85 @@ export default function ClassCard({
             </div>
           </button>
 
-          {/* Add Button - Fixed right side */}
+          {/* Add/Select Button - Fixed right side */}
           <button
             onClick={handleAdd}
-            disabled={isAdded || isAdding}
+            disabled={(!multiSelectMode && (isAdded || isAdding))}
             className={`
               relative flex-shrink-0
-              w-12 h-12 sm:w-14 sm:h-14
+              w-14 h-14 sm:w-14 sm:h-14 md:w-16 md:h-16
               flex items-center justify-center
               rounded-xl
               font-semibold text-sm
               transition-all duration-300
-              ${isExactMatch
-                ? 'bg-attendance-safe/20 text-attendance-safe cursor-default'
-                : isAdded
-                ? 'bg-gray-500/20 text-gray-400 cursor-not-allowed'
-                : isAdding
-                ? 'bg-accent/30 text-accent cursor-wait'
-                : hasConflict
-                ? 'bg-attendance-warning/20 text-attendance-warning hover:bg-attendance-warning/30 hover:scale-110 active:scale-95'
-                : 'bg-accent/20 text-accent hover:bg-accent hover:text-dark-bg hover:scale-110 hover:shadow-lg hover:shadow-accent/30 active:scale-95'
+              ${multiSelectMode
+                ? (isAdded
+                  ? (isExactMatch
+                    ? 'bg-attendance-safe/30 text-attendance-safe cursor-not-allowed border-2 border-attendance-safe/50'
+                    : 'bg-blue-500/10 text-blue-400 cursor-not-allowed border-2 border-blue-400/30')
+                  : selectedDifferentSection
+                  ? 'bg-dark-surface border-2 border-orange-400/30 text-orange-400/50 cursor-not-allowed opacity-50'
+                  : isSelected
+                  ? 'bg-accent text-dark-bg border-2 border-accent shadow-lg shadow-accent/30'
+                  : 'bg-dark-surface border-2 border-dark-border hover:border-accent/50 hover:scale-110 active:scale-95')
+                : (isExactMatch
+                  ? 'bg-attendance-safe/30 text-attendance-safe cursor-default border-2 border-attendance-safe/50 shadow-lg shadow-attendance-safe/20'
+                  : isAdded
+                  ? 'bg-blue-500/10 text-blue-400 cursor-not-allowed border border-blue-400/30'
+                  : isAdding
+                  ? 'bg-accent/30 text-accent cursor-wait'
+                  : hasConflict
+                  ? 'bg-attendance-warning/20 text-attendance-warning hover:bg-attendance-warning/30 hover:scale-110 active:scale-95'
+                  : 'bg-accent/20 text-accent hover:bg-accent hover:text-dark-bg hover:scale-110 hover:shadow-lg hover:shadow-accent/30 active:scale-95')
               }
               disabled:cursor-not-allowed disabled:hover:scale-100
             `}
             title={
-              isExactMatch
-                ? 'This exact section is in your courses'
+              multiSelectMode && selectedDifferentSection
+                ? `Cannot select - ${classData.courseCode} Section ${selectedDifferentSection.section} already selected`
+                : multiSelectMode && isAdded
+                ? (isExactMatch
+                  ? `✓ Already enrolled in this section`
+                  : `Already enrolled in ${classData.courseCode} Section ${enrolledCourse?.section}`)
+                : isExactMatch
+                ? `✓ Enrolled in ${classData.courseCode} Section ${enrolledCourse?.section || classData.section}`
+                : isAdded && enrolledCourse
+                ? `Already enrolled in ${classData.courseCode} Section ${enrolledCourse.section}`
                 : isAdded
-                ? 'Already taking this course (different section)'
+                ? 'Already enrolled in this course (different section)'
                 : isAdding
                 ? 'Adding...'
                 : hasConflict
                 ? 'Has conflict'
+                : multiSelectMode
+                ? 'Select to add'
                 : 'Add to My Courses'
             }
-            aria-label={isAdded ? 'Already added to courses' : 'Add to my courses'}
+            aria-label={isAdded ? 'Already added to courses' : multiSelectMode ? 'Select course' : 'Add to my courses'}
           >
-            <div className={`transition-transform duration-300 ${isAdding ? 'animate-spin' : (isAdded || isExactMatch) ? 'scale-110' : ''}`}>
-              {isExactMatch ? (
-                <Check className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={3} />
-              ) : isAdded ? (
-                <Ban className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
-              ) : isAdding ? (
-                <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            <div className={`transition-transform duration-300 ${isAdding ? 'animate-spin' : (isAdded || isExactMatch || isSelected) ? 'scale-110' : ''}`}>
+              {multiSelectMode ? (
+                isAdded ? (
+                  isExactMatch ? (
+                    <Check className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} />
+                  ) : (
+                    <CheckCheck className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={2} />
+                  )
+                ) : isSelected ? (
+                  <CheckSquare className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={2} />
+                ) : (
+                  <Square className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={1.5} />
+                )
               ) : (
-                <Plus className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
+                isExactMatch ? (
+                  <Check className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} />
+                ) : isAdded ? (
+                  <CheckCheck className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={2} />
+                ) : isAdding ? (
+                  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Plus className="w-5 h-5 sm:w-5.5 sm:h-5.5" strokeWidth={2} />
+                )
               )}
             </div>
           </button>
@@ -259,7 +310,10 @@ export default function ClassCard({
                               {day}
                             </span>
                             <span className="text-xs text-content-tertiary font-mono">
-                              <HighlightedText text={session.timeSlot || 'TBA'} searchTerm={searchTerm} />
+                              <HighlightedText
+                                text={session.timeSlot ? formatTimeTo12Hour(session.timeSlot.split('-')[0]) + ' - ' + formatTimeTo12Hour(session.timeSlot.split('-')[1]) : 'TBA'}
+                                searchTerm={searchTerm}
+                              />
                             </span>
                           </div>
                           {session.room && (
@@ -298,14 +352,26 @@ export default function ClassCard({
 
           {/* Expanded Add Button / Status */}
           {isExactMatch ? (
-            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-attendance-safe/20 text-attendance-safe border border-attendance-safe/30 text-sm font-semibold">
-              <Check className="w-4 h-4" />
-              This Section Added to My Courses
+            <div className="w-full flex flex-col items-center justify-center gap-2 px-4 py-3 rounded-lg bg-attendance-safe/20 text-attendance-safe border border-attendance-safe/30 text-sm font-semibold">
+              <div className="flex items-center gap-2">
+                <Check className="w-4 h-4" />
+                <span>This Section Added to My Courses</span>
+              </div>
+            </div>
+          ) : isAdded && enrolledCourse ? (
+            <div className="w-full flex flex-col items-center justify-center gap-1 px-4 py-3 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-400/30 text-sm">
+              <div className="flex items-center gap-2 font-semibold">
+                <CheckCheck className="w-4 h-4" />
+                <span>Already Enrolled in This Course</span>
+              </div>
+              <span className="text-xs text-blue-300">
+                Section {enrolledCourse.section}
+              </span>
             </div>
           ) : isAdded ? (
-            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-500/20 text-gray-400 border border-gray-500/30 text-sm font-semibold">
-              <Ban className="w-4 h-4" />
-              Already Taking This Course (Different Section)
+            <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-400/30 text-sm font-semibold">
+              <CheckCheck className="w-4 h-4" />
+              Already Enrolled (Different Section)
             </div>
           ) : (
             <button

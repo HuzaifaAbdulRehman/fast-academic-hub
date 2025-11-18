@@ -23,7 +23,9 @@ export function detectConflicts(newClass, enrolledCourses) {
 
   enrolledCourses.forEach(course => {
     // 1. Check for duplicate course (same code, different section)
-    if (course.code === newClass.courseCode) {
+    // Handle both 'code' and 'courseCode' properties for consistency
+    const courseCode = course.code || course.courseCode
+    if (courseCode === newClass.courseCode) {
       if (course.section !== newClass.section) {
         conflicts.hasConflict = true
         conflicts.type = 'duplicate'
@@ -63,12 +65,17 @@ export function detectConflicts(newClass, enrolledCourses) {
  * @returns {boolean} - True if classes overlap
  */
 function hasTimeOverlap(class1, class2) {
-  if (!class1.days || !class2.days) return false
+  // Handle both 'days' and 'weekdays' properties, and extract from schedule if needed
+  const days1 = class1.days || (class1.schedule?.map(s => s.day)) || []
+  const days2 = class2.days || (class2.schedule?.map(s => s.day)) || (class2.weekdays?.map(dayNum => {
+    const dayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    return dayMap[dayNum]
+  })) || []
+
+  if (days1.length === 0 || days2.length === 0) return false
 
   // Check if any days overlap
-  const overlappingDays = class1.days.filter(day =>
-    class2.days && class2.days.includes(day)
-  )
+  const overlappingDays = days1.filter(day => days2.includes(day))
 
   if (overlappingDays.length === 0) return false
 

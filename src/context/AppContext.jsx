@@ -119,9 +119,9 @@ export function AppProvider({ children }) {
           updates.colorHex = assignedColor.hex
         }
         if (!course.shortName) {
-          // Auto-generate short name from first letters of each word, max 6 chars
+          // Auto-generate short name from first letters of each word, max 12 chars
           const words = course.name.trim().split(/\s+/)
-          updates.shortName = words.map(w => w[0]).join('').toUpperCase().slice(0, 6)
+          updates.shortName = words.map(w => w[0]).join('').toUpperCase().slice(0, 12)
         }
         return updates
       }))

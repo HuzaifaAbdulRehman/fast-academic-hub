@@ -38,11 +38,8 @@ function fuzzyMatch(searchTokens, classData) {
     classData.courseCode,
     classData.instructor,
     classData.section,
-    classData.room,
-    classData.timeSlot,
     classData.day,
-    classData.days?.join(' '),
-    classData.sessions?.map(s => `${s.day} ${s.timeSlot} ${s.room}`).join(' ')
+    classData.days?.join(' ')
   ]
 
   // Normalize all field values

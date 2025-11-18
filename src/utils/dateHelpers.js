@@ -199,3 +199,45 @@ export function areSameDay(date1, date2) {
 export function getTodayISO() {
   return toISODate(new Date())
 }
+
+/**
+ * Convert 24-hour time to 12-hour format
+ * @param {string} time24 - Time in 24-hour format (e.g., "14:30" or "09:00")
+ * @returns {string} Time in 12-hour format (e.g., "2:30 PM" or "9:00 AM")
+ */
+export function formatTimeTo12Hour(time24) {
+  if (!time24) return '9:00 AM'
+
+  // If already in 12-hour format, return as is
+  if (time24.includes('AM') || time24.includes('PM')) {
+    return time24.trim()
+  }
+
+  const [hours, minutes] = time24.split(':')
+  const hour = parseInt(hours)
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  const hour12 = hour % 12 || 12
+  return `${hour12}:${minutes || '00'} ${ampm}`
+}
+
+/**
+ * Convert time range from 24-hour to 12-hour format
+ * @param {string} timeRange - Time range in 24-hour format (e.g., "14:30-16:00")
+ * @returns {string} Time range in 12-hour format (e.g., "2:30 PM - 4:00 PM")
+ */
+export function formatTimeRangeTo12Hour(timeRange) {
+  if (!timeRange) return 'TBA'
+
+  // If already in 12-hour format, return as is
+  if (timeRange.includes('AM') || timeRange.includes('PM')) {
+    return timeRange.trim()
+  }
+
+  const [start, end] = timeRange.split('-').map(t => t.trim())
+  if (!start || !end) return timeRange
+
+  const startTime12 = formatTimeTo12Hour(start)
+  const endTime12 = formatTimeTo12Hour(end)
+
+  return `${startTime12} - ${endTime12}`
+}

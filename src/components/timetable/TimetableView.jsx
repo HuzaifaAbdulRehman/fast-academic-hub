@@ -6,16 +6,7 @@ import CacheReminderBanner from '../shared/CacheReminderBanner'
 import Toast from '../shared/Toast'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import { clearTimetableCache } from '../../utils/cacheManager'
-
-// Convert 24-hour time to 12-hour format
-const formatTimeTo12Hour = (time24) => {
-  if (!time24) return '9:00 AM'
-  const [hours, minutes] = time24.split(':')
-  const hour = parseInt(hours)
-  const ampm = hour >= 12 ? 'PM' : 'AM'
-  const hour12 = hour % 12 || 12
-  return `${hour12}:${minutes || '00'} ${ampm}`
-}
+import { formatTimeTo12Hour } from '../../utils/dateHelpers'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
@@ -194,7 +185,8 @@ export default function TimetableView() {
     setRefreshing(false)
     setToast({
       message: 'Timetable refreshed successfully',
-      type: 'success'
+      type: 'success',
+      duration: 2000
     })
   }
 
@@ -203,7 +195,8 @@ export default function TimetableView() {
     clearTimetableCache()
     setToast({
       message: 'Timetable cache cleared successfully',
-      type: 'success'
+      type: 'success',
+      duration: 2000
     })
     setShowCacheReminder(false) // Hide banner after clearing cache
     // Reload page after a short delay to fetch fresh data
@@ -448,8 +441,10 @@ export default function TimetableView() {
       {/* Toast Notifications */}
       {toast && (
         <Toast
+          key={`${toast.message}-${Date.now()}`}
           message={toast.message}
           type={toast.type}
+          duration={toast.duration}
           onClose={() => setToast(null)}
         />
       )}

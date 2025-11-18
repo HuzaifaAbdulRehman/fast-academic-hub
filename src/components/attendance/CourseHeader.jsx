@@ -86,11 +86,28 @@ export default function CourseHeader({
             style={{ backgroundColor: course.colorHex || courseColor?.hex || '#6366f1' }}
           />
           <div
-            className="text-[9px] sm:text-[10px] md:text-sm font-bold truncate text-content-primary max-w-[38px] sm:max-w-[44px] md:max-w-[58px]"
+            className="text-[9px] sm:text-[10px] md:text-sm font-bold text-content-primary max-w-[38px] sm:max-w-[44px] md:max-w-[58px] min-w-0"
             style={{ fontWeight: 700 }}
             title={course.name || 'Course'}
           >
-            {course.shortName || course.name || 'N/A'}
+            {(() => {
+              const displayName = course.shortName || course.name || 'N/A'
+              // Check if the name contains "LAB" (case-insensitive)
+              const labMatch = displayName.match(/^(.+?)\s+(LAB)$/i)
+
+              if (labMatch) {
+                // Split into two lines: main part and "LAB"
+                return (
+                  <div className="flex flex-col items-center leading-tight">
+                    <span className="truncate max-w-full">{labMatch[1]}</span>
+                    <span className="text-[8px] sm:text-[9px] md:text-xs">{labMatch[2].toUpperCase()}</span>
+                  </div>
+                )
+              }
+
+              // For non-lab courses, use standard truncate
+              return <span className="truncate">{displayName}</span>
+            })()}
           </div>
         </div>
 

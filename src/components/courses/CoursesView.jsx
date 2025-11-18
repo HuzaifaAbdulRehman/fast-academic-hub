@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useApp } from '../../context/AppContext'
-import { BookOpen, Calendar, AlertCircle, CheckCircle2, Plus, Trash2, Edit, FolderOpen, X } from 'lucide-react'
+import { BookOpen, Calendar, AlertCircle, CheckCircle2, Plus, Trash2, Edit, FolderOpen, X, Compass } from 'lucide-react'
 import TimetableSelector from './TimetableSelector'
 import CourseForm from './CourseForm'
 import ConfirmModal from '../shared/ConfirmModal'
@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import { clearTimetableCache } from '../../utils/cacheManager'
 
-export default function CoursesView() {
+export default function CoursesView({ onNavigate }) {
   const { courses, deleteCourse, deleteAllCourses, updateCourse, addCourse, semesters, activeSemesterId, switchSemester, createSemester, deleteSemester } = useApp()
   const [showTimetableSelector, setShowTimetableSelector] = useState(false)
   const [showCourseForm, setShowCourseForm] = useState(false)
@@ -25,6 +25,7 @@ export default function CoursesView() {
   const [refreshing, setRefreshing] = useState(false)
   const [toast, setToast] = useState(null)
   const [showCacheReminder, setShowCacheReminder] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(true)
 
   const handleEditCourse = (course) => {
     setEditingCourse(course)
@@ -86,7 +87,8 @@ export default function CoursesView() {
     setRefreshing(false)
     setToast({
       message: 'Courses refreshed.',
-      type: 'success'
+      type: 'success',
+      duration: 2000
     })
   }
 
@@ -95,7 +97,8 @@ export default function CoursesView() {
     clearTimetableCache()
     setToast({
       message: 'Timetable cache cleared successfully',
-      type: 'success'
+      type: 'success',
+      duration: 2000
     })
     setShowCacheReminder(false) // Hide banner after clearing cache
     // Reload page after a short delay to fetch fresh data
@@ -154,76 +157,87 @@ export default function CoursesView() {
 
         {courses.length === 0 ? (
           // Welcome Screen - No Courses Yet
-          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-accent/20 to-accent/5 rounded-3xl flex items-center justify-center mb-6 shadow-lg shadow-accent/10">
-              <BookOpen className="w-10 h-10 text-accent" />
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-3 sm:px-4">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-accent/20 to-accent/5 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-4 sm:mb-6 shadow-lg shadow-accent/10">
+              <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-accent" />
             </div>
 
-            <h2 className="text-2xl font-bold text-content-primary mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-content-primary mb-1 sm:mb-2 px-2">
               Select Your Courses
             </h2>
-            <p className="text-lg font-semibold text-accent mb-4">
+            <p className="text-base sm:text-lg font-semibold text-accent mb-3 sm:mb-4 px-2">
               Step 1: Build Your Schedule
             </p>
 
-            <p className="text-content-secondary leading-relaxed mb-8 max-w-md">
-              Start by selecting courses from your FAST NUCES timetable.
+            <p className="text-sm sm:text-base text-content-secondary leading-relaxed mb-6 sm:mb-8 max-w-md px-2">
+              Start by exploring or selecting courses from your FAST NUCES timetable.
               We'll automatically set up your schedule and attendance tracking.
             </p>
 
             {/* Feature List */}
-            <div className="grid gap-4 mb-8 w-full max-w-md">
-              <div className="flex items-start gap-3 bg-dark-card p-4 rounded-xl border border-dark-border">
-                <div className="p-1.5 bg-blue-500/10 rounded-lg mt-0.5 flex-shrink-0">
-                  <BookOpen className="w-4 h-4 text-blue-400" />
+            <div className="grid gap-2.5 sm:gap-4 mb-6 sm:mb-8 w-full max-w-md px-2 sm:px-0">
+              <div className="flex items-start gap-2 sm:gap-3 bg-dark-card p-3 sm:p-4 rounded-lg sm:rounded-xl border border-dark-border">
+                <div className="p-1 sm:p-1.5 bg-blue-500/10 rounded-md sm:rounded-lg mt-0.5 flex-shrink-0">
+                  <Compass className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
                 </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-content-primary">Select from Timetable</p>
-                  <p className="text-xs text-content-tertiary">Choose your section, import all courses instantly</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 bg-dark-card p-4 rounded-xl border border-dark-border">
-                <div className="p-1.5 bg-purple-500/10 rounded-lg mt-0.5 flex-shrink-0">
-                  <Calendar className="w-4 h-4 text-purple-400" />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-content-primary">Configure Dates</p>
-                  <p className="text-xs text-content-tertiary">Set semester dates or choose quick presets</p>
+                <div className="text-left min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-content-primary">Explore All Classes</p>
+                  <p className="text-[10px] sm:text-xs text-content-tertiary leading-snug">Browse and search the entire timetable, add courses individually</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 bg-dark-card p-4 rounded-xl border border-dark-border">
-                <div className="p-1.5 bg-green-500/10 rounded-lg mt-0.5 flex-shrink-0">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <div className="flex items-start gap-2 sm:gap-3 bg-dark-card p-3 sm:p-4 rounded-lg sm:rounded-xl border border-dark-border">
+                <div className="p-1 sm:p-1.5 bg-purple-500/10 rounded-md sm:rounded-lg mt-0.5 flex-shrink-0">
+                  <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
                 </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-content-primary">Auto Setup</p>
-                  <p className="text-xs text-content-tertiary">Timetable and attendance tracking ready instantly</p>
+                <div className="text-left min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-content-primary">Select from Timetable</p>
+                  <p className="text-[10px] sm:text-xs text-content-tertiary leading-snug">Choose your section, import all courses instantly</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2 sm:gap-3 bg-dark-card p-3 sm:p-4 rounded-lg sm:rounded-xl border border-dark-border">
+                <div className="p-1 sm:p-1.5 bg-green-500/10 rounded-md sm:rounded-lg mt-0.5 flex-shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />
+                </div>
+                <div className="text-left min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-content-primary">Auto Setup</p>
+                  <p className="text-[10px] sm:text-xs text-content-tertiary leading-snug">Timetable and attendance tracking ready instantly</p>
                 </div>
               </div>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col gap-3 w-full max-w-md">
+            <div className="flex flex-col gap-2.5 sm:gap-3 w-full max-w-md px-2 sm:px-0">
+              {/* Primary: Explore Classes */}
               <button
-                onClick={() => setShowTimetableSelector(true)}
-                className="px-4 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent text-white rounded-xl font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-200 flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
+                onClick={() => onNavigate && onNavigate('explore')}
+                className="px-3 py-2.5 sm:px-6 sm:py-3.5 md:px-8 md:py-4 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent text-white rounded-xl font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-base"
               >
-                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
-                Select from Timetable
+                <Compass className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="whitespace-nowrap">Explore All Classes</span>
               </button>
 
+              {/* Secondary: Select from Timetable */}
+              <button
+                onClick={() => setShowTimetableSelector(true)}
+                className="px-3 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3.5 bg-dark-card border-2 border-accent/30 hover:border-accent/50 text-content-primary rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-base hover:scale-[1.02] active:scale-95"
+              >
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="whitespace-nowrap">Select from Timetable</span>
+              </button>
+
+              {/* Tertiary: Add Manually */}
               <button
                 onClick={() => setShowCourseForm(true)}
-                className="px-4 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 bg-dark-card border-2 border-dark-border hover:border-accent/50 text-content-primary rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base hover:scale-[1.02] active:scale-95"
+                className="px-3 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3.5 bg-dark-card border-2 border-dark-border hover:border-accent/30 text-content-secondary hover:text-content-primary rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-base hover:scale-[1.02] active:scale-95"
               >
-                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                Add Course Manually
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="whitespace-nowrap">Add Manually</span>
               </button>
             </div>
 
-            <p className="text-xs text-content-tertiary mt-6 text-center">
+            <p className="text-[10px] sm:text-xs text-content-tertiary mt-4 sm:mt-6 text-center px-4">
               Plan Smart. Take Leaves. Chill at Home. Still Hit 80%.
             </p>
           </div>
@@ -258,20 +272,31 @@ export default function CoursesView() {
               </div>
             </div>
 
-            {/* Success Message */}
-            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-green-400 mb-1">
-                  Courses Imported Successfully!
-                </p>
-                <p className="text-xs text-content-secondary">
-                  Your timetable and attendance tracking are ready.
-                  Switch to <span className="font-medium text-accent">Timetable</span> to view your schedule
-                  or <span className="font-medium text-accent">Attendance</span> to track absences.
-                </p>
+            {/* Success Message - Dismissible */}
+            {showSuccessMessage && (
+              <div className="mb-6 p-3 sm:p-4 bg-green-500/10 border border-green-500/20 rounded-xl flex items-start gap-2 sm:gap-3 animate-fade-in">
+                <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-green-400 mb-1">
+                    Courses Imported Successfully!
+                  </p>
+                  <p className="text-xs text-content-secondary">
+                    Your timetable and attendance tracking are ready.
+                    Switch to <span className="font-medium text-accent">Timetable</span> to view your schedule
+                    or <span className="font-medium text-accent">Attendance</span> to track absences.
+                  </p>
+                </div>
+                {/* Dismiss Button */}
+                <button
+                  onClick={() => setShowSuccessMessage(false)}
+                  className="p-1 hover:bg-green-500/10 rounded transition-colors flex-shrink-0"
+                  title="Dismiss"
+                  aria-label="Dismiss success message"
+                >
+                  <X className="w-4 h-4 text-content-tertiary hover:text-green-400" />
+                </button>
               </div>
-            </div>
+            )}
 
             {/* Course Cards */}
             <div className="grid gap-3 mb-6">
@@ -394,8 +419,10 @@ export default function CoursesView() {
       {/* Toast Notifications */}
       {toast && (
         <Toast
+          key={`${toast.message}-${Date.now()}`}
           message={toast.message}
           type={toast.type}
+          duration={toast.duration}
           onClose={() => setToast(null)}
         />
       )}

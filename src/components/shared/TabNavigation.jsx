@@ -3,9 +3,9 @@ import { vibrate } from '../../utils/uiHelpers'
 
 export default function TabNavigation({ activeTab, onTabChange }) {
   const tabs = [
-    { id: 'courses', label: 'Courses', shortLabel: 'Courses', icon: GraduationCap },
     { id: 'explore', label: 'Explore', shortLabel: 'Explore', icon: Compass },
-    { id: 'timetable', label: 'My Schedule', shortLabel: 'Schedule', icon: Calendar },
+    { id: 'courses', label: 'My Courses', shortLabel: 'Courses', icon: GraduationCap },
+    { id: 'timetable', label: 'My Timetable', shortLabel: 'Schedule', icon: Calendar },
     { id: 'attendance', label: 'Attendance', shortLabel: 'Track', icon: Table },
   ]
 
