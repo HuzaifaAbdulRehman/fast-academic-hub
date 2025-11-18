@@ -2,7 +2,7 @@
   "name": "fast-course-timetable-attendance-tracker",
   "private": true,
   "version": "1.0.0",
-  "description": "FAST Course, Timetable & Attendance Tracker - Complete NUCES course management, timetable planning, and smart attendance tracking",
+  "description": "FAST Course Timetable & Attendance Tracker - Complete NUCES timetable management and smart attendance tracking",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -25,11 +25,11 @@ export default function Header() {
               </div>
               <div className="min-w-0 flex-1 overflow-hidden">
                 <div className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-content-primary leading-tight">
-                  <span className="block sm:inline">FAST Absence &</span>
-                  <span className="block sm:inline"> Timetable Tracker</span>
+                  <span className="block sm:inline">FAST Course, Timetable &</span>
+                  <span className="block sm:inline"> Attendance Tracker</span>
                 </div>
                 <p className="text-xs sm:text-xs md:text-sm text-content-tertiary hidden sm:block truncate mt-0.5">
-                  Track absences • Stay above 80%
+                  Course management • Timetable • Attendance • Stay above 80%
                 </p>
               </div>
             </div>
