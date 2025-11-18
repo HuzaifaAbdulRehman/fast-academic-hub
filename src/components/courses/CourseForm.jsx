@@ -220,13 +220,13 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
     </div>
   )
 
-  // Custom title with subtitle
+  // Custom title with subtitle - Standardized typography
   const titleContent = (
     <div>
-      <h2 className="text-lg font-semibold text-content-primary">
+      <h2 className="text-base sm:text-lg font-semibold text-content-primary">
         {existingCourse ? 'Edit Course' : 'Add New Course'}
       </h2>
-      <p className="text-xs text-content-tertiary">
+      <p className="text-xs sm:text-sm text-content-tertiary mt-0.5">
         Track your attendance
       </p>
     </div>

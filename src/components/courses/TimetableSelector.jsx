@@ -798,10 +798,10 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
               </div>
               <div>
-                <h2 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-content-primary">
+                <h2 className="text-base sm:text-lg font-bold text-content-primary">
                   Select Courses from Timetable
                 </h2>
-                <p className="text-[10px] sm:text-xs text-content-tertiary hidden sm:block">
+                <p className="text-xs sm:text-sm text-content-tertiary mt-0.5 hidden sm:block">
                   Choose your department and enter section
                 </p>
               </div>
@@ -809,12 +809,16 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             <div className="flex items-center gap-1 sm:gap-2">
               {showManualOption && (
                 <button
-                  onClick={() => setShowManualForm(true)}
-                  className="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-xs md:text-sm bg-dark-bg border border-dark-border rounded-lg text-content-primary hover:bg-dark-surface-raised transition-all flex items-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    vibrate([10])
+                    setShowManualForm(true)
+                  }}
+                  className="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm bg-gradient-to-br from-accent/15 to-accent/10 hover:from-accent/25 hover:to-accent/15 border-2 border-accent/30 hover:border-accent/50 rounded-lg text-accent hover:text-accent-hover font-medium transition-all flex items-center gap-1 sm:gap-1.5 hover:scale-[1.02] active:scale-95 shadow-sm"
+                  title="Add course details manually"
                 >
-                  <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">Add Manually</span>
-                  <span className="sm:hidden">Add</span>
+                  <span className="sm:hidden">Manual</span>
                 </button>
               )}
               <button
@@ -1127,16 +1131,56 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           )}
 
           {!loading && !error && filteredCourses.length === 0 && section && hasSearched && (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-dark-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="w-8 h-8 text-content-tertiary" />
+            <div className="text-center py-8 sm:py-12">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-dark-surface-raised rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Search className="w-7 h-7 sm:w-8 sm:h-8 text-content-tertiary" />
               </div>
-              <p className="text-sm text-content-secondary mb-1">
+              <p className="text-sm sm:text-base text-content-secondary mb-1">
                 No courses found for section "{section}"
               </p>
-              <p className="text-xs text-content-tertiary">
+              <p className="text-xs sm:text-sm text-content-tertiary mb-6 sm:mb-8">
                 Try a different section (e.g., BCS-5F, BSE-5A)
               </p>
+
+              {/* Manual Add CTA - Enhanced Discoverability */}
+              {showManualOption && (
+                <>
+                  <div className="relative my-6 sm:my-8">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-dark-border"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs sm:text-sm uppercase">
+                      <span className="px-2 bg-dark-surface text-content-tertiary font-medium">Or</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      vibrate([10])
+                      setShowManualForm(true)
+                    }}
+                    className="group mx-auto max-w-sm w-full bg-gradient-to-br from-accent/10 to-accent/5 hover:from-accent/20 hover:to-accent/10 border-2 border-accent/30 hover:border-accent/50 rounded-xl p-4 sm:p-5 transition-all hover:scale-[1.02] active:scale-95"
+                  >
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 mb-2">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/20 group-hover:bg-accent/30 rounded-xl flex items-center justify-center transition-colors">
+                        <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
+                      </div>
+                      <div className="text-left flex-1">
+                        <h3 className="text-sm sm:text-base font-bold text-accent group-hover:text-accent-hover transition-colors">
+                          Add Course Manually
+                        </h3>
+                        <p className="text-xs sm:text-sm text-content-tertiary">
+                          Can't find your course?
+                        </p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-accent group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                    <p className="text-xs text-content-tertiary text-center">
+                      Add course details yourself
+                    </p>
+                  </button>
+                </>
+              )}
             </div>
           )}
 

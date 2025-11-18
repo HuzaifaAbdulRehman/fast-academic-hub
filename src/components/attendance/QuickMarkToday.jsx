@@ -48,13 +48,13 @@ export default function QuickMarkToday({ inline = false }) {
     <Calendar className="w-5 h-5 text-accent" />
   )
 
-  // Custom title with subtitle
+  // Custom title with subtitle - Standardized typography
   const titleContent = (
     <div>
-      <h2 className="text-lg md:text-xl font-semibold text-content-primary">
+      <h2 className="text-base sm:text-lg font-semibold text-content-primary">
         Mark Today's Attendance
       </h2>
-      <p className="text-xs md:text-sm text-content-tertiary mt-0.5">
+      <p className="text-xs sm:text-sm text-content-tertiary mt-0.5">
         {formatDateLong(today)}
       </p>
     </div>
