@@ -4,19 +4,19 @@
 /* stylelint-disable-next-line unknownAtRules */
 @theme {
   /* Attendance colors (Professional palette) */
-  --color-attendance-safe: #10B981; /* Emerald green */
-  --color-attendance-warning: #F59E0B; /* Amber */
-  --color-attendance-danger: #DC2626; /* Deep red (not pinkish) */
+  --color-attendance-safe: #10B981; /* Emerald green - Safe zone (0-60%) */
+  --color-attendance-warning: #F59E0B; /* Amber - Caution zone (60-85%) */
+  --color-attendance-danger: #EF4444; /* Red - Danger zone (85-100%) */
 
-  /* Primary Accent (Professional Blue) */
-  --color-accent: #3B82F6; /* Blue 500 */
-  --color-accent-hover: #2563EB; /* Blue 600 */
-  --color-accent-light: #DBEAFE; /* Blue 100 */
+  /* Primary Accent (Indigo - Professional & Modern) */
+  --color-accent: #6366F1; /* Indigo 500 - Primary interactive elements */
+  --color-accent-hover: #4F46E5; /* Indigo 600 */
+  --color-accent-light: #E0E7FF; /* Indigo 100 */
 
-  /* Secondary Accent (Indigo for special features) */
-  --color-secondary: #6366F1; /* Indigo 500 */
-  --color-secondary-hover: #4F46E5; /* Indigo 600 */
-  --color-secondary-light: #E0E7FF; /* Indigo 100 */
+  /* Secondary Accent (Purple for special features) */
+  --color-secondary: #8B5CF6; /* Purple 500 - Special highlights */
+  --color-secondary-hover: #7C3AED; /* Purple 600 */
+  --color-secondary-light: #EDE9FE; /* Purple 100 */
 
   /* Dark theme backgrounds - Lighter & more comfortable */
   --color-dark-bg: #1a1a1e;

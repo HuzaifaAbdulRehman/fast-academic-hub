@@ -63,13 +63,16 @@ export function useScrollCollapse({ threshold = 50, enabled = true } = {}) {
       }
     }
 
+    // Listen to both window and document scroll events
     window.addEventListener('scroll', onScroll, { passive: true })
+    document.addEventListener('scroll', onScroll, { passive: true })
 
     // Initial check
     handleScroll()
 
     return () => {
       window.removeEventListener('scroll', onScroll)
+      document.removeEventListener('scroll', onScroll)
     }
   }, [handleScroll, enabled])
 

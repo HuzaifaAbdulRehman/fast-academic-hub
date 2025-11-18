@@ -1,34 +1,39 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useApp } from '../../context/AppContext'
 import AttendanceTable from './AttendanceTable'
 import CourseForm from '../courses/CourseForm'
 import Toast from '../shared/Toast'
 import SemesterSelector from '../shared/SemesterSelector'
-import { AlertCircle, CheckCircle2, Calendar, AlertTriangle, ChevronUp, ChevronDown, BookOpen } from 'lucide-react'
+import QuickMarkToday from './QuickMarkToday'
+import { AlertCircle, CheckCircle2, Calendar, AlertTriangle, ChevronUp, ChevronDown, BookOpen, CheckSquare, Square, ArrowLeftRight } from 'lucide-react'
 import { getTodayISO } from '../../utils/dateHelpers'
 import { DEFAULT_WEEKS_TO_SHOW } from '../../utils/constants'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import Confetti, { celebratePerfectAttendance, celebrateMilestone } from '../shared/Confetti'
 import { vibrate } from '../../utils/uiHelpers'
-import { useScrollCollapse } from '../../hooks/useScrollCollapse'
 
 export default function AttendanceView() {
-  const { courses, undoHistory, undo } = useApp()
+  const { courses, undoHistory, undo, markDaysAbsent } = useApp()
   const [refreshing, setRefreshing] = useState(false)
+
   const [showCourseForm, setShowCourseForm] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
   const [toast, setToast] = useState(null) // { message, type, action }
   const [showAllControls, setShowAllControls] = useState(true) // Track if ALL controls are visible - default to true
+  const [scrollVisible, setScrollVisible] = useState(true)
+  const tableContainerRef = useRef(null)
+  const [bulkSelectMode, setBulkSelectMode] = useState(false)
+  const [selectedDates, setSelectedDates] = useState([])
+  const [reorderMode, setReorderMode] = useState(false)
 
-  // Scroll-based collapse hook - always enabled
-  const { isVisible: scrollVisible } = useScrollCollapse({
-    threshold: 50,
-    enabled: true
-  })
+  // Track if we've already shown toast for current undo history
+  const lastUndoHistoryRef = useRef(null)
 
-  // Show undo toast when action is performed
+  // Show undo toast only when a NEW action is performed (not on tab navigation)
   useEffect(() => {
-    if (undoHistory) {
+    // Only show toast if undoHistory is new and different from last shown
+    if (undoHistory && undoHistory !== lastUndoHistoryRef.current) {
+      lastUndoHistoryRef.current = undoHistory
       setToast({
         message: undoHistory.description,
         type: 'info',
@@ -37,9 +42,13 @@ export default function AttendanceView() {
           onClick: () => {
             undo()
             setToast(null)
+            lastUndoHistoryRef.current = null
           }
         }
       })
+    } else if (!undoHistory && lastUndoHistoryRef.current) {
+      // Clear reference when undo history is cleared
+      lastUndoHistoryRef.current = null
     }
   }, [undoHistory, undo])
 
@@ -143,75 +152,151 @@ export default function AttendanceView() {
     setShowAllControls(!showAllControls)
   }
 
+  const toggleBulkSelectMode = () => {
+    vibrate([10])
+    setBulkSelectMode(prev => {
+      const newValue = !prev
+      if (newValue) {
+        setReorderMode(false)
+      }
+      return newValue
+    })
+    setSelectedDates([])
+  }
+
+  const handleBulkMarkAbsent = () => {
+    if (selectedDates.length > 0) {
+      markDaysAbsent(selectedDates)
+      onBulkMarkComplete(selectedDates.length)
+      setSelectedDates([])
+      setBulkSelectMode(false)
+    }
+  }
+
   const renderContent = () => (
     <div className="relative">
-      {/* App Tagline - More compact on mobile - with smooth transition */}
-      {courses.length > 0 && (
+      {/* Collapsible Header Container - smooth fade with transform */}
+      <div
+        className={`
+          transition-all duration-400 ease-out
+          ${scrollVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
+        `}
+        style={{
+          maxHeight: scrollVisible ? '500px' : '0px',
+          overflow: scrollVisible ? 'visible' : 'hidden'
+        }}
+      >
+        {/* App Tagline - More compact on mobile */}
+        {courses.length > 0 && (
+          <div className="mb-0.5 sm:mb-1 flex items-center justify-center py-0.5">
+            <p className="text-[9px] sm:text-[10px] md:text-sm text-content-tertiary font-medium leading-tight">
+              Plan Smart. Skip Smart. Stay Above 80%
+            </p>
+          </div>
+        )}
+
+        {/* Unified Toggle Bar - More compact on mobile */}
         <div
-          className={`
-            mb-0.5 sm:mb-1 flex items-center justify-center py-0.5
-            transition-all duration-200 ease-out
-            ${scrollVisible ? 'opacity-100 translate-y-0 max-h-20' : 'opacity-0 -translate-y-2 max-h-0 overflow-hidden'}
-          `}
+          onClick={handleToggleControls}
+          className="mb-1 sm:mb-2 flex items-center justify-center gap-1 sm:gap-1.5 py-1 sm:py-1.5 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all duration-200 ease-out group"
+          title={showAllControls ? "Hide controls" : "Show controls"}
         >
-          <p className="text-[9px] sm:text-[10px] md:text-sm text-content-tertiary font-medium leading-tight">
-            Plan Smart. Skip Smart. Stay Above 80%
-          </p>
+          {showAllControls ? (
+            <>
+              <ChevronUp className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent group-hover:text-accent-hover transition-colors" />
+              <span className="text-[9px] sm:text-[10px] text-content-secondary group-hover:text-content-primary transition-colors">
+                Collapse
+              </span>
+            </>
+          ) : (
+            <>
+              <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent group-hover:text-accent-hover transition-colors" />
+              <span className="text-[9px] sm:text-[10px] text-content-secondary group-hover:text-content-primary transition-colors">
+                Expand
+              </span>
+            </>
+          )}
+        </div>
+
+        {/* Unified Controls Row - Semester + Weeks - More compact on mobile */}
+        {showAllControls && (
+        <div className="mb-1.5 sm:mb-2 md:mb-3 space-y-1.5 sm:space-y-2">
+          {/* Row 1: Semester + Weeks */}
+          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 md:gap-2">
+            <SemesterSelector compact />
+            <select
+              value={weeksToShow}
+              onChange={(e) => setWeeksToShow(Number(e.target.value))}
+              className="bg-dark-surface-raised border border-dark-border rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 text-content-primary text-[9px] sm:text-[10px] focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all flex-shrink-0"
+            >
+              <option value={4}>4w</option>
+              <option value={8}>8w</option>
+              <option value={12}>12w</option>
+              <option value={16}>16w</option>
+              <option value={semesterWeeks}>All ({semesterWeeks}w)</option>
+            </select>
+          </div>
+
+          {/* Row 2: Action Buttons */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0">
+              <button
+                onClick={toggleBulkSelectMode}
+                className={`
+                  flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] sm:text-[10px] font-medium transition-all duration-200 flex-shrink-0
+                  ${bulkSelectMode
+                    ? 'bg-accent text-dark-bg'
+                    : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
+                  }
+                `}
+              >
+                {bulkSelectMode ? <CheckSquare className="w-3 h-3" /> : <Square className="w-3 h-3" />}
+                <span className="whitespace-nowrap">Select</span>
+              </button>
+
+              {!bulkSelectMode && courses.length > 1 && (
+                <button
+                  onClick={() => {
+                    vibrate([10])
+                    if (!reorderMode) {
+                      setBulkSelectMode(false)
+                      setSelectedDates([])
+                    }
+                    setReorderMode(!reorderMode)
+                  }}
+                  className={`
+                    flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] sm:text-[10px] font-medium transition-all duration-200 flex-shrink-0
+                    ${reorderMode
+                      ? 'bg-accent text-dark-bg'
+                      : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
+                    }
+                  `}
+                >
+                  <ArrowLeftRight className="w-3 h-3" />
+                  <span className="whitespace-nowrap">Reorder</span>
+                </button>
+              )}
+
+              {bulkSelectMode && selectedDates.length > 0 && (
+                <span className="text-[9px] sm:text-[10px] text-content-tertiary font-medium flex-shrink-0 tabular-nums">
+                  {selectedDates.length} selected
+                </span>
+              )}
+
+              {reorderMode && (
+                <span className="text-[9px] sm:text-[10px] text-accent font-medium flex-shrink-0">
+                  Use arrows
+                </span>
+              )}
+            </div>
+
+            {!bulkSelectMode && !reorderMode && (
+              <QuickMarkToday inline />
+            )}
+          </div>
         </div>
       )}
-
-      {/* Unified Toggle Bar - More compact on mobile - with smooth transition */}
-      <div
-        onClick={handleToggleControls}
-        className={`
-          mb-1 sm:mb-2 flex items-center justify-center gap-1 sm:gap-1.5 py-1 sm:py-1.5 bg-dark-surface border border-dark-border/50 rounded-lg cursor-pointer hover:bg-dark-surface-raised hover:border-accent/30 transition-all duration-200 ease-out group
-          ${scrollVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}
-        `}
-        title={showAllControls ? "Hide controls" : "Show controls"}
-      >
-        {showAllControls ? (
-          <>
-            <ChevronUp className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent group-hover:text-accent-hover transition-colors" />
-            <span className="text-[9px] sm:text-[10px] text-content-secondary group-hover:text-content-primary transition-colors">
-              Collapse
-            </span>
-          </>
-        ) : (
-          <>
-            <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent group-hover:text-accent-hover transition-colors" />
-            <span className="text-[9px] sm:text-[10px] text-content-secondary group-hover:text-content-primary transition-colors">
-              Expand
-            </span>
-          </>
-        )}
       </div>
-
-      {/* Unified Controls Row - Semester + Weeks - More compact on mobile - with smooth transition */}
-      {showAllControls && (
-      <div
-        className={`
-          mb-1.5 sm:mb-2 md:mb-3 flex flex-wrap items-center gap-1 sm:gap-1.5 md:gap-2
-          transition-all duration-200 ease-out
-          ${scrollVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}
-        `}
-      >
-        {/* Compact Semester Selector */}
-        <SemesterSelector compact />
-
-        {/* Weeks Dropdown */}
-        <select
-          value={weeksToShow}
-          onChange={(e) => setWeeksToShow(Number(e.target.value))}
-          className="bg-dark-surface-raised border border-dark-border rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 text-content-primary text-[9px] sm:text-[10px] focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all flex-shrink-0"
-        >
-          <option value={4}>4w</option>
-          <option value={8}>8w</option>
-          <option value={12}>12w</option>
-          <option value={16}>16w</option>
-          <option value={semesterWeeks}>All ({semesterWeeks}w)</option>
-        </select>
-      </div>
-      )}
 
       {/* Attendance Table */}
       <AttendanceTable
@@ -220,7 +305,28 @@ export default function AttendanceView() {
         onEditCourse={handleEditCourse}
         onDeleteCourse={handleDeleteCourse}
         onBulkMarkComplete={handleBulkMarkComplete}
-        showActions={showAllControls}
+        showActions={false}
+        bulkSelectMode={bulkSelectMode}
+        selectedDates={selectedDates}
+        setSelectedDates={setSelectedDates}
+        reorderMode={reorderMode}
+        onScroll={(scrollTop) => {
+          // Show header when at top or scrolling up, hide when scrolling down past threshold
+          if (scrollTop < 10) {
+            setScrollVisible(true)
+          } else if (scrollTop > 50) {
+            // Check scroll direction via ref
+            const lastScroll = tableContainerRef.current?.lastScrollTop || 0
+            if (scrollTop > lastScroll) {
+              setScrollVisible(false) // Scrolling down
+            } else {
+              setScrollVisible(true) // Scrolling up
+            }
+            if (tableContainerRef.current) {
+              tableContainerRef.current.lastScrollTop = scrollTop
+            }
+          }
+        }}
       />
 
       {/* Course Form Modal */}

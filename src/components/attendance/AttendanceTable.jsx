@@ -8,14 +8,23 @@ import QuickMarkToday from './QuickMarkToday'
 import CourseHeader from './CourseHeader'
 import { vibrate } from '../../utils/uiHelpers'
 
-export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, onDeleteCourse, onBulkMarkComplete, showActions = false }) {
+export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, onDeleteCourse, onBulkMarkComplete, showActions = false, bulkSelectMode: externalBulkSelectMode, selectedDates: externalSelectedDates, setSelectedDates: externalSetSelectedDates, reorderMode: externalReorderMode, onScroll }) {
   const { courses, attendance, toggleDay, toggleSession, deleteCourse, markDaysAbsent, reorderCourse } = useApp()
   const [deleteConfirm, setDeleteConfirm] = useState(null) // { course }
   const [longPressTimer, setLongPressTimer] = useState(null)
-  const [bulkSelectMode, setBulkSelectMode] = useState(false)
-  const [selectedDates, setSelectedDates] = useState([])
   const [swipedCourse, setSwipedCourse] = useState(null) // Track swiped course for delete reveal
-  const [reorderMode, setReorderMode] = useState(false) // Track reorder mode
+
+  // Use external state if provided, otherwise use internal state
+  const [internalBulkSelectMode, setInternalBulkSelectMode] = useState(false)
+  const [internalSelectedDates, setInternalSelectedDates] = useState([])
+  const [internalReorderMode, setInternalReorderMode] = useState(false)
+
+  const bulkSelectMode = externalBulkSelectMode !== undefined ? externalBulkSelectMode : internalBulkSelectMode
+  const setBulkSelectMode = externalBulkSelectMode !== undefined ? (() => {}) : setInternalBulkSelectMode
+  const selectedDates = externalSelectedDates !== undefined ? externalSelectedDates : internalSelectedDates
+  const setSelectedDates = externalSetSelectedDates !== undefined ? externalSetSelectedDates : setInternalSelectedDates
+  const reorderMode = externalReorderMode !== undefined ? externalReorderMode : internalReorderMode
+  const setReorderMode = externalReorderMode !== undefined ? (() => {}) : setInternalReorderMode
 
   // Close swipe when clicking outside
   useEffect(() => {
@@ -70,20 +79,6 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   const handleDayClick = (date) => {
     vibrate([15, 30, 15]) // Medium feedback for day toggle
     toggleDay(date)
-  }
-
-  // Handle bulk select mode
-  const toggleBulkSelectMode = () => {
-    vibrate([10])
-    setBulkSelectMode(prev => {
-      const newValue = !prev
-      if (newValue) {
-        // Entering bulk select mode - exit reorder mode
-        setReorderMode(false)
-      }
-      return newValue
-    })
-    setSelectedDates([]) // Clear selection when toggling mode
   }
 
   const handleDateClick = (date) => {
@@ -170,33 +165,33 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
     }
   }
 
-  // Get cell className based on status - minimal hover effects only
+  // Get cell className based on status - enhanced hover effects with scale
   const getCellClassName = (courseId, date, hasClass) => {
-    if (!hasClass) return 'cursor-not-allowed'
+    if (!hasClass) return 'cursor-not-allowed opacity-40'
 
     const status = getSessionStatus(courseId, date, attendance)
 
     if (status === SESSION_STATUS.ABSENT) {
-      return 'cursor-pointer hover:bg-red-500/10 transition-colors'
+      return 'cursor-pointer hover:bg-attendance-danger/15 hover:scale-105 active:scale-95 transition-all duration-200 group'
     } else if (status === SESSION_STATUS.CANCELLED) {
-      return 'cursor-pointer hover:bg-amber-500/10 transition-colors'
+      return 'cursor-pointer hover:bg-attendance-warning/15 hover:scale-105 active:scale-95 transition-all duration-200 group'
     } else {
-      return 'cursor-pointer hover:bg-dark-surface-overlay transition-colors'
+      return 'cursor-pointer hover:bg-attendance-safe/10 hover:scale-105 active:scale-95 transition-all duration-200 group'
     }
   }
 
-  // Get cell content icon
+  // Get cell content icon with color coding
   const getCellIcon = (courseId, date, hasClass) => {
-    if (!hasClass) return <Minus className="w-4 h-4 mx-auto" />
+    if (!hasClass) return <Minus className="w-4 h-4 mx-auto text-content-disabled" />
 
     const status = getSessionStatus(courseId, date, attendance)
 
     if (status === SESSION_STATUS.ABSENT) {
-      return <X className="w-4 h-4 mx-auto" />
+      return <X className="w-4 h-4 mx-auto text-attendance-danger group-hover:scale-110 transition-transform" />
     } else if (status === SESSION_STATUS.CANCELLED) {
-      return <Circle className="w-4 h-4 mx-auto" />
+      return <Circle className="w-4 h-4 mx-auto text-attendance-warning group-hover:scale-110 transition-transform" />
     } else {
-      return <Check className="w-4 h-4 mx-auto" />
+      return <Check className="w-4 h-4 mx-auto text-attendance-safe group-hover:scale-110 transition-transform" />
     }
   }
 
@@ -216,91 +211,22 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
 
   return (
     <div className="card p-0 relative" role="region" aria-label="Attendance tracker table">
-      {/* Action Buttons - Fixed outside scrollable area */}
-      {showActions && (
-        <div className="sticky top-0 z-20 bg-dark-surface border-b border-dark-border px-2 md:px-4 py-1.5 sm:py-2 flex flex-wrap items-center gap-1.5 sm:gap-2 justify-between">
-          <div className="flex items-center gap-2 flex-1 min-w-0">
-            <button
-              onClick={toggleBulkSelectMode}
-              aria-label={bulkSelectMode ? "Exit bulk select mode" : "Enter bulk select mode"}
-              aria-pressed={bulkSelectMode}
-              className={`
-                flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 flex-shrink-0
-                ${bulkSelectMode
-                  ? 'bg-accent text-dark-bg shadow-accent'
-                  : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
-                }
-              `}
-            >
-              {bulkSelectMode ? (
-                <>
-                  <CheckSquare className="w-3.5 h-3.5" />
-                  <span className="whitespace-nowrap">Bulk Select</span>
-                </>
-              ) : (
-                <>
-                  <Square className="w-3.5 h-3.5" />
-                  <span className="whitespace-nowrap">Select</span>
-                </>
-              )}
-            </button>
-
-            {!bulkSelectMode && courses.length > 1 && (
-              <button
-                onClick={() => {
-                  vibrate([10])
-                  if (!reorderMode) {
-                    setBulkSelectMode(false)
-                    setSelectedDates([])
-                  }
-                  setReorderMode(!reorderMode)
-                }}
-                aria-label={reorderMode ? "Exit reorder mode" : "Enter reorder mode"}
-                aria-pressed={reorderMode}
-                title="Reorder courses"
-                className={`
-                  flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 flex-shrink-0
-                  ${reorderMode
-                    ? 'bg-accent text-dark-bg shadow-accent'
-                    : 'bg-dark-bg border border-dark-border text-content-secondary hover:bg-dark-surface-raised hover:text-content-primary hover:border-accent/30'
-                  }
-                `}
-              >
-                <ArrowLeftRight className="w-3.5 h-3.5" />
-                <span className="whitespace-nowrap">Reorder</span>
-              </button>
-            )}
-
-            {bulkSelectMode && selectedDates.length > 0 && (
-              <span className="text-xs text-content-tertiary font-medium flex-shrink-0 tabular-nums">
-                {selectedDates.length} selected
-              </span>
-            )}
-
-            {reorderMode && (
-              <span className="text-xs text-accent font-medium flex-shrink-0">
-                Use arrows to reorder
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            {!bulkSelectMode && !reorderMode && <QuickMarkToday inline />}
-          </div>
-        </div>
-      )}
-
       {/* Scrollable Table Container */}
       <div
-        className={`overflow-auto ${showActions ? 'max-h-[calc(100dvh-10.5rem)]' : 'max-h-[calc(100dvh-7.5rem)]'} sm:${showActions ? 'max-h-[calc(100vh-15rem)]' : 'max-h-[calc(100vh-12rem)]'} md:${showActions ? 'max-h-[calc(100vh-17rem)]' : 'max-h-[calc(100vh-14rem)]'} scroll-smooth pb-12 sm:pb-14`}
+        className="overflow-auto max-h-[calc(100dvh-7.5rem)] sm:max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-14rem)] scroll-smooth pb-12 sm:pb-14"
         role="table"
         aria-label="Course attendance grid"
+        onScroll={(e) => {
+          if (onScroll) {
+            onScroll(e.target.scrollTop)
+          }
+        }}
       >
         <table className="attendance-table w-full min-w-full">
           <thead className="sticky top-0 z-[15] bg-dark-surface shadow-sm">
-            <tr className="border-b border-dark-border" role="row">
+            <tr className="border-b-2 border-accent/30" role="row">
               <th className="text-left min-w-[52px] sm:min-w-[60px] md:min-w-[80px] px-1 sm:px-2 md:px-4 py-0.5 sm:py-1 md:py-1.5 sticky left-0 z-[20] bg-dark-surface" scope="col">
-                <span className="text-[9px] sm:text-[10px] md:text-sm font-semibold text-content-primary">Date</span>
+                <span className="text-[9px] sm:text-[10px] md:text-sm text-content-primary" style={{ fontWeight: 600 }}>Date</span>
               </th>
               {courses.map((course, index) => (
                 <CourseHeader
@@ -344,8 +270,8 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                       <tr
                         key={day.date}
                         className={`
-                          hover:bg-dark-surface-raised transition-colors
-                          ${isToday ? 'border-l-4 border-accent bg-accent/5' : ''}
+                          hover:bg-dark-surface-raised transition-all duration-200
+                          ${isToday ? 'border-l-4 border-accent bg-accent/[0.08] shadow-[inset_0_0_12px_rgba(99,102,241,0.15)]' : ''}
                         `}
                         style={bulkSelectMode && selectedDates.includes(day.date) ? {
                           backgroundColor: 'rgba(99, 102, 241, 0.2)',
@@ -387,11 +313,14 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                               <span className="text-sm sm:text-base md:text-lg flex-shrink-0">{getDayIndicator(day.date)}</span>
                             )}
                             <div className="min-w-0">
-                              <div className="text-[10px] sm:text-xs md:text-sm text-content-primary truncate">
+                              <div
+                                className={`text-[10px] sm:text-xs md:text-sm truncate ${isToday ? 'text-accent' : 'text-content-primary'}`}
+                                style={{ fontWeight: isToday ? 700 : 600 }}
+                              >
                                 {day.dayShort} {formatDateShort(day.date).split(' ')[1]}
                               </div>
                               {isToday && (
-                                <div className="text-[8px] sm:text-[10px] md:text-xs text-accent">Today</div>
+                                <div className="text-[8px] sm:text-[10px] md:text-xs text-accent bg-accent/10 px-1.5 py-0.5 rounded-md inline-block" style={{ fontWeight: 600 }}>Today</div>
                               )}
                             </div>
                           </div>

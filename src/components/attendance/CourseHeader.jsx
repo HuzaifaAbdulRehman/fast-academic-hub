@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSwipeable } from 'react-swipeable'
-import { Edit2, Trash2, ArrowLeft, ArrowRight } from 'lucide-react'
+import { Edit2, Trash2, ArrowLeft, ArrowRight, Info } from 'lucide-react'
 import { calculateAttendanceStats } from '../../utils/attendanceCalculator'
 import { COURSE_COLORS } from '../../utils/constants'
 
@@ -30,6 +30,8 @@ export default function CourseHeader({
   onEditCourse,
   reorderCourse
 }) {
+  const [showTooltip, setShowTooltip] = useState(false)
+
   // Safely calculate stats with error handling
   let stats, absencesUsed, absencesAllowed, percentage, courseColor
   try {
@@ -88,7 +90,31 @@ export default function CourseHeader({
       <div
         className={`py-0.5 sm:py-1 px-0.5 transition-transform duration-200 relative z-10 bg-dark-surface ${isSwipedOpen ? '-translate-x-[calc(100%+6px)]' : 'translate-x-0'}`}
         {...swipeHandlers}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
       >
+        {/* Hover Tooltip - Desktop only */}
+        {showTooltip && (
+          <div className="hidden sm:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none">
+            <div className="bg-dark-surface-raised border border-dark-border shadow-glass-lg rounded-lg p-2 min-w-[180px] animate-fade-in">
+              <div className="text-xs font-semibold text-content-primary mb-1">{course.name}</div>
+              {course.instructor && (
+                <div className="text-[10px] text-content-secondary">Instructor: {course.instructor}</div>
+              )}
+              {course.room && (
+                <div className="text-[10px] text-content-secondary">Room: {course.room}</div>
+              )}
+              <div className="text-[10px] text-content-tertiary mt-1">
+                {stats.percentage.toFixed(1)}% attendance
+              </div>
+              {/* Tooltip arrow */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
+                <div className="border-4 border-transparent border-t-dark-border" />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Badge Style with Status - Compact Mobile Design */}
 
         {/* Course name with colored dot - TOP */}
@@ -99,6 +125,7 @@ export default function CourseHeader({
           />
           <div
             className="text-[9px] sm:text-[10px] md:text-sm font-bold truncate text-content-primary max-w-[38px] sm:max-w-[44px] md:max-w-[58px]"
+            style={{ fontWeight: 700 }}
             title={course.name || 'Course'}
           >
             {course.shortName || course.name || 'N/A'}
@@ -110,14 +137,16 @@ export default function CourseHeader({
 
         {/* Stats with status background - MIDDLE - More compact on mobile */}
         <div className={`
-          px-0.5 sm:px-1 md:px-1.5 py-0.5 rounded-md mb-0.5 text-[8px] sm:text-[9px] md:text-xs font-bold tabular-nums
+          px-0.5 sm:px-1 md:px-1.5 py-0.5 rounded-md mb-0.5 text-[8px] sm:text-[9px] md:text-xs tabular-nums
           ${percentage < 60
             ? 'bg-attendance-safe/15 text-attendance-safe border border-attendance-safe/20'
             : percentage < 85
               ? 'bg-attendance-warning/15 text-attendance-warning border border-attendance-warning/20'
               : 'bg-attendance-danger/15 text-attendance-danger border border-attendance-danger/20'
           }
-        `}>
+        `}
+        style={{ fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}
+        >
           {absencesUsed}/{absencesAllowed}
         </div>
 

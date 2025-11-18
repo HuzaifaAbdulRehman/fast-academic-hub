@@ -3,14 +3,12 @@ import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react'
 
 export default function Toast({ message, type = 'success', onClose, action = null, duration = 3000 }) {
   useEffect(() => {
-    // Don't auto-close if there's an action button (permanent until manually dismissed)
-    if (action) {
-      return // No auto-close timer for undo toasts
-    }
+    // Undo toasts have longer duration (8 seconds) but still auto-dismiss
+    const autoDismissDuration = action ? 8000 : duration
 
     const timer = setTimeout(() => {
       onClose()
-    }, duration)
+    }, autoDismissDuration)
 
     return () => clearTimeout(timer)
   }, [duration, onClose, action])
@@ -30,16 +28,18 @@ export default function Toast({ message, type = 'success', onClose, action = nul
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
+    <div className="fixed bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-50 animate-slide-up px-4 w-full max-w-md">
       <div
         className={`
           ${bgColors[type]}
-          backdrop-blur-xl rounded-xl border px-4 py-3
-          shadow-glass-lg flex items-center gap-3 min-w-[280px] max-w-md
+          backdrop-blur-xl rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3
+          shadow-glass-lg flex items-center gap-2 sm:gap-3 w-full
         `}
       >
-        {icons[type]}
-        <span className="text-sm font-medium text-content-primary flex-1">
+        <div className="flex-shrink-0">
+          {icons[type]}
+        </div>
+        <span className="text-xs sm:text-sm font-medium text-content-primary flex-1 min-w-0 line-clamp-2">
           {message}
         </span>
 
@@ -50,7 +50,7 @@ export default function Toast({ message, type = 'success', onClose, action = nul
               action.onClick()
               onClose()
             }}
-            className="px-3 py-1.5 bg-accent hover:bg-accent-hover text-dark-bg font-medium text-xs rounded-lg transition-all uppercase tracking-wider"
+            className="px-2.5 sm:px-3 py-1.5 bg-accent hover:bg-accent-hover active:bg-accent-hover text-dark-bg font-semibold text-[10px] sm:text-xs rounded-lg transition-all uppercase tracking-wider flex-shrink-0"
           >
             {action.label}
           </button>
@@ -58,9 +58,10 @@ export default function Toast({ message, type = 'success', onClose, action = nul
 
         <button
           onClick={onClose}
-          className="p-1 hover:bg-dark-surface-raised rounded transition-colors ml-1"
+          className="p-1 hover:bg-dark-surface-raised rounded transition-colors flex-shrink-0"
+          aria-label="Dismiss"
         >
-          <X className="w-4 h-4 text-content-secondary" />
+          <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-content-secondary" />
         </button>
       </div>
     </div>
