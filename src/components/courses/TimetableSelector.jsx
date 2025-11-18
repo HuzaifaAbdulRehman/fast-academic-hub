@@ -793,11 +793,11 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         {/* Header */}
         <div className="sticky top-0 bg-dark-surface/95 backdrop-blur-xl border-b border-dark-border/50 p-2 sm:p-3 md:p-5 z-10 rounded-t-3xl md:rounded-t-2xl">
           <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <div className="p-1.5 sm:p-2 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg sm:rounded-xl border border-accent/20">
-                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl border border-accent/20 flex-shrink-0">
+                <BookOpen className="w-5 h-5 text-accent" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h2 className="text-base sm:text-lg font-bold text-content-primary">
                   Select Courses from Timetable
                 </h2>
