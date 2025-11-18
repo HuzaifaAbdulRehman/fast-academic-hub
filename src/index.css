@@ -18,49 +18,49 @@
   --color-secondary-hover: #7C3AED; /* Purple 600 */
   --color-secondary-light: #EDE9FE; /* Purple 100 */
 
-  /* Dark theme backgrounds - Lighter & more comfortable */
-  --color-dark-bg: #1a1a1e;
-  --color-dark-bg-secondary: #25252a;
-  --color-dark-bg-tertiary: #2f2f35;
+  /* Dark theme backgrounds - Softer & more comfortable */
+  --color-dark-bg: #0f1115;
+  --color-dark-bg-secondary: #1a1d24;
+  --color-dark-bg-tertiary: #232832;
 
   /* Dark theme surfaces */
-  --color-dark-surface: #25252a;
-  --color-dark-surface-raised: #2f2f35;
-  --color-dark-surface-overlay: #4a4a52;
-  --color-dark-surface-hover: #5a5a62;
+  --color-dark-surface: #1a1d24;
+  --color-dark-surface-raised: #232832;
+  --color-dark-surface-overlay: #2d3341;
+  --color-dark-surface-hover: #363c4f;
 
-  /* Dark theme borders */
-  --color-dark-border: #3a3a42;
-  --color-dark-border-muted: #4a4a52;
-  --color-dark-border-strong: #5a5a62;
+  /* Dark theme borders - Subtle & refined */
+  --color-dark-border: #2d3341;
+  --color-dark-border-muted: #363c4f;
+  --color-dark-border-strong: #4a5060;
 
-  /* Content/Text colors */
-  --color-content-primary: #fafafa;
-  --color-content-secondary: #a1a1aa;
-  --color-content-tertiary: #71717a;
-  --color-content-disabled: #52525b;
+  /* Content/Text colors - Enhanced readability */
+  --color-content-primary: #f5f5f7;
+  --color-content-secondary: #b4b8c5;
+  --color-content-tertiary: #8b90a0;
+  --color-content-disabled: #5a5f6e;
 
-  /* Light mode backgrounds */
+  /* Light mode backgrounds - Clean & professional */
   --color-light-bg: #ffffff;
-  --color-light-bg-secondary: #f9fafb;
-  --color-light-bg-tertiary: #f3f4f6;
+  --color-light-bg-secondary: #f8f9fa;
+  --color-light-bg-tertiary: #f1f3f5;
 
   /* Light mode surfaces */
   --color-light-surface: #ffffff;
-  --color-light-surface-raised: #f9fafb;
-  --color-light-surface-overlay: #e5e7eb;
-  --color-light-surface-hover: #d1d5db;
+  --color-light-surface-raised: #f8f9fa;
+  --color-light-surface-overlay: #e9ecef;
+  --color-light-surface-hover: #dee2e6;
 
-  /* Light mode borders */
-  --color-light-border: #e5e7eb;
-  --color-light-border-muted: #d1d5db;
-  --color-light-border-strong: #9ca3af;
+  /* Light mode borders - Soft & refined */
+  --color-light-border: #e1e4e8;
+  --color-light-border-muted: #ced4da;
+  --color-light-border-strong: #adb5bd;
 
-  /* Light mode content/text colors */
-  --color-light-content-primary: #18181b;
-  --color-light-content-secondary: #52525b;
-  --color-light-content-tertiary: #71717a;
-  --color-light-content-disabled: #a1a1aa;
+  /* Light mode content/text colors - High contrast for readability */
+  --color-light-content-primary: #1a1d24;
+  --color-light-content-secondary: #495057;
+  --color-light-content-tertiary: #6c757d;
+  --color-light-content-disabled: #adb5bd;
 
   /* Box shadows */
   --shadow-glass: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.1);
