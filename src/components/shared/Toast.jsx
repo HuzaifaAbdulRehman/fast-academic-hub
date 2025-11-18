@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react'
 
 export default function Toast({ message, type = 'success', onClose, action = null, duration = 3000 }) {
   useEffect(() => {
@@ -18,12 +18,14 @@ export default function Toast({ message, type = 'success', onClose, action = nul
   const icons = {
     success: <CheckCircle2 className="w-5 h-5 text-attendance-safe" />,
     error: <AlertCircle className="w-5 h-5 text-attendance-danger" />,
+    warning: <AlertTriangle className="w-5 h-5 text-yellow-400" />,
     info: <Info className="w-5 h-5 text-accent" />
   }
 
   const bgColors = {
     success: 'bg-attendance-safe/10 border-attendance-safe/30',
     error: 'bg-attendance-danger/10 border-attendance-danger/30',
+    warning: 'bg-yellow-500/10 border-yellow-500/30',
     info: 'bg-accent/10 border-accent/30'
   }
 

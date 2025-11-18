@@ -161,18 +161,54 @@ export function AppProvider({ children }) {
     // Validate required fields
     if (!courseData || typeof courseData !== 'object') {
       console.error('Invalid course data: must be an object')
-      return null
+      return { success: false, error: 'INVALID_DATA', message: 'Invalid course data' }
     }
 
     if (!courseData.name || typeof courseData.name !== 'string' || courseData.name.trim() === '') {
       console.error('Invalid course data: name is required')
-      return null
+      return { success: false, error: 'MISSING_NAME', message: 'Course name is required' }
+    }
+
+    // Check for duplicates by course code only (students can't take same course in different sections)
+    const existingCourse = courses.find(existing => {
+      // Match by courseCode (primary for timetable courses)
+      if (courseData.courseCode && existing.courseCode) {
+        return existing.courseCode === courseData.courseCode
+      }
+      // Match by exact name (for manually added courses without courseCode)
+      return existing.name === courseData.name
+    })
+
+    if (existingCourse) {
+      const existingInfo = existingCourse.section
+        ? `${existingCourse.courseCode || existingCourse.name} (${existingCourse.section})`
+        : existingCourse.name
+
+      const attemptedInfo = courseData.section
+        ? `${courseData.courseCode || courseData.name} (${courseData.section})`
+        : courseData.name
+
+      const errorMsg = existingCourse.section && courseData.section && existingCourse.section !== courseData.section
+        ? `${courseData.courseCode || courseData.name} is already added in section ${existingCourse.section}. Remove it first to change sections.`
+        : `${attemptedInfo} is already added`
+
+      console.warn('Duplicate course detected:', { existing: existingInfo, attempted: attemptedInfo })
+      return {
+        success: false,
+        error: 'DUPLICATE',
+        message: errorMsg,
+        courseName: courseData.name,
+        courseCode: courseData.courseCode,
+        section: courseData.section,
+        existingSection: existingCourse.section,
+        existingCourseName: existingCourse.name
+      }
     }
 
     // Validate weekdays array
     if (!courseData.weekdays || !Array.isArray(courseData.weekdays) || courseData.weekdays.length === 0) {
       console.error('Invalid course data: weekdays must be a non-empty array')
-      return null
+      return { success: false, error: 'INVALID_WEEKDAYS', message: 'Weekdays must be specified' }
     }
 
     // Validate weekday values (0-6)
@@ -181,18 +217,18 @@ export function AppProvider({ children }) {
     )
     if (!validWeekdays) {
       console.error('Invalid course data: weekdays must be numbers between 0-6')
-      return null
+      return { success: false, error: 'INVALID_WEEKDAYS', message: 'Invalid weekday values' }
     }
 
     // Validate dates if provided
     if (courseData.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(courseData.startDate)) {
       console.error('Invalid course data: startDate must be in YYYY-MM-DD format')
-      return null
+      return { success: false, error: 'INVALID_DATE', message: 'Invalid start date format' }
     }
 
     if (courseData.endDate && !/^\d{4}-\d{2}-\d{2}$/.test(courseData.endDate)) {
       console.error('Invalid course data: endDate must be in YYYY-MM-DD format')
-      return null
+      return { success: false, error: 'INVALID_DATE', message: 'Invalid end date format' }
     }
 
     // Validate credit hours
@@ -200,7 +236,7 @@ export function AppProvider({ children }) {
       const creditHours = Number(courseData.creditHours)
       if (isNaN(creditHours) || creditHours < 0 || creditHours > 10) {
         console.error('Invalid course data: creditHours must be a number between 0-10')
-        return null
+        return { success: false, error: 'INVALID_CREDIT_HOURS', message: 'Credit hours must be between 0-10' }
       }
     }
 
@@ -272,37 +308,61 @@ export function AppProvider({ children }) {
 
       return [...prev, newCourse]
     })
-    
-    return newCourse
-  }, [setCourses, ensureActiveSemester])
+
+    return { success: true, course: newCourse }
+  }, [setCourses, ensureActiveSemester, courses])
 
   const addMultipleCourses = useCallback((coursesData) => {
     if (!Array.isArray(coursesData) || coursesData.length === 0) {
       console.error('Invalid courses data: must be a non-empty array')
-      return []
+      return { success: false, added: [], duplicates: [], errors: [] }
     }
 
-    // Validate all courses first
+    // Validate and filter courses
     const validCourses = []
+    const duplicates = []
+    const errors = []
+
     coursesData.forEach((courseData, index) => {
       if (!courseData || typeof courseData !== 'object') {
         console.error(`Invalid course data at index ${index}: must be an object`)
+        errors.push({ index, error: 'INVALID_DATA', courseData })
         return
       }
       if (!courseData.name || typeof courseData.name !== 'string' || courseData.name.trim() === '') {
         console.error(`Invalid course data at index ${index}: name is required`)
+        errors.push({ index, error: 'MISSING_NAME', courseData })
         return
       }
       if (!courseData.weekdays || !Array.isArray(courseData.weekdays) || courseData.weekdays.length === 0) {
         console.error(`Invalid course data at index ${index}: weekdays must be a non-empty array`)
+        errors.push({ index, error: 'INVALID_WEEKDAYS', courseData })
         return
       }
+
+      // Check if duplicate by course code only (students can't take same course in different sections)
+      const existingCourse = courses.find(existing => {
+        if (courseData.courseCode && existing.courseCode) {
+          return existing.courseCode === courseData.courseCode
+        }
+        return existing.name === courseData.name
+      })
+
+      if (existingCourse) {
+        duplicates.push({
+          ...courseData,
+          existingSection: existingCourse.section,
+          existingCourseName: existingCourse.name
+        })
+        return
+      }
+
       validCourses.push(courseData)
     })
 
     if (validCourses.length === 0) {
-      console.error('No valid courses to add')
-      return []
+      console.warn('No valid courses to add after filtering')
+      return { success: duplicates.length > 0, added: [], duplicates, errors }
     }
 
     const semesterIdForCourse = ensureActiveSemester()
@@ -376,8 +436,13 @@ export function AppProvider({ children }) {
       return [...prev, ...newCourses]
     })
 
-    return addedCourses
-  }, [setCourses, ensureActiveSemester])
+    return {
+      success: true,
+      added: addedCourses,
+      duplicates,
+      errors
+    }
+  }, [setCourses, ensureActiveSemester, courses])
 
   const updateCourse = useCallback((courseId, updates) => {
     setCourses(prev =>
@@ -392,6 +457,97 @@ export function AppProvider({ children }) {
     // Also delete all attendance records for this course
     setAttendance(prev => prev.filter(record => record.courseId !== courseId))
   }, [setCourses, setAttendance])
+
+  /**
+   * Change course section - removes old course and adds new one atomically
+   * Preserves attendance data by transferring it to the new course
+   * @param {string} oldCourseId - ID of existing course to replace
+   * @param {object} newCourseData - New course data with different section
+   * @returns {object} - Status object with success/error info and undo capability
+   */
+  const changeCourseSection = useCallback((oldCourseId, newCourseData) => {
+    const oldCourse = courses.find(c => c.id === oldCourseId)
+
+    if (!oldCourse) {
+      return {
+        success: false,
+        error: 'COURSE_NOT_FOUND',
+        message: 'Original course not found'
+      }
+    }
+
+    // Validate that this is actually a section change
+    if (!oldCourse.courseCode || !newCourseData.courseCode) {
+      return {
+        success: false,
+        error: 'MISSING_COURSE_CODE',
+        message: 'Cannot change section for manually added courses'
+      }
+    }
+
+    if (oldCourse.courseCode !== newCourseData.courseCode) {
+      return {
+        success: false,
+        error: 'DIFFERENT_COURSE',
+        message: 'Cannot change to a different course'
+      }
+    }
+
+    if (oldCourse.section === newCourseData.section) {
+      return {
+        success: false,
+        error: 'SAME_SECTION',
+        message: 'Course is already in this section'
+      }
+    }
+
+    // Save old course state for undo functionality
+    const oldAttendanceRecords = attendance.filter(r => r.courseId === oldCourseId)
+
+    // Create new course with same ID to preserve attendance records
+    const semesterIdForCourse = ensureActiveSemester()
+
+    // Find available color (reuse old course color to maintain consistency)
+    const newCourse = {
+      ...oldCourse, // Preserve all old course data
+      ...newCourseData, // Override with new section data
+      id: oldCourseId, // Keep same ID to preserve attendance
+      semesterId: semesterIdForCourse,
+      // Update metadata
+      name: newCourseData.name || oldCourse.name,
+      instructor: newCourseData.instructor || oldCourse.instructor,
+      room: newCourseData.room || newCourseData.roomNumber || oldCourse.room,
+      roomNumber: newCourseData.roomNumber || newCourseData.room || oldCourse.roomNumber,
+      building: newCourseData.building || oldCourse.building,
+      section: newCourseData.section,
+      schedule: newCourseData.schedule || oldCourse.schedule,
+      timeSlot: newCourseData.timeSlot || oldCourse.timeSlot,
+      weekdays: newCourseData.weekdays || oldCourse.weekdays,
+      // Preserve important course settings
+      color: oldCourse.color,
+      colorHex: oldCourse.colorHex,
+      shortName: oldCourse.shortName,
+      creditHours: newCourseData.creditHours || oldCourse.creditHours,
+      startDate: oldCourse.startDate,
+      endDate: oldCourse.endDate,
+      initialAbsences: oldCourse.initialAbsences,
+      allowedAbsences: oldCourse.allowedAbsences,
+      createdAt: oldCourse.createdAt,
+    }
+
+    // Update courses atomically
+    setCourses(prev => prev.map(course =>
+      course.id === oldCourseId ? newCourse : course
+    ))
+
+    return {
+      success: true,
+      course: newCourse,
+      oldCourse,
+      oldAttendanceRecords,
+      message: `Changed from ${oldCourse.section} to ${newCourse.section}`
+    }
+  }, [courses, attendance, setCourses, ensureActiveSemester])
 
   const deleteAllCourses = useCallback(() => {
     setCourses([])
@@ -705,6 +861,7 @@ export function AppProvider({ children }) {
     deleteCourse,
     deleteAllCourses,
     reorderCourse,
+    changeCourseSection,
 
     // Attendance management
     toggleSession,

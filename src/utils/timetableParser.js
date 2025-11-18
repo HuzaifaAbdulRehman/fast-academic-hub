@@ -30,7 +30,122 @@ const COURSE_NAMES = {
   'Web': 'Web Technologies',
   'Mobile': 'Mobile Application Development',
   'Cloud': 'Cloud Computing',
-  'Cyber': 'Cyber Security'
+  'Cyber': 'Cyber Security',
+  // Lab courses
+  'CN Lab': 'Computer Networks Lab',
+  'DBS Lab': 'Database Systems Lab',
+  'COAL Lab': 'Computer Organization & Assembly Language Lab',
+  'DS Lab': 'Data Structures Lab',
+  'PF Lab': 'Programming Fundamentals Lab',
+  'ICT Lab': 'ICT Lab',
+  'DS-Lab': 'Data Structures Lab',
+  'BE Lab': 'Business Economics Lab',
+  'DF Lab': 'Digital Forensics Lab',
+  'FE Lab': 'Functional English Lab',
+  'Eng-1 Lab': 'English Lab',
+  'IT in Business lab': 'IT in Business Lab',
+  'Intro to D. Sci Lab': 'Introduction to Data Science Lab',
+  'Electrical Network Analysis lab': 'Electrical Network Analysis Lab',
+  'Object Oriented Data Structures lab': 'Object Oriented Data Structures Lab',
+  'Computer Architecture lab': 'Computer Architecture Lab',
+  'Applied Physics lab': 'Applied Physics Lab',
+  'Analog and Digital Communication lab': 'Analog and Digital Communication Lab',
+  'AML Lab': 'Applied Machine Learning Lab',
+  'OOP Lab': 'Object Oriented Programming Lab',
+  'DLD Lab': 'Digital Logic Design Lab',
+  'PAI Lab': 'Probability and Inference Lab',
+  'OS Lab': 'Operating Systems Lab',
+  'SCD Lab': 'Software Construction & Development Lab',
+  'SSD Lab': 'System & Software Design Lab',
+  'CV Lab': 'Computer Vision Lab',
+  'FA Lab': 'Financial Accounting Lab',
+  'FM Lab': 'Financial Management Lab',
+  'ML Lab': 'Machine Learning Lab',
+  'DCNet lab': 'Data Communication & Networking Lab',
+  'ENA lab': 'Electrical Network Analysis Lab',
+  'Electronic Devices and Circuits lab': 'Electronic Devices and Circuits Lab',
+  'Engineering Drawing lab': 'Engineering Drawing Lab',
+  'Application of ICT lab': 'Application of ICT Lab',
+  'MPI lab': 'Microprocessor Interfacing Lab',
+  'ICT lab': 'ICT Lab',
+  'PF lab': 'Programming Fundamentals Lab',
+  'IOOP-Lab': 'Introduction to OOP Lab',
+  'DAB2 lAB': 'Database Systems 2 Lab',
+  'DS&BA Lab': 'Data Structures & Business Analytics Lab',
+  // Additional courses
+  'Intro to D. Sci': 'Introduction to Data Science',
+  'Intro. to SE': 'Introduction to Software Engineering',
+  'Applied Physics': 'Applied Physics',
+  'Cyber Security': 'Cyber Security',
+  'Eng-1': 'Functional English',
+  'IST / UoS': 'Introduction to Information Systems',
+  'IT in Business': 'IT in Business',
+  'Entrep': 'Entrepreneurship',
+  'GenAI': 'Generative AI',
+  'Macro Eco': 'Macroeconomics',
+  'Psych': 'Psychology',
+  'Socio': 'Sociology',
+  'KRR': 'Knowledge Representation & Reasoning',
+  'KKR': 'Knowledge Representation',
+  'SQE': 'Software Quality Engineering',
+  'SSD': 'System & Software Design',
+  'PDC': 'Parallel & Distributed Computing',
+  'NLP': 'Natural Language Processing',
+  'OR': 'Operations Research',
+  'OODS': 'Object Oriented Data Structures',
+  'MVC': 'Multivariable Calculus',
+  'MPI': 'Microprocessor Interfacing',
+  'HRM': 'Human Resource Management',
+  'GT': 'Graph Theory',
+  'FOM': 'Fundamentals of Management',
+  'FSPM': 'Fundamentals of Project Management',
+  'FM': 'Financial Management',
+  'FA': 'Financial Accounting',
+  'Ethics': 'Ethics',
+  'ENG': 'English',
+  'EM': 'Engineering Mathematics',
+  'EMT': 'Electromagnetic Theory',
+  'ENA': 'Electrical Network Analysis',
+  'EDC': 'Electronic Devices & Circuits',
+  'Enter': 'Entrepreneurship',
+  'DCNet': 'Data Communication & Networking',
+  'DCB': 'Database Concepts',
+  'DAB2': 'Database Systems 2',
+  'DSA': 'Data Structures & Algorithms',
+  'DLP': 'Deep Learning Projects',
+  'BM1': 'Business Mathematics 1',
+  'BM2': 'Business Mathematics 2',
+  'AML': 'Applied Machine Learning',
+  'AT': 'Antenna Theory',
+  'ADC': 'Analog & Digital Communication',
+  'AC': 'Applied Calculus',
+  'CA': 'Computer Architecture',
+  'CB': 'Consumer Behavior',
+  'CCE': 'Computer Communication & Electronics',
+  'CT': 'Coding Theory',
+  'CV': 'Computer Vision',
+  'CVT': 'Computer Vision Techniques',
+  'C. Const.': 'Constitutional Law',
+  'BF': 'Business Finance',
+  'EIS': 'Enterprise Information Systems',
+  'FOA': 'Foundations of Algorithms',
+  'ICC': 'Introduction to Cloud Computing',
+  'IA': 'Information Assurance',
+  'IOOP': 'Introduction to Object Oriented Programming',
+  'ME': 'Managerial Economics',
+  'MFM': 'Mathematical Foundations',
+  'MM': 'Marketing Management',
+  'NC': 'Neural Computing',
+  'OHS': 'Occupational Health & Safety',
+  'POE': 'Principles of Economics',
+  'PPIT': 'Pakistan & International Trade',
+  'PST': 'Probability & Statistics',
+  'PFB': 'Programming Fundamentals - Business',
+  'RS': 'Recommender Systems',
+  'SCD': 'Software Construction & Development',
+  'ST': 'Software Testing',
+  'UoS': 'Understanding of Self',
+  'WP': 'Web Programming'
 }
 
 // Time slots mapping (based on your CSV)
@@ -49,7 +164,7 @@ const TIME_SLOTS = {
 /**
  * Parse a single cell entry from FAST NUCES timetable
  * Format: "COURSE_CODE SECTION\nInstructor Name"
- * Example: "DAA BCS-5B\nFahad Sherwani"
+ * Example: "DAA BCS-5B\nFahad Sherwani" or "CN Lab BCS-5F\nSameer Faisal"
  */
 function parseCellEntry(cellText, room, day, slotNumber) {
   if (!cellText || cellText.trim() === '' || cellText.toLowerCase().includes('reserved')) {
@@ -63,13 +178,23 @@ function parseCellEntry(cellText, room, day, slotNumber) {
   const instructor = lines[1] || 'TBA'
 
   // Extract course code and section
-  // Pattern: "COURSE_CODE SECTION" or "COURSE_CODE PROGRAM-SECTION"
-  const match = firstLine.match(/^([A-Z]+)\s+([A-Z]+-?\d+[A-Z]?)/)
+  // Pattern supports:
+  // 1. Regular courses: "DAA BCS-5B"
+  // 2. Lab courses: "CN Lab BCS-5F"
+  // 3. Multi-word courses: "Intro to D. Sci Lab BDS-3A"
+  // 4. Hyphenated courses: "DS-Lab BDS-3B"
+  // Strategy: Match everything before the section pattern as the course code
+  const sectionMatch = firstLine.match(/\s+([A-Z]{2,}[A-Z]?-?\d+[A-Z]{0,2})(?:\s|$)/)
 
-  if (!match) return null
+  if (!sectionMatch) return null
 
-  const courseCode = match[1]
-  const section = match[2]
+  const section = sectionMatch[1]
+  const sectionStartIndex = sectionMatch.index
+
+  // Everything before the section is the course code
+  const courseCode = firstLine.substring(0, sectionStartIndex).trim()
+
+  if (!courseCode) return null
 
   return {
     courseCode,
@@ -210,13 +335,57 @@ export function parseTimetable(csvFiles) {
   // Group by section
   const sections = groupBySection(allEntries)
 
-  // Calculate credit hours for each course (count unique days)
-  Object.values(sections).forEach(courses => {
-    courses.forEach(course => {
-      const sameCourse = courses.filter(c => c.courseCode === course.courseCode)
-      const uniqueDays = new Set(sameCourse.map(c => c.day))
-      course.creditHours = uniqueDays.size
+  // Aggregate courses by courseCode + section, combining multiple days into sessions array
+  Object.keys(sections).forEach(sectionName => {
+    const courses = sections[sectionName]
+    const courseMap = new Map()
+
+    courses.forEach(entry => {
+      const key = `${entry.courseCode}-${entry.section}`
+
+      if (courseMap.has(key)) {
+        // Add to existing course's sessions array
+        const existingCourse = courseMap.get(key)
+        existingCourse.sessions.push({
+          day: entry.day,
+          timeSlot: entry.timeSlot,
+          room: entry.room,
+          slotNumber: entry.slotNumber
+        })
+      } else {
+        // Create new course with sessions array
+        courseMap.set(key, {
+          courseCode: entry.courseCode,
+          courseName: entry.courseName,
+          section: entry.section,
+          instructor: entry.instructor,
+          creditHours: 0, // Will be calculated below
+          sessions: [{
+            day: entry.day,
+            timeSlot: entry.timeSlot,
+            room: entry.room,
+            slotNumber: entry.slotNumber
+          }]
+        })
+      }
     })
+
+    // Convert map to array and calculate credit hours
+    const aggregatedCourses = Array.from(courseMap.values())
+    aggregatedCourses.forEach(course => {
+      course.creditHours = course.sessions.length
+
+      // Add backward compatibility fields (first session's data)
+      if (course.sessions.length > 0) {
+        const firstSession = course.sessions[0]
+        course.day = firstSession.day
+        course.timeSlot = firstSession.timeSlot
+        course.room = firstSession.room
+        course.slotNumber = firstSession.slotNumber
+      }
+    })
+
+    sections[sectionName] = aggregatedCourses
   })
 
   return sections

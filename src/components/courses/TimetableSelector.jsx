@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus } from 'lucide-react'
+import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus, RefreshCcw } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
 import { vibrate, isMobile } from '../../utils/uiHelpers'
 import { useApp } from '../../context/AppContext'
 import { getTodayISO } from '../../utils/dateHelpers'
 import CourseForm from './CourseForm'
+import Toast from '../shared/Toast'
+import ConfirmDialog from '../shared/ConfirmDialog'
+import SectionSelectorDialog from '../shared/SectionSelectorDialog'
 
 // Convert 24-hour time to 12-hour format
 const formatTimeTo12Hour = (time24) => {
@@ -13,6 +16,53 @@ const formatTimeTo12Hour = (time24) => {
   const ampm = hour >= 12 ? 'PM' : 'AM'
   const hour12 = hour % 12 || 12
   return `${hour12}:${minutes} ${ampm}`
+}
+
+// Generate comprehensive tooltip with full schedule information
+const generateScheduleTooltip = (course) => {
+  if (!course) return ''
+
+  const parts = []
+
+  // Section and instructor
+  if (course.section) {
+    parts.push(`Section: ${course.section}`)
+  }
+  if (course.instructor) {
+    parts.push(`Instructor: ${course.instructor}`)
+  }
+
+  // Full schedule from sessions array
+  if (course.sessions && course.sessions.length > 0) {
+    parts.push('\nSchedule:')
+    course.sessions.forEach(session => {
+      const timeFormatted = session.timeSlot ?
+        session.timeSlot.split('-').map(t => {
+          const [h, m] = t.trim().split(':')
+          const hour = parseInt(h)
+          const ampm = hour >= 12 ? 'PM' : 'AM'
+          const hour12 = hour % 12 || 12
+          return `${hour12}:${m} ${ampm}`
+        }).join(' - ') :
+        'TBA'
+      parts.push(`  • ${session.day}: ${timeFormatted} (${session.room || 'TBA'})`)
+    })
+  } else if (course.day && course.timeSlot) {
+    // Fallback to single session
+    const timeFormatted = course.timeSlot.split('-').map(t => {
+      const [h, m] = t.trim().split(':')
+      const hour = parseInt(h)
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const hour12 = hour % 12 || 12
+      return `${hour12}:${m} ${ampm}`
+    }).join(' - ')
+    parts.push(`\nSchedule: ${course.day} at ${timeFormatted}`)
+    if (course.room) {
+      parts.push(`Room: ${course.room}`)
+    }
+  }
+
+  return parts.join('\n')
 }
 
 // Available departments in FAST NUCES
@@ -30,7 +80,7 @@ const DEPARTMENTS = [
 ]
 
 export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false }) {
-  const { addCourse, addMultipleCourses } = useApp()
+  const { addCourse, addMultipleCourses, courses, changeCourseSection } = useApp()
   const [step, setStep] = useState('select') // 'select' or 'configure'
   const [department, setDepartment] = useState('BCS') // Default to BCS
   const [section, setSection] = useState('')
@@ -42,6 +92,104 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   const [showManualForm, setShowManualForm] = useState(false)
   const [isMobileDevice] = useState(isMobile())
   const [hasSearched, setHasSearched] = useState(false) // Track if search has been performed
+  const [toast, setToast] = useState(null) // Toast notification state
+  const [confirmDialog, setConfirmDialog] = useState(null) // Confirmation dialog state
+
+  // Handle section change with confirmation - shows all available sections
+  const handleChangeSectionClick = (course, existingCourse) => {
+    // Find all sections offering this course from the timetable
+    const availableSections = []
+
+    // Handle both direct timetable object and nested data structure
+    const timetableData = timetable?.data || timetable
+
+    if (timetableData && typeof timetableData === 'object') {
+      Object.entries(timetableData).forEach(([sectionName, sectionCourses]) => {
+        // Skip metadata fields
+        if (!Array.isArray(sectionCourses)) return
+
+        const matchingCourse = sectionCourses.find(c => c.courseCode === course.courseCode)
+        if (matchingCourse) {
+          availableSections.push({
+            ...matchingCourse,
+            section: sectionName,
+            isCurrent: sectionName === existingCourse.section,
+            isViewing: sectionName === course.section
+          })
+        }
+      })
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Available sections for', course.courseCode, ':', availableSections.length)
+      console.log('Available sections:', availableSections.map(s => s.section))
+    }
+
+    // Sort: current first, then viewing section, then alphabetically
+    availableSections.sort((a, b) => {
+      if (a.isCurrent) return -1
+      if (b.isCurrent) return 1
+      if (a.isViewing) return -1
+      if (b.isViewing) return 1
+      return a.section.localeCompare(b.section)
+    })
+
+    setConfirmDialog({
+      course,
+      existingCourse,
+      availableSections,
+      type: 'info',
+      title: `Change Section for ${course.courseCode}`,
+      message: 'Select a new section from the options below:',
+      showSectionSelector: true
+    })
+  }
+
+  const handleConfirmSectionChange = (selectedSectionCourse) => {
+    const { existingCourse } = confirmDialog
+
+    if (!selectedSectionCourse) {
+      setToast({ message: 'Please select a section', type: 'warning' })
+      return
+    }
+
+    // Prevent changing to the same section
+    if (selectedSectionCourse.section === existingCourse.section) {
+      setToast({ message: 'Course is already in this section', type: 'info' })
+      setConfirmDialog(null)
+      return
+    }
+
+    // Prepare new course data with proper format
+    const newCourseData = buildCourseData(selectedSectionCourse)
+
+    const result = changeCourseSection(existingCourse.id, newCourseData)
+
+    if (result.success) {
+      setToast({
+        message: `Changed ${selectedSectionCourse.courseCode} from ${result.oldCourse.section} to ${result.course.section}`,
+        type: 'success',
+        action: {
+          label: 'UNDO',
+          onClick: () => {
+            // Undo by changing back to old section
+            const oldCourseData = {
+              ...result.oldCourse,
+              weekdays: result.oldCourse.weekdays || [],
+              schedule: result.oldCourse.schedule || []
+            }
+            changeCourseSection(result.course.id, oldCourseData)
+            setToast({ message: `Restored ${selectedSectionCourse.courseCode} to ${result.oldCourse.section}`, type: 'info' })
+          }
+        }
+      })
+      vibrate([10, 50, 10])
+    } else {
+      setToast({ message: result.message, type: 'error' })
+    }
+
+    setConfirmDialog(null)
+  }
 
   // Date configuration state (Step 2)
   const parseDate = (isoDate) => {
@@ -240,14 +388,42 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             courseCode: 'DBS',
             courseName: 'Database Systems',
             section: 'BCS-5F',
-            instructor: 'Dr. Zulfiqar Ali',
+            instructor: 'Hajra Ahmed',
             room: 'A-1',
             day: 'Monday',
             timeSlot: '15:20-16:05',
             slotNumber: 9,
             creditHours: 3,
             sessions: [
-              { day: 'Monday', room: 'A-1', timeSlot: '15:20-16:05' }
+              { day: 'Monday', room: 'A-1', timeSlot: '15:20-16:05', instructor: 'Hajra Ahmed' }
+            ]
+          },
+          {
+            courseCode: 'CN Lab',
+            courseName: 'Computer Networks Lab',
+            section: 'BCS-5F',
+            instructor: 'Sameer Faisal',
+            room: 'Academic Block II LAB-11 (46)',
+            day: 'Monday',
+            timeSlot: '10:45-11:35',
+            slotNumber: 4,
+            creditHours: 1,
+            sessions: [
+              { day: 'Monday', room: 'Academic Block II LAB-11 (46)', timeSlot: '10:45-11:35', instructor: 'Sameer Faisal' }
+            ]
+          },
+          {
+            courseCode: 'DBS Lab',
+            courseName: 'Database Systems Lab',
+            section: 'BCS-5F',
+            instructor: 'Fareeha Jabeen',
+            room: 'Academic Block II Lab-13 (47)',
+            day: 'Wednesday',
+            timeSlot: '08:00-08:50',
+            slotNumber: 1,
+            creditHours: 1,
+            sessions: [
+              { day: 'Wednesday', room: 'Academic Block II Lab-13 (47)', timeSlot: '08:00-08:50', instructor: 'Fareeha Jabeen' }
             ]
           }
         ]
@@ -279,46 +455,44 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     }
 
     const courses = (timetable && timetable[fullSection]) || []
-    
+
     if (process.env.NODE_ENV === 'development') {
+      console.log('Searching for section:', fullSection)
       console.log('Found courses:', courses)
+      console.log('First course sessions:', courses[0]?.sessions)
     }
 
-      // Validate courses is an array
-      if (!Array.isArray(courses)) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Invalid courses data, expected array')
-        }
-        setFilteredCourses([])
-        return
+    // Validate courses is an array
+    if (!Array.isArray(courses)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Invalid courses data, expected array')
       }
+      setFilteredCourses([])
+      return
+    }
 
-    // Group courses by course code and collect all sessions
-    const uniqueCourses = {}
-    courses.forEach(course => {
-      // Validate course has required fields
+    // Validate each course has required fields
+    const validCourses = courses.filter(course => {
       if (!course || !course.courseCode || !course.courseName) {
         if (process.env.NODE_ENV === 'development') {
           console.warn('Skipping invalid course entry:', course)
         }
-        return
+        return false
       }
-
-      if (!uniqueCourses[course.courseCode]) {
-        uniqueCourses[course.courseCode] = {
-          ...course,
-          sessions: [course] // Always start with array
-        }
-      } else {
-        // Add this session to the existing course
-        uniqueCourses[course.courseCode].sessions.push(course)
-      }
+      return true
     })
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('Filtered courses:', Object.values(uniqueCourses))
+      console.log('Valid courses with sessions:', validCourses.map(c => ({
+        code: c.courseCode,
+        sessionsCount: c.sessions?.length,
+        sessions: c.sessions
+      })))
     }
-    setFilteredCourses(Object.values(uniqueCourses))
+
+    // Courses from timetable.json are already aggregated with sessions array
+    // No need to re-group, just use them directly
+    setFilteredCourses(validCourses)
     vibrate([10])
   }
 
@@ -332,11 +506,21 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   }
 
   const toggleCourse = (course) => {
-    const isSelected = selectedCourses.find(c => c.courseCode === course.courseCode)
+    const selectedMatch = selectedCourses.find(c => c.courseCode === course.courseCode)
 
-    if (isSelected) {
-      setSelectedCourses(selectedCourses.filter(c => c.courseCode !== course.courseCode))
+    if (selectedMatch) {
+      // If clicking the same course in the same section, deselect it
+      if (selectedMatch.section === course.section) {
+        setSelectedCourses(selectedCourses.filter(c => c.courseCode !== course.courseCode))
+      } else {
+        // If clicking the same course in a different section, replace the old selection
+        setSelectedCourses([
+          ...selectedCourses.filter(c => c.courseCode !== course.courseCode),
+          course
+        ])
+      }
     } else {
+      // New course selection
       setSelectedCourses([...selectedCourses, course])
     }
 
@@ -419,24 +603,51 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     
     try {
       // Use batch add function if multiple courses, single add if one course
-      const addedCourses = appCourses.length > 1 
-        ? addMultipleCourses(appCourses)
-        : [addCourse(appCourses[0])].filter(Boolean)
-      
-      if (addedCourses.length > 0) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Successfully added ${addedCourses.length}/${appCourses.length} courses:`, 
-            addedCourses.map(c => ({ id: c.id, name: c.name, courseCode: c.courseCode }))
-          )
+      if (appCourses.length > 1) {
+        const result = addMultipleCourses(appCourses)
+
+        if (result.success && result.added.length > 0) {
+          let message = `Successfully added ${result.added.length} courses!`
+
+          if (result.duplicates.length > 0) {
+            const dupInfo = result.duplicates.map(d =>
+              d.existingSection && d.section !== d.existingSection
+                ? `${d.courseCode || d.name} (already in ${d.existingSection})`
+                : d.courseCode || d.name
+            ).join(', ')
+            message = `Added ${result.added.length} courses. Skipped ${result.duplicates.length}: ${dupInfo}`
+          }
+
+          setToast({ message, type: 'success' })
+          onCoursesSelected(appCourses)
+          vibrate([10, 50, 10])
+        } else if (result.duplicates.length > 0 && result.added.length === 0) {
+          const duplicateNames = result.duplicates.map(d => {
+            const courseId = d.courseCode || d.name
+            if (d.existingSection && d.section !== d.existingSection) {
+              return `${courseId} (already in ${d.existingSection})`
+            }
+            return `${courseId} (${d.section})`
+          }).join(', ')
+          setToast({
+            message: `All selected courses already exist: ${duplicateNames}`,
+            type: 'warning'
+          })
+        } else {
+          setError('Failed to add courses. Please check the console for details.')
         }
-        
-        onCoursesSelected(appCourses)
-        vibrate([10, 50, 10])
       } else {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Failed to add any courses')
+        const result = addCourse(appCourses[0])
+
+        if (result.success) {
+          setToast({ message: `Successfully added ${result.course.name}!`, type: 'success' })
+          onCoursesSelected(appCourses)
+          vibrate([10, 50, 10])
+        } else if (result.error === 'DUPLICATE') {
+          setToast({ message: result.message, type: 'warning' })
+        } else {
+          setError(result.message || 'Failed to add course')
         }
-        setError('Failed to add courses. Please check the console for details.')
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -492,13 +703,19 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         const formatted = {
           day: dayName,
           startTime: formatTimeTo12Hour(startTime.trim()),
-          endTime: formatTimeTo12Hour(endTime.trim())
+          endTime: formatTimeTo12Hour(endTime.trim()),
+          // Include per-session metadata
+          // Note: instructor is at course level, not session level, so use course.instructor
+          instructor: s.instructor || course.instructor || 'TBA',
+          room: s.room || 'TBA'
         }
         if (process.env.NODE_ENV === 'development') {
           console.log('Creating schedule slot:', {
             originalDay: s.day,
             normalizedDay: dayName,
             timeSlot: s.timeSlot,
+            instructor: formatted.instructor,
+            room: s.room,
             formatted: formatted
           })
         }
@@ -543,6 +760,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       // Schedule array for TimetableView
       schedule
     }
+  }
+
+  // Helper function to build course data for section changes
+  // Ensures all session data is preserved when changing sections
+  const buildCourseData = (sectionCourse) => {
+    return convertToAppFormat(sectionCourse)
   }
 
   return (
@@ -664,9 +887,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           {/* Clear Cache Button */}
           <button
             onClick={clearCache}
-            className="text-xs sm:text-xs text-content-tertiary hover:text-accent transition-colors flex items-center gap-1"
+            className="mt-2 px-3 py-1.5 text-xs sm:text-sm text-accent hover:text-accent-hover bg-accent/10 hover:bg-accent/20 rounded-lg transition-all flex items-center gap-1.5 sm:gap-2 border border-accent/20 hover:border-accent/30"
           >
-            <RefreshCw className="w-3 h-3 sm:w-3 sm:h-3" />
+            <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Clear cache & reload timetable</span>
             <span className="sm:hidden">Clear cache</span>
           </button>
@@ -924,41 +1147,164 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               </p>
 
               {filteredCourses.map((course) => {
-                const isSelected = selectedCourses.find(c => c.courseCode === course.courseCode)
+                // Find if this course is selected (in selectedCourses state)
+                const selectedCourseMatch = selectedCourses.find(c => c.courseCode === course.courseCode)
+                const isSelected = !!selectedCourseMatch
+                const isSelectedInSameSection = isSelected && selectedCourseMatch?.section === course.section
+
+                // Check if already added to app (by course code only, regardless of section)
+                const existingCourseMatch = courses.find(existingCourse => {
+                  if (course.courseCode && existingCourse.courseCode) {
+                    return existingCourse.courseCode === course.courseCode
+                  }
+                  return existingCourse.name === course.courseName
+                })
+
+                const isAlreadyAdded = !!existingCourseMatch
+                const existingSection = existingCourseMatch?.section
+                const isSameSection = existingSection === course.section
 
                 return (
                   <div
                     key={course.courseCode}
-                    onClick={() => toggleCourse(course)}
-                    className={`relative bg-dark-surface-raised border-2 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 cursor-pointer transition-all ${
-                      isSelected
-                        ? 'border-accent/50 bg-accent/5'
-                        : 'border-dark-border hover:border-accent/30'
+                    onClick={() => {
+                      // Allow clicking if not already added, OR if selected in different section
+                      if (!isAlreadyAdded) {
+                        toggleCourse(course)
+                      } else if (isSelected && !isSelectedInSameSection) {
+                        // Allow switching sections for selected courses
+                        toggleCourse(course)
+                      }
+                    }}
+                    className={`relative bg-dark-surface-raised border-2 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 transition-all ${
+                      isAlreadyAdded
+                        ? 'border-yellow-500/30 bg-yellow-500/5 cursor-not-allowed opacity-75'
+                        : isSelected
+                        ? 'border-accent/50 bg-accent/5 cursor-pointer'
+                        : 'border-dark-border hover:border-accent/30 cursor-pointer'
                     }`}
                   >
-                    {/* Checkbox */}
-                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4">
-                      <div
-                        className={`w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-md sm:rounded-lg border-2 flex items-center justify-center transition-all ${
-                          isSelected
-                            ? 'bg-accent border-accent'
-                            : 'border-dark-border bg-dark-surface'
-                        }`}
-                      >
-                        {isSelected && <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-dark-bg" />}
-                      </div>
+                    {/* Status Indicator - Top Right */}
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 z-10 max-w-[calc(100%-6rem)] sm:max-w-[calc(100%-8rem)]">
+                      {isAlreadyAdded ? (
+                        // Course already added to app
+                        isSameSection ? (
+                          // Same section - show enhanced indicator with section info and full schedule tooltip
+                          <div
+                            className="bg-green-500/20 border border-green-500/40 rounded-lg shadow-sm overflow-hidden cursor-help"
+                            title={generateScheduleTooltip(existingCourseMatch)}
+                          >
+                            <div className="px-1.5 sm:px-2 py-1 flex items-center gap-1">
+                              <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-green-400 flex-shrink-0" />
+                              <div className="flex flex-col min-w-0">
+                                <span className="text-[10px] sm:text-xs text-green-400 font-medium">Added</span>
+                                <span className="text-[8px] sm:text-[9px] text-green-300/80 truncate">
+                                  {existingSection} {existingCourseMatch?.instructor && `• ${existingCourseMatch.instructor.split(' ')[0]}`}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          // Different section - compact yellow badge with full schedule tooltip, responsive padding
+                          <div
+                            className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-yellow-500/20 border border-yellow-500/40 rounded-md sm:rounded-lg shadow-sm cursor-help"
+                            title={generateScheduleTooltip(existingCourseMatch)}
+                          >
+                            <span className="text-[9px] sm:text-[10px] md:text-xs text-yellow-400 font-semibold uppercase tracking-wide whitespace-nowrap">Unavailable</span>
+                          </div>
+                        )
+                      ) : isSelected ? (
+                        // Course selected but not yet added
+                        isSelectedInSameSection ? (
+                          // Selected in same section - simple checkmark
+                          <div
+                            className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-md sm:rounded-lg border-2 bg-accent border-accent flex items-center justify-center transition-all"
+                          >
+                            <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-dark-bg" />
+                          </div>
+                        ) : (
+                          // Selected in different section - show enhanced badge with section info
+                          <div
+                            className="bg-accent/20 border border-accent/40 rounded-lg shadow-sm overflow-hidden cursor-help"
+                            title={generateScheduleTooltip(selectedCourseMatch)}
+                          >
+                            <div className="px-2 py-1 flex items-center gap-1">
+                              <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent flex-shrink-0" />
+                              <div className="flex flex-col min-w-0">
+                                <span className="text-[10px] sm:text-xs text-accent font-medium">Selected</span>
+                                <span className="text-[8px] sm:text-[9px] text-accent/80 truncate">
+                                  {selectedCourseMatch.section} {selectedCourseMatch?.instructor && `• ${selectedCourseMatch.instructor.split(' ')[0]}`}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      ) : (
+                        // Not selected, not added - empty checkbox
+                        <div
+                          className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-md sm:rounded-lg border-2 border-dark-border bg-dark-surface flex items-center justify-center transition-all"
+                        >
+                        </div>
+                      )}
                     </div>
 
                     {/* Course Info */}
-                    <div className="pr-8 sm:pr-9 md:pr-10">
-                      <div className="flex items-start gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                        <span className="px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-accent/20 text-accent text-[10px] sm:text-xs font-mono font-semibold rounded">
+                    <div className={
+                      (isAlreadyAdded && isSameSection) || (isSelected && !isSelectedInSameSection)
+                        ? "pr-32 sm:pr-36 md:pr-40"  // Wide padding for enhanced badges
+                        : "pr-20 sm:pr-24 md:pr-28"  // Standard padding for simple indicators
+                    }>
+                      <div className="flex items-start gap-1.5 sm:gap-2 mb-2">
+                        <span className="px-1.5 py-0.5 sm:px-2 sm:py-0.5 bg-accent/20 text-accent text-[10px] sm:text-xs font-mono font-semibold rounded flex-shrink-0">
                           {course.courseCode}
                         </span>
-                        <h3 className="text-xs sm:text-sm md:text-base font-semibold text-content-primary leading-tight">
+                        <h3 className="text-xs sm:text-sm md:text-base font-semibold text-content-primary leading-tight flex-1 min-w-0">
                           {course.courseName}
                         </h3>
                       </div>
+
+                      {/* Cross-section duplicate warning with Change Section button */}
+                      {isAlreadyAdded && !isSameSection && existingSection && (
+                        <div className="mb-2 sm:mb-3 px-2 sm:px-2.5 md:px-3 py-1.5 sm:py-2 md:py-2.5 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                          {/* Header with icon and title - responsive wrapping */}
+                          <div className="flex items-start gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                            <AlertCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[10px] sm:text-[11px] md:text-xs text-yellow-400 font-semibold">
+                                Course already enrolled
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Details and button - fully responsive stacked layout for mobile */}
+                          <div className="flex flex-col gap-2">
+                            {/* Details section - better spacing on mobile */}
+                            <div className="ml-4 sm:ml-5 md:ml-6 space-y-0.5">
+                              <p className="text-[9px] sm:text-[10px] md:text-xs text-yellow-300/90 break-words">
+                                <span className="font-medium">Section:</span> <span className="inline-block">{existingSection}</span>
+                              </p>
+                              {existingCourseMatch?.instructor && (
+                                <p className="text-[9px] sm:text-[10px] md:text-xs text-yellow-300/90 break-words">
+                                  <span className="font-medium">Prof:</span> <span className="inline-block">{existingCourseMatch.instructor}</span>
+                                </p>
+                              )}
+                            </div>
+
+                            {/* Change button - full width on all mobile screens */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleChangeSectionClick(course, existingCourseMatch)
+                              }}
+                              className="w-full px-2.5 sm:px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-dark-bg text-[10px] sm:text-xs font-medium rounded-md sm:rounded-lg transition-all flex items-center justify-center gap-1 sm:gap-1.5 shadow-sm hover:shadow-md"
+                              title="Change to a different section"
+                            >
+                              <RefreshCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                              <span className="whitespace-nowrap">Change Section</span>
+                            </button>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Details Grid */}
                       <div className="space-y-1 sm:space-y-1.5 md:space-y-2 mt-1.5 sm:mt-2 md:mt-3">
@@ -1069,6 +1415,52 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             onCoursesSelected([]) // Close timetable selector after manual add
           }}
         />
+      )}
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+          action={toast.action}
+        />
+      )}
+
+      {/* Section Change Confirmation Dialog */}
+      {confirmDialog && confirmDialog.showSectionSelector && (
+        <SectionSelectorDialog
+          isOpen={true}
+          onClose={() => setConfirmDialog(null)}
+          onConfirm={handleConfirmSectionChange}
+          courseCode={confirmDialog.course?.courseCode}
+          courseName={confirmDialog.course?.courseName}
+          currentSection={confirmDialog.existingCourse?.section}
+          availableSections={confirmDialog.availableSections || []}
+        />
+      )}
+
+      {/* Generic Confirmation Dialog */}
+      {confirmDialog && !confirmDialog.showSectionSelector && (
+        <ConfirmDialog
+          isOpen={true}
+          onClose={() => setConfirmDialog(null)}
+          onConfirm={() => handleConfirmSectionChange(confirmDialog.course)}
+          title={confirmDialog.title}
+          message={confirmDialog.message}
+          type={confirmDialog.type}
+        >
+          {confirmDialog.details && (
+            <div className="space-y-2">
+              {confirmDialog.details.map((detail, idx) => (
+                <div key={idx} className="flex justify-between text-sm">
+                  <span className="text-content-tertiary">{detail.label}:</span>
+                  <span className="text-content-primary font-medium">{detail.value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </ConfirmDialog>
       )}
     </div>
   )

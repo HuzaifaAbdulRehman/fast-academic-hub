@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApp } from '../../context/AppContext'
 import { BookOpen, Calendar, AlertCircle, CheckCircle2, Plus, Trash2, Edit, FolderOpen, X } from 'lucide-react'
 import TimetableSelector from './TimetableSelector'
 import CourseForm from './CourseForm'
 import ConfirmModal from '../shared/ConfirmModal'
 import SemesterSelector from '../shared/SemesterSelector'
+import CacheReminderBanner from '../shared/CacheReminderBanner'
+import Toast from '../shared/Toast'
 import { createPortal } from 'react-dom'
+import PullToRefresh from 'react-simple-pull-to-refresh'
+import { clearTimetableCache } from '../../utils/cacheManager'
 
 export default function CoursesView() {
   const { courses, deleteCourse, deleteAllCourses, updateCourse, addCourse, semesters, activeSemesterId, switchSemester, createSemester, deleteSemester } = useApp()
@@ -18,6 +22,9 @@ export default function CoursesView() {
   const [courseToDelete, setCourseToDelete] = useState(null)
   const [newSemesterName, setNewSemesterName] = useState('')
   const [showNewSemesterInput, setShowNewSemesterInput] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
+  const [toast, setToast] = useState(null)
+  const [showCacheReminder, setShowCacheReminder] = useState(false)
 
   const handleEditCourse = (course) => {
     setEditingCourse(course)
@@ -70,17 +77,80 @@ export default function CoursesView() {
     }
   }
 
+  // Pull to refresh handler
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    // Clear timetable cache and refresh
+    clearTimetableCache()
+    await new Promise(resolve => setTimeout(resolve, 500))
+    setRefreshing(false)
+    setToast({
+      message: 'Courses refreshed.',
+      type: 'success'
+    })
+  }
+
+  // Handle manual cache clear from banner
+  const handleCacheClear = () => {
+    clearTimetableCache()
+    setToast({
+      message: 'Timetable cache cleared successfully',
+      type: 'success'
+    })
+    setShowCacheReminder(false) // Hide banner after clearing cache
+    // Reload page after a short delay to fetch fresh data
+    setTimeout(() => {
+      window.location.reload()
+    }, 500)
+  }
+
+  // Check if we should show cache reminder
+  // Show only when there are courses with missing data
+  useEffect(() => {
+    if (courses.length === 0) {
+      setShowCacheReminder(false)
+      return
+    }
+
+    // Check if any course has missing critical data
+    const hasMissingData = courses.some(course => {
+      // Check for missing instructor, section, or schedule
+      if (!course.instructor || !course.section) {
+        return true
+      }
+
+      // Check if course lacks schedule data
+      if (!course.schedule || course.schedule.length === 0) {
+        return true
+      }
+
+      return false
+    })
+
+    setShowCacheReminder(hasMissingData)
+  }, [courses])
+
   // Filter semesters - show all non-archived semesters
   const activeSemesters = semesters.filter(s => !s.isArchived)
   const currentSemester = semesters.find(s => s.id === activeSemesterId)
 
-  return (
-    <div className="flex-1 overflow-y-auto">
-      <div className="max-w-4xl mx-auto p-4 md:p-6">
-        {/* Semester Selector - Always visible */}
-        <div className="mb-4">
-          <SemesterSelector compact={true} />
-        </div>
+  const renderContent = () => (
+    <div className="max-w-4xl mx-auto p-4 md:p-6">
+      {/* Semester Selector - Always visible */}
+      <div className="mb-4">
+        <SemesterSelector compact={true} />
+      </div>
+
+      {/* Cache Reminder - Only show when data issues detected */}
+      {showCacheReminder && courses.length > 0 && (
+        <CacheReminderBanner
+          message="Some course data may be missing. Refresh to reload."
+          onRefresh={handleCacheClear}
+          dismissible={true}
+          show={showCacheReminder}
+          autoDismissAfter={10000}
+        />
+      )}
 
         {courses.length === 0 ? (
           // Welcome Screen - No Courses Yet
@@ -245,31 +315,59 @@ export default function CoursesView() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 text-xs">
+                  {/* Course metadata - mobile optimized layout */}
+                  <div className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3 text-xs">
+                    {/* Instructor - Full width on mobile */}
                     {course.instructor && (
-                      <div>
-                        <p className="text-content-tertiary">Instructor</p>
-                        <p className="text-content-primary font-medium">{course.instructor}</p>
+                      <div className="sm:col-span-2">
+                        <p className="text-content-tertiary text-[10px] sm:text-xs">Instructor</p>
+                        <p className="text-content-primary font-medium text-xs sm:text-sm truncate">{course.instructor}</p>
                       </div>
                     )}
-                    {course.creditHours && (
-                      <div>
-                        <p className="text-content-tertiary">Credit Hours</p>
-                        <p className="text-content-primary font-medium">{course.creditHours}</p>
-                      </div>
-                    )}
-                    {course.room && (
-                      <div>
-                        <p className="text-content-tertiary">Room</p>
-                        <p className="text-content-primary font-medium">{course.room}</p>
-                      </div>
-                    )}
-                    {course.schedule && course.schedule.length > 0 && (
-                      <div>
-                        <p className="text-content-tertiary">Days</p>
-                        <p className="text-content-primary font-medium">
-                          {course.schedule.map(s => s.day.slice(0, 3)).join(', ')}
-                        </p>
+
+                    {/* Section (if available) and Credit Hours on same row */}
+                    <div className="flex items-start justify-between gap-3 sm:col-span-2">
+                      {/* Section */}
+                      {course.section && (
+                        <div className="flex-shrink-0">
+                          <p className="text-content-tertiary text-[10px] sm:text-xs">Section</p>
+                          <p className="text-content-primary font-medium text-xs sm:text-sm">{course.section}</p>
+                        </div>
+                      )}
+
+                      {/* Credit Hours - Aligned to right */}
+                      {course.creditHours && (
+                        <div className="flex-shrink-0 text-right">
+                          <p className="text-content-tertiary text-[10px] sm:text-xs">Credit Hours</p>
+                          <p className="text-content-primary font-medium text-xs sm:text-sm">{course.creditHours} CH</p>
+                        </div>
+                      )}
+
+                      {/* Days - Aligned to right if section not present */}
+                      {!course.section && course.schedule && course.schedule.length > 0 && (
+                        <div className="flex-1 min-w-0 text-right">
+                          <p className="text-content-tertiary text-[10px] sm:text-xs">Days</p>
+                          <p className="text-content-primary font-medium text-xs sm:text-sm truncate">
+                            {course.schedule.map(s => s.day.slice(0, 3)).join(', ')}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Days - Full row if section is present */}
+                    {course.section && course.schedule && course.schedule.length > 0 && (
+                      <div className="sm:col-span-2">
+                        <p className="text-content-tertiary text-[10px] sm:text-xs">Class Days</p>
+                        <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-1">
+                          {course.schedule.map((session, idx) => (
+                            <span
+                              key={idx}
+                              className="px-1.5 sm:px-2 py-0.5 bg-accent/10 text-accent text-[9px] sm:text-[10px] font-medium rounded border border-accent/20"
+                            >
+                              {session.day}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -292,7 +390,28 @@ export default function CoursesView() {
             </div>
           </div>
         )}
-      </div>
+
+      {/* Toast Notifications */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+    </div>
+  )
+
+  return (
+    <PullToRefresh
+      onRefresh={handleRefresh}
+      pullingContent=""
+      refreshingContent={<div className="text-center py-4 text-accent text-sm">Refreshing...</div>}
+      isPullable={true}
+      resistance={2}
+    >
+      <div className="flex-1 overflow-y-auto">
+        {renderContent()}
 
       {/* Timetable Selector Modal */}
       {showTimetableSelector && (
@@ -500,6 +619,7 @@ export default function CoursesView() {
           confirmationText="DELETE ALL"
         />
       )}
-    </div>
+      </div>
+    </PullToRefresh>
   )
 }

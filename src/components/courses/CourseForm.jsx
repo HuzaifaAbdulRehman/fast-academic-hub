@@ -4,6 +4,7 @@ import { useApp } from '../../context/AppContext'
 import { X, Calendar, BookOpen, Hash } from 'lucide-react'
 import { getTodayISO } from '../../utils/dateHelpers'
 import { WEEKDAY_FULL_NAMES } from '../../utils/constants'
+import Toast from '../shared/Toast'
 
 // Haptic feedback utility
 const vibrate = (pattern = [10]) => {
@@ -22,6 +23,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
   const modalRef = useRef(null)
   const [isMobileDevice] = useState(isMobile())
   const portalTargetRef = useRef(typeof document !== 'undefined' ? document.body : null)
+  const [toast, setToast] = useState(null)
 
   useEffect(() => {
     const portalTarget = portalTargetRef.current
@@ -69,10 +71,36 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
 
   const [userModifiedAbsences, setUserModifiedAbsences] = useState(!!existingCourse?.allowedAbsences)
 
+  // Calculate initial end date mode and duration
+  const calculateInitialMode = () => {
+    if (!existingCourse) return { mode: 'duration', duration: 16 }
+
+    // If editing, check if we have both start and end dates
+    if (existingStart.year && existingEnd.year) {
+      const start = new Date(existingStart.year, parseInt(existingStart.month) - 1, parseInt(existingStart.day))
+      const end = new Date(existingEnd.year, parseInt(existingEnd.month) - 1, parseInt(existingEnd.day))
+      const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24))
+      const weeks = Math.round(diffDays / 7)
+
+      // Check if it's close to a standard duration (within 3 days)
+      const standardWeeks = [4, 8, 12, 16, 20, 24]
+      const isStandardDuration = standardWeeks.some(w => Math.abs(diffDays - (w * 7)) <= 3)
+
+      if (isStandardDuration) {
+        return { mode: 'duration', duration: weeks }
+      }
+    }
+
+    // Default to duration mode for consistency
+    return { mode: 'duration', duration: 16 }
+  }
+
+  const initialModeData = calculateInitialMode()
+
   const [startDate, setStartDate] = useState(existingStart.year ? existingStart : today)
-  const [endDate, setEndDate] = useState(existingEnd)
-  const [endDateMode, setEndDateMode] = useState('exact') // 'exact' or 'duration'
-  const [semesterDuration, setSemesterDuration] = useState(16) // weeks
+  const [endDate, setEndDate] = useState(existingEnd.year ? existingEnd : { year: '', month: '', day: '' })
+  const [endDateMode, setEndDateMode] = useState(initialModeData.mode)
+  const [semesterDuration, setSemesterDuration] = useState(initialModeData.duration)
   const [errors, setErrors] = useState({})
   const [sessionSelections, setSessionSelections] = useState(
     existingCourse?.weekdays || Array(formData.creditHours).fill('')
@@ -166,17 +194,35 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
 
     if (existingCourse) {
       updateCourse(existingCourse.id, courseData)
+      vibrate([10, 50, 10]) // Success pattern
+
+      if (typeof onSave === 'function') {
+        onSave()
+      }
+      if (typeof onClose === 'function' && onClose !== onSave) {
+        onClose()
+      }
     } else {
-      addCourse(courseData)
-    }
+      const result = addCourse(courseData)
 
-    vibrate([10, 50, 10]) // Success pattern
+      if (result.success) {
+        vibrate([10, 50, 10]) // Success pattern
+        setToast({ message: `Successfully added ${result.course.name}!`, type: 'success' })
 
-    if (typeof onSave === 'function') {
-      onSave()
-    }
-    if (typeof onClose === 'function' && onClose !== onSave) {
-      onClose()
+        // Close after showing toast briefly
+        setTimeout(() => {
+          if (typeof onSave === 'function') {
+            onSave()
+          }
+          if (typeof onClose === 'function' && onClose !== onSave) {
+            onClose()
+          }
+        }, 500)
+      } else if (result.error === 'DUPLICATE') {
+        setToast({ message: result.message, type: 'warning' })
+      } else {
+        setToast({ message: result.message || 'Failed to add course', type: 'error' })
+      }
     }
   }
 
@@ -376,13 +422,13 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
           <div>
             <label className="block text-sm font-medium text-content-primary mb-2 flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
-              Start Date
+              Start Date *
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
               <select
                 value={startDate.day}
                 onChange={(e) => setStartDate({ ...startDate, day: e.target.value })}
-                className="px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                className="px-2 sm:px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
               >
                 <option value="">Day</option>
                 {days.map(d => (
@@ -392,17 +438,17 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
               <select
                 value={startDate.month}
                 onChange={(e) => setStartDate({ ...startDate, month: e.target.value })}
-                className="px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                className="px-2 sm:px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
               >
                 <option value="">Month</option>
                 {months.map(m => (
-                  <option key={m.value} value={m.value}>{m.label}</option>
+                  <option key={m.value} value={m.value}>{m.label.slice(0, 3)}</option>
                 ))}
               </select>
               <select
                 value={startDate.year}
                 onChange={(e) => setStartDate({ ...startDate, year: e.target.value })}
-                className="px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                className="px-2 sm:px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
               >
                 <option value="">Year</option>
                 {years.map(y => (
@@ -460,11 +506,11 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
 
             {/* Exact Date Mode */}
             {endDateMode === 'exact' && (
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                 <select
                   value={endDate.day}
                   onChange={(e) => setEndDate({ ...endDate, day: e.target.value })}
-                  className="px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                  className="px-2 sm:px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                 >
                   <option value="">Day</option>
                   {days.map(d => (
@@ -474,17 +520,17 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
                 <select
                   value={endDate.month}
                   onChange={(e) => setEndDate({ ...endDate, month: e.target.value })}
-                  className="px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                  className="px-2 sm:px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                 >
                   <option value="">Month</option>
                   {months.map(m => (
-                    <option key={m.value} value={m.value}>{m.label}</option>
+                    <option key={m.value} value={m.value}>{m.label.slice(0, 3)}</option>
                   ))}
                 </select>
                 <select
                   value={endDate.year}
                   onChange={(e) => setEndDate({ ...endDate, year: e.target.value })}
-                  className="px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                  className="px-2 sm:px-3 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                 >
                   <option value="">Year</option>
                   {years.map(y => (
@@ -497,7 +543,7 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
             {/* Duration Mode */}
             {endDateMode === 'duration' && (
               <div>
-                <div className="flex gap-2 mb-2">
+                <div className="flex gap-1.5 sm:gap-2 mb-2">
                   {[4, 8, 12, 16].map(weeks => (
                     <button
                       key={weeks}
@@ -527,12 +573,12 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
                     const value = e.target.value === '' ? 16 : Number(e.target.value)
                     setSemesterDuration(value)
                   }}
-                  className="w-full px-4 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                  className="w-full px-3 sm:px-4 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                   placeholder="Custom weeks"
                 />
-                {endDate.year && (
+                {endDate.year && endDate.month && endDate.day && (
                   <p className="text-xs text-content-tertiary mt-2">
-                    End date: {months.find(m => m.value === endDate.month)?.label} {endDate.day}, {endDate.year}
+                    End date: {endDate.day} {months.find(m => m.value === String(endDate.month))?.label} {endDate.year}
                   </p>
                 )}
               </div>
@@ -541,6 +587,10 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
             {errors.endDate && (
               <p className="text-xs text-attendance-danger mt-1.5">{errors.endDate}</p>
             )}
+            <p className="text-xs text-content-tertiary mt-2 flex items-start gap-1.5">
+              <Calendar className="w-3 h-3 mt-0.5 flex-shrink-0" />
+              <span>Default: 16 weeks from start date if not specified. Switch to "Exact Date" for custom end dates.</span>
+            </p>
           </div>
 
           {/* Maximum Allowed Absences */}
@@ -607,6 +657,15 @@ export default function CourseForm({ onClose, onSave, existingCourse = null }) {
           </div>
         </div>
         </div>
+
+        {/* Toast Notification */}
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     ),
     portalTarget
