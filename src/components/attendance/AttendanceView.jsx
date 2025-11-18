@@ -22,6 +22,7 @@ export default function AttendanceView() {
   const [showAllControls, setShowAllControls] = useState(true) // Track if ALL controls are visible - default to true
   const [scrollVisible, setScrollVisible] = useState(true)
   const tableContainerRef = useRef(null)
+  const scrollTimeoutRef = useRef(null)
   const [bulkSelectMode, setBulkSelectMode] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
   const [reorderMode, setReorderMode] = useState(false)
@@ -129,6 +130,15 @@ export default function AttendanceView() {
     setWeeksToShow(semesterWeeks)
   }, [semesterWeeks])
 
+  // Cleanup scroll timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
+    }
+  }, [])
+
   if (courses.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center p-6">
@@ -180,14 +190,16 @@ export default function AttendanceView() {
 
   const renderContent = () => (
     <div className="relative">
-      {/* Collapsible Header Container - smooth fade with transform */}
+      {/* Collapsible Header Container - smooth fade with transform and height */}
       <div
         className={`
-          transition-all duration-400 ease-out
-          ${scrollVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
+          transition-all duration-300 ease-in-out
+          ${scrollVisible
+            ? 'opacity-100 translate-y-0 max-h-[500px]'
+            : 'opacity-0 -translate-y-2 max-h-0 pointer-events-none'
+          }
         `}
         style={{
-          maxHeight: scrollVisible ? '500px' : '0px',
           overflow: scrollVisible ? 'visible' : 'hidden'
         }}
       >
@@ -316,16 +328,27 @@ export default function AttendanceView() {
         setSelectedDates={setSelectedDates}
         reorderMode={reorderMode}
 onScroll={(scrollTop) => {
-          // Show header when at top or scrolling up, hide when scrolling down past threshold
+          // Clear any pending timeout
+          if (scrollTimeoutRef.current) {
+            clearTimeout(scrollTimeoutRef.current)
+          }
+
+          // Show header when at top (with smooth delay)
           if (scrollTop < 10) {
-            setScrollVisible(true)
+            scrollTimeoutRef.current = setTimeout(() => {
+              setScrollVisible(true)
+            }, 150) // Small delay for smooth appearance
           } else if (scrollTop > 50) {
             // Check scroll direction via ref
             const lastScroll = tableContainerRef.current?.lastScrollTop || 0
             if (scrollTop > lastScroll) {
-              setScrollVisible(false) // Scrolling down
+              // Scrolling down - hide immediately
+              setScrollVisible(false)
             } else {
-              setScrollVisible(true) // Scrolling up
+              // Scrolling up - show with delay
+              scrollTimeoutRef.current = setTimeout(() => {
+                setScrollVisible(true)
+              }, 100)
             }
             if (tableContainerRef.current) {
               tableContainerRef.current.lastScrollTop = scrollTop
