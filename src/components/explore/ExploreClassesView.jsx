@@ -544,6 +544,7 @@ export default function ExploreClassesView() {
                 <button
                   onClick={clearSearch}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-content-secondary hover:text-content-primary bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border transition-all"
+                  aria-label="Clear search input"
                 >
                   <X className="w-3 h-3" />
                   <span className="hidden sm:inline">Clear</span>
@@ -556,6 +557,8 @@ export default function ExploreClassesView() {
                     ? 'bg-accent text-dark-bg'
                     : 'text-content-secondary hover:text-content-primary bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border'
                 }`}
+                aria-label={multiSelectMode ? 'Exit multi-select mode' : 'Enable multi-select mode'}
+                aria-pressed={multiSelectMode}
               >
                 {multiSelectMode ? <CheckSquare className="w-3 h-3" /> : <Square className="w-3 h-3" />}
                 <span className="hidden sm:inline">{multiSelectMode ? 'Exit Select' : 'Multi-Select'}</span>
@@ -578,6 +581,7 @@ export default function ExploreClassesView() {
                 <button
                   onClick={addSelectedCourses}
                   className="px-3 py-1 bg-accent hover:bg-accent-hover text-dark-bg rounded-lg text-xs font-semibold transition-all hover:scale-105 active:scale-95"
+                  aria-label={`Add ${selectedClasses.length} selected course${selectedClasses.length > 1 ? 's' : ''} to My Courses`}
                 >
                   Add All
                 </button>
@@ -603,16 +607,22 @@ export default function ExploreClassesView() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="w-full pl-10 pr-3 py-2.5 sm:py-3 bg-dark-bg border border-dark-border rounded-xl text-content-primary placeholder:text-content-tertiary text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                aria-label="Search for classes by course, instructor, section, or day"
+                aria-describedby="search-help-text"
               />
             </div>
             <button
               onClick={handleSearch}
               className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-accent hover:bg-accent-hover text-dark-bg rounded-xl font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/30 active:scale-95"
+              aria-label={`Search classes${searchInput ? ` for ${searchInput}` : ''}`}
             >
               <Search className="w-4 h-4" />
               <span className="hidden sm:inline">Search</span>
             </button>
           </div>
+          <p id="search-help-text" className="text-xs sm:text-xs text-content-tertiary mt-1.5">
+            Type multiple keywords (e.g., "sameer monday" or "daa 5f")
+          </p>
         </div>
       </div>
 
@@ -650,10 +660,59 @@ export default function ExploreClassesView() {
               <p className="text-sm text-content-tertiary text-center mb-4">
                 {searchTerm ? 'Try a different search term' : 'No classes available'}
               </p>
-              {searchTerm && (
+              {searchTerm && timetableData.length > 0 && (
+                <>
+                  <div className="max-w-sm mb-4 space-y-2">
+                    <p className="text-xs text-content-secondary text-center font-medium">Try searching for:</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <button
+                        onClick={() => {
+                          setSearchInput('Monday')
+                          setSearchTerm('Monday')
+                        }}
+                        className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
+                      >
+                        Monday
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSearchInput('DAA')
+                          setSearchTerm('DAA')
+                        }}
+                        className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
+                      >
+                        DAA
+                      </button>
+                      <button
+                        onClick={() => {
+                          const sampleInstructor = timetableData.find(c => c.instructor)?.instructor
+                          if (sampleInstructor) {
+                            const firstName = sampleInstructor.split(' ')[0]
+                            setSearchInput(firstName)
+                            setSearchTerm(firstName)
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
+                      >
+                        Instructor name
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    onClick={clearSearch}
+                    className="flex items-center gap-2 px-4 py-2 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg transition-all text-sm font-medium"
+                    aria-label="Clear search and show all classes"
+                  >
+                    <X className="w-4 h-4" />
+                    Clear search
+                  </button>
+                </>
+              )}
+              {searchTerm && timetableData.length === 0 && (
                 <button
                   onClick={clearSearch}
                   className="flex items-center gap-2 px-4 py-2 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg transition-all text-sm font-medium"
+                  aria-label="Clear search"
                 >
                   <X className="w-4 h-4" />
                   Clear search
@@ -711,7 +770,7 @@ export default function ExploreClassesView() {
     <>
       <PullToRefresh
         onRefresh={handleRefresh}
-        pullingContent=""
+        pullingContent={<div className="text-center py-4 text-content-secondary text-sm">Pull to refresh...</div>}
         refreshingContent={<div className="text-center py-4 text-accent text-sm font-semibold">Refreshing timetable...</div>}
         isPullable={true}
         resistance={2}

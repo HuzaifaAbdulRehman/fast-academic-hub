@@ -15,6 +15,7 @@ import { vibrate } from '../../utils/uiHelpers'
 export default function AttendanceView() {
   const { courses, undoHistory, undo, markDaysAbsent } = useApp()
   const [refreshing, setRefreshing] = useState(false)
+  const [loadingWeeks, setLoadingWeeks] = useState(false)
 
   const [showCourseForm, setShowCourseForm] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
@@ -139,6 +140,11 @@ export default function AttendanceView() {
     }
   }, [])
 
+  // Cleanup toast on unmount to prevent persistence across tab switches
+  useEffect(() => {
+    return () => setToast(null)
+  }, [])
+
   if (courses.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center p-6">
@@ -182,7 +188,7 @@ export default function AttendanceView() {
   const handleBulkMarkAbsent = () => {
     if (selectedDates.length > 0) {
       markDaysAbsent(selectedDates)
-      onBulkMarkComplete(selectedDates.length)
+      handleBulkMarkComplete(selectedDates.length)
       setSelectedDates([])
       setBulkSelectMode(false)
     }
@@ -243,8 +249,13 @@ export default function AttendanceView() {
             <SemesterSelector compact />
             <select
               value={weeksToShow}
-              onChange={(e) => setWeeksToShow(Number(e.target.value))}
-              className="bg-dark-surface-raised border border-dark-border rounded-lg px-2 sm:px-2.5 py-1 sm:py-1.5 text-content-primary text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all flex-shrink-0 min-w-[70px]"
+              onChange={(e) => {
+                setLoadingWeeks(true)
+                setWeeksToShow(Number(e.target.value))
+                setTimeout(() => setLoadingWeeks(false), 300) // Brief loading state
+              }}
+              disabled={loadingWeeks}
+              className="bg-dark-surface-raised border border-dark-border rounded-lg px-2 sm:px-2.5 py-1 sm:py-1.5 text-content-primary text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all flex-shrink-0 min-w-[70px] disabled:opacity-50 disabled:cursor-wait"
             >
               <option value={4}>4 weeks</option>
               <option value={8}>8 weeks</option>
@@ -261,6 +272,7 @@ export default function AttendanceView() {
                 onClick={toggleBulkSelectMode}
                 className={`
                   flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex-shrink-0
+                  focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-dark-bg
                   ${bulkSelectMode
                     ? 'bg-accent text-white shadow-sm'
                     : 'bg-dark-surface-raised border border-dark-border text-content-primary hover:bg-dark-surface-hover hover:border-accent/40'
@@ -283,6 +295,7 @@ export default function AttendanceView() {
                   }}
                   className={`
                     flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex-shrink-0
+                    focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-dark-bg
                     ${reorderMode
                       ? 'bg-accent text-white shadow-sm'
                       : 'bg-dark-surface-raised border border-dark-border text-content-primary hover:bg-dark-surface-hover hover:border-accent/40'
@@ -314,6 +327,16 @@ export default function AttendanceView() {
         </div>
       )}
       </div>
+
+      {/* Loading Overlay for Week Changes */}
+      {loadingWeeks && (
+        <div className="absolute inset-0 bg-dark-bg/60 backdrop-blur-sm z-40 flex items-center justify-center pointer-events-none">
+          <div className="bg-dark-surface border border-dark-border rounded-xl px-4 py-3 flex items-center gap-2 shadow-glass-lg">
+            <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-sm text-content-primary font-medium">Updating...</span>
+          </div>
+        </div>
+      )}
 
       {/* Attendance Table */}
       <AttendanceTable

@@ -133,6 +133,22 @@ export default function CoursesView({ onNavigate }) {
     setShowCacheReminder(hasMissingData)
   }, [courses])
 
+  // Cleanup toast on unmount to prevent persistence across tab switches
+  useEffect(() => {
+    return () => setToast(null)
+  }, [])
+
+  // Auto-hide success banner after 5 seconds
+  useEffect(() => {
+    if (showSuccessMessage && courses.length > 0) {
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false)
+      }, 5000) // 5 seconds
+
+      return () => clearTimeout(timer)
+    }
+  }, [showSuccessMessage, courses.length])
+
   // Filter semesters - show all non-archived semesters
   const activeSemesters = semesters.filter(s => !s.isArchived)
   const currentSemester = semesters.find(s => s.id === activeSemesterId)
@@ -303,7 +319,7 @@ export default function CoursesView({ onNavigate }) {
               {courses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-dark-card rounded-xl p-3 sm:p-4 border border-dark-border hover:border-accent/30 transition-all group"
+                  className="bg-dark-card rounded-xl p-3 sm:p-4 border border-dark-border hover:border-accent/30 active:scale-[0.98] active:border-accent/50 transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
@@ -319,7 +335,7 @@ export default function CoursesView({ onNavigate }) {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleEditCourse(course)}
-                        className="p-2 bg-dark-bg hover:bg-accent/10 text-content-secondary hover:text-accent rounded-lg transition-all"
+                        className="p-2 bg-dark-bg hover:bg-accent/10 active:bg-accent/20 text-content-secondary hover:text-accent active:scale-95 rounded-lg transition-all"
                         title="Edit course"
                         aria-label="Edit course"
                       >
@@ -327,7 +343,7 @@ export default function CoursesView({ onNavigate }) {
                       </button>
                       <button
                         onClick={() => handleDeleteCourse(course)}
-                        className="p-2 bg-dark-bg hover:bg-red-500/10 text-content-secondary hover:text-red-400 rounded-lg transition-all"
+                        className="p-2 bg-dark-bg hover:bg-red-500/10 active:bg-red-500/20 text-content-secondary hover:text-red-400 active:scale-95 rounded-lg transition-all"
                         title="Delete course"
                         aria-label="Delete course"
                       >

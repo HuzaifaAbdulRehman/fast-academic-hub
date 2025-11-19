@@ -23,6 +23,7 @@ export default function TimetableView() {
   const [refreshing, setRefreshing] = useState(false)
   const [toast, setToast] = useState(null)
   const [showCacheReminder, setShowCacheReminder] = useState(false)
+  const [expandedFields, setExpandedFields] = useState(new Set()) // Track expanded instructor/room fields
 
   // Create a stable dependency for useMemo by tracking course IDs and sections
   // This ensures re-sorting happens when courses change (add/remove/section change)
@@ -109,11 +110,15 @@ export default function TimetableView() {
           }
         })
       } else {
-        console.warn(`Course "${course.name}" has no schedule or weekdays`)
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`Course "${course.name}" has no schedule or weekdays`)
+        }
       }
     })
-    
-    console.log('Final scheduleByDay:', schedule)
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Final scheduleByDay:', schedule)
+    }
 
     // Sort each day's classes by start time (chronological order)
     // Secondary sort by course name for stability
@@ -174,6 +179,19 @@ export default function TimetableView() {
       const minutes = parseInt(timeSplit[1]) || 0
       return hours * 60 + minutes
     }
+  }
+
+  // Toggle expand state for instructor/room fields
+  const toggleExpand = (fieldId) => {
+    setExpandedFields(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(fieldId)) {
+        newSet.delete(fieldId)
+      } else {
+        newSet.add(fieldId)
+      }
+      return newSet
+    })
   }
 
   // Pull to refresh handler
@@ -286,7 +304,12 @@ export default function TimetableView() {
           const hasClasses = dayClasses && dayClasses.length > 0
 
           return (
-            <div key={day} className="bg-dark-card rounded-2xl border border-dark-border overflow-hidden">
+            <div
+              key={day}
+              className="bg-dark-card rounded-2xl border border-dark-border overflow-hidden"
+              role="region"
+              aria-label={`${day} schedule with ${hasClasses ? dayClasses.length : 0} ${dayClasses?.length === 1 ? 'class' : 'classes'}`}
+            >
               {/* Day Header */}
               <div className="bg-gradient-to-r from-accent/10 to-accent/5 px-4 py-3 border-b border-dark-border">
                 <div className="flex items-center justify-between">
@@ -317,7 +340,9 @@ export default function TimetableView() {
                   {dayClasses.map((classInfo, index) => (
                     <div
                       key={index}
-                      className="bg-dark-bg rounded-xl p-2.5 sm:p-3 md:p-4 border border-dark-border hover:border-accent/30 transition-all"
+                      className="bg-dark-bg rounded-xl p-2.5 sm:p-3 md:p-4 border border-dark-border hover:border-accent/30 transition-all active:scale-[0.98]"
+                      role="article"
+                      aria-label={`${classInfo.courseName} class at ${classInfo.startTime}`}
                     >
                       {/* Course Name & Code */}
                       <div className="flex items-start justify-between mb-2 sm:mb-2.5 md:mb-3">
@@ -362,18 +387,24 @@ export default function TimetableView() {
 
                       {/* Class Details - Vertical stack on all screens */}
                       <div className="space-y-2 sm:space-y-2.5">
-                        {/* Instructor - Prioritized */}
+                        {/* Instructor - Prioritized with expand-on-tap */}
                         {classInfo.instructor && (
-                          <div className="flex items-center gap-1.5 sm:gap-2 text-sm">
+                          <div className="flex items-start gap-1.5 sm:gap-2 text-sm">
                             <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
                               <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="text-[10px] sm:text-xs text-content-tertiary">Instructor</p>
-                              <p className="text-xs sm:text-sm font-medium text-content-primary truncate">
+                            <button
+                              onClick={() => toggleExpand(`instructor-${day}-${index}`)}
+                              className="min-w-0 flex-1 text-left"
+                              aria-label={expandedFields.has(`instructor-${day}-${index}`) ? "Collapse instructor name" : "Expand instructor name"}
+                            >
+                              <p className="text-[10px] sm:text-xs text-content-tertiary mb-0.5">Instructor</p>
+                              <p className={`text-xs sm:text-sm font-medium text-content-primary leading-snug ${
+                                expandedFields.has(`instructor-${day}-${index}`) ? 'break-words' : 'truncate'
+                              }`}>
                                 {classInfo.instructor}
                               </p>
-                            </div>
+                            </button>
                           </div>
                         )}
 
@@ -387,26 +418,32 @@ export default function TimetableView() {
                               </div>
                               <div className="min-w-0 flex-1">
                                 <p className="text-[10px] sm:text-xs text-content-tertiary">Time</p>
-                                <p className="text-xs sm:text-sm font-medium text-content-primary">
+                                <time className="text-xs sm:text-sm font-medium text-content-primary block">
                                   {classInfo.startTime} - {classInfo.endTime}
-                                </p>
+                                </time>
                               </div>
                             </div>
                           )}
 
-                          {/* Location */}
+                          {/* Location with expand-on-tap */}
                           {(classInfo.room || classInfo.building) && (
-                            <div className="flex items-center gap-1.5 sm:gap-2 text-sm">
+                            <div className="flex items-start gap-1.5 sm:gap-2 text-sm">
                               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
                               </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="text-[10px] sm:text-xs text-content-tertiary">Location</p>
-                                <p className="text-xs sm:text-sm font-medium text-content-primary truncate">
+                              <button
+                                onClick={() => toggleExpand(`location-${day}-${index}`)}
+                                className="min-w-0 flex-1 text-left"
+                                aria-label={expandedFields.has(`location-${day}-${index}`) ? "Collapse location" : "Expand location"}
+                              >
+                                <p className="text-[10px] sm:text-xs text-content-tertiary mb-0.5">Location</p>
+                                <p className={`text-xs sm:text-sm font-medium text-content-primary leading-snug ${
+                                  expandedFields.has(`location-${day}-${index}`) ? 'break-words' : 'truncate'
+                                }`}>
                                   {classInfo.room}
                                   {classInfo.building && `, ${classInfo.building}`}
                                 </p>
-                              </div>
+                              </button>
                             </div>
                           )}
                         </div>
@@ -454,7 +491,7 @@ export default function TimetableView() {
   return (
     <PullToRefresh
       onRefresh={handleRefresh}
-      pullingContent=""
+      pullingContent={<div className="text-center py-4 text-content-secondary text-sm">Pull to refresh...</div>}
       refreshingContent={<div className="text-center py-4 text-accent text-sm">Refreshing...</div>}
       isPullable={true}
       resistance={2}

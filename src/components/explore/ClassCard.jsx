@@ -57,6 +57,8 @@ export default function ClassCard({
   selectedDifferentSection = null
 }) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [showFullCourseName, setShowFullCourseName] = useState(false)
+  const [showFullInstructor, setShowFullInstructor] = useState(false)
 
   const handleToggle = () => {
     vibrate(10)
@@ -127,21 +129,39 @@ export default function ClassCard({
               </span>
             </div>
 
-            {/* Course Name - Secondary */}
-            <p className="text-sm sm:text-base text-content-secondary mb-2 line-clamp-1 group-hover:text-content-primary transition-colors">
+            {/* Course Name - Secondary with expand-on-tap */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                vibrate(5)
+                setShowFullCourseName(!showFullCourseName)
+              }}
+              className={`text-sm sm:text-base text-content-secondary mb-2 group-hover:text-content-primary transition-colors text-left w-full ${
+                showFullCourseName ? '' : 'line-clamp-1'
+              }`}
+              title="Tap to expand full name"
+            >
               <HighlightedText text={classData.courseName || 'Unnamed Course'} searchTerm={searchTerm} />
-            </p>
+            </button>
 
             {/* Quick Info Row - Tertiary */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-content-tertiary">
-              {/* Instructor */}
+              {/* Instructor with expand-on-tap */}
               {classData.instructor && (
-                <div className="flex items-center gap-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    vibrate(5)
+                    setShowFullInstructor(!showFullInstructor)
+                  }}
+                  className="flex items-center gap-1 hover:text-content-secondary transition-colors"
+                  title="Tap to expand full name"
+                >
                   <User className="w-3 h-3 flex-shrink-0" />
-                  <span className="truncate max-w-[150px]">
+                  <span className={showFullInstructor ? '' : 'truncate max-w-[150px]'}>
                     <HighlightedText text={classData.instructor} searchTerm={searchTerm} />
                   </span>
-                </div>
+                </button>
               )}
 
               {/* Days */}

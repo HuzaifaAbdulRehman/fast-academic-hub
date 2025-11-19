@@ -161,16 +161,34 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
 
   // Get cell content icon with color coding
   const getCellIcon = (courseId, date, hasClass) => {
-    if (!hasClass) return <Minus className="w-4 h-4 mx-auto text-content-disabled" />
+    if (!hasClass) {
+      return (
+        <span role="img" aria-label="No class scheduled">
+          <Minus className="w-4 h-4 mx-auto text-content-disabled" />
+        </span>
+      )
+    }
 
     const status = getSessionStatus(courseId, date, attendance)
 
     if (status === SESSION_STATUS.ABSENT) {
-      return <X className="w-4 h-4 mx-auto text-attendance-danger group-hover:scale-110 transition-transform" />
+      return (
+        <span role="img" aria-label="Marked as absent">
+          <X className="w-4 h-4 mx-auto text-attendance-danger group-hover:scale-110 transition-transform" />
+        </span>
+      )
     } else if (status === SESSION_STATUS.CANCELLED) {
-      return <Circle className="w-4 h-4 mx-auto text-attendance-warning group-hover:scale-110 transition-transform" />
+      return (
+        <span role="img" aria-label="Class cancelled">
+          <Circle className="w-4 h-4 mx-auto text-attendance-warning group-hover:scale-110 transition-transform" />
+        </span>
+      )
     } else {
-      return <Check className="w-4 h-4 mx-auto text-attendance-safe group-hover:scale-110 transition-transform" />
+      return (
+        <span role="img" aria-label="Marked as present">
+          <Check className="w-4 h-4 mx-auto text-attendance-safe group-hover:scale-110 transition-transform" />
+        </span>
+      )
     }
   }
 
@@ -268,6 +286,9 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                           <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 px-1 sm:px-1.5 md:px-2">
                             {bulkSelectMode ? (
                               <div
+                                role="checkbox"
+                                aria-checked={selectedDates.includes(day.date)}
+                                aria-label={`Select ${day.dayShort} ${formatDateShort(day.date)}`}
                                 className={`
                                   w-4 h-4 sm:w-5 sm:h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0
                                   ${selectedDates.includes(day.date)
@@ -295,7 +316,13 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                                 {day.dayShort} {formatDateShort(day.date).split(' ')[1]}
                               </div>
                               {isToday && (
-                                <div className="text-[8px] sm:text-[10px] md:text-xs text-accent bg-accent/10 px-1.5 py-0.5 rounded-md inline-block" style={{ fontWeight: 600 }}>Today</div>
+                                <div
+                                  className="text-[8px] sm:text-[10px] md:text-xs text-accent bg-accent/10 px-1.5 py-0.5 rounded-md inline-block"
+                                  style={{ fontWeight: 600 }}
+                                  aria-label={`Today: ${formatDateShort(day.date)}`}
+                                >
+                                  Today
+                                </div>
                               )}
                             </div>
                           </div>
@@ -338,7 +365,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
             <div className="flex gap-2">
               <button
                 onClick={handleCancelBulkSelect}
-                className="px-4 py-2 bg-dark-bg/50 hover:bg-dark-surface-raised text-content-primary border border-dark-border/30 rounded-lg transition-all text-sm"
+                className="px-4 py-2 bg-dark-bg/50 hover:bg-dark-surface-raised text-content-primary border border-dark-border/30 rounded-lg transition-all text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-dark-surface-raised"
               >
                 Cancel
               </button>
@@ -347,8 +374,9 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
                 disabled={selectedDates.length === 0}
                 className={`
                   px-4 py-2 rounded-lg font-medium text-sm transition-all
+                  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-surface-raised
                   ${selectedDates.length > 0
-                    ? 'bg-attendance-danger hover:bg-attendance-danger/90 text-white'
+                    ? 'bg-attendance-danger hover:bg-attendance-danger/90 text-white focus:ring-attendance-danger/50'
                     : 'bg-dark-surface-raised text-content-disabled cursor-not-allowed'
                   }
                 `}

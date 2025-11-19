@@ -79,11 +79,56 @@ const DEPARTMENTS = [
   { code: 'BSFBA', name: 'Finance & Business Analytics' }
 ]
 
+// Fuzzy search helper functions (matching Explore tab logic)
+const tokenizeSearch = (searchTerm) => {
+  if (!searchTerm) return []
+  return searchTerm
+    .toLowerCase()
+    .replace(/^(dr\.|engr\.|prof\.|ms\.|mr\.|mrs\.)\s*/gi, '') // Remove titles
+    .replace(/[^\w\s]/g, ' ') // Remove special chars
+    .split(/\s+/) // Split by whitespace
+    .filter(token => token.length > 0) // Remove empty tokens
+}
+
+const normalizeValue = (value) => {
+  if (!value) return ''
+  return String(value)
+    .toLowerCase()
+    .replace(/^(dr\.|engr\.|prof\.|ms\.|mr\.|mrs\.)\s*/gi, '')
+}
+
+const fuzzyMatch = (searchTokens, course) => {
+  if (searchTokens.length === 0) return true // No search = match all
+
+  // All searchable fields
+  const searchableFields = [
+    course.courseName,
+    course.courseCode,
+    course.instructor,
+    course.section,
+    course.day,
+    course.days?.join(' '),
+    // Add day names from sessions for better day search
+    course.sessions?.map(s => s.day).join(' ')
+  ]
+
+  // Normalize all field values
+  const normalizedFields = searchableFields
+    .filter(Boolean)
+    .map(normalizeValue)
+    .join(' ')
+
+  // Check if ALL search tokens are found somewhere in the fields
+  return searchTokens.every(token =>
+    normalizedFields.includes(token)
+  )
+}
+
 export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false }) {
   const { addCourse, addMultipleCourses, courses, changeCourseSection } = useApp()
   const [step, setStep] = useState('select') // 'select' or 'configure'
   const [department, setDepartment] = useState('BCS') // Default to BCS
-  const [section, setSection] = useState('')
+  const [searchQuery, setSearchQuery] = useState('') // Fuzzy search query
   const [timetable, setTimetable] = useState(null)
   const [filteredCourses, setFilteredCourses] = useState([])
   const [selectedCourses, setSelectedCourses] = useState([])
@@ -438,7 +483,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   }
 
   const handleSearch = () => {
-    if (!section || !section.trim() || !timetable || !department) {
+    if (!timetable || !department) {
       setFilteredCourses([])
       setHasSearched(false)
       return
@@ -447,23 +492,24 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Mark that search has been performed
     setHasSearched(true)
 
-    // Combine department and section (e.g., BCS + 5F = BCS-5F)
-    const fullSection = `${department}-${section.toUpperCase().trim()}`
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Searching for section:', fullSection)
-      console.log('Available sections:', timetable ? Object.keys(timetable) : [])
-    }
-
-    const courses = (timetable && timetable[fullSection]) || []
+    // Search across ALL sections for the department
+    let coursesToSearch = []
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('Searching for section:', fullSection)
-      console.log('Found courses:', courses)
-      console.log('First course sessions:', courses[0]?.sessions)
+      console.log('Fuzzy search across all sections for department:', department)
     }
+
+    Object.keys(timetable).forEach(sectionKey => {
+      if (sectionKey.startsWith(department)) {
+        const sectionCourses = timetable[sectionKey]
+        if (Array.isArray(sectionCourses)) {
+          coursesToSearch.push(...sectionCourses)
+        }
+      }
+    })
 
     // Validate courses is an array
-    if (!Array.isArray(courses)) {
+    if (!Array.isArray(coursesToSearch)) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Invalid courses data, expected array')
       }
@@ -472,7 +518,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     }
 
     // Validate each course has required fields
-    const validCourses = courses.filter(course => {
+    let validCourses = coursesToSearch.filter(course => {
       if (!course || !course.courseCode || !course.courseName) {
         if (process.env.NODE_ENV === 'development') {
           console.warn('Skipping invalid course entry:', course)
@@ -482,12 +528,30 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       return true
     })
 
+    // APPLY FUZZY SEARCH if searchQuery is provided
+    if (searchQuery && searchQuery.trim()) {
+      const searchTokens = tokenizeSearch(searchQuery)
+      validCourses = validCourses.filter(course => fuzzyMatch(searchTokens, course))
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Fuzzy search applied:', {
+          query: searchQuery,
+          tokens: searchTokens,
+          resultCount: validCourses.length
+        })
+      }
+    }
+
     if (process.env.NODE_ENV === 'development') {
-      console.log('Valid courses with sessions:', validCourses.map(c => ({
-        code: c.courseCode,
-        sessionsCount: c.sessions?.length,
-        sessions: c.sessions
-      })))
+      console.log('Search results:', {
+        total: validCourses.length,
+        courses: validCourses.map(c => ({
+          code: c.courseCode,
+          name: c.courseName,
+          instructor: c.instructor,
+          section: c.section
+        }))
+      })
     }
 
     // Courses from timetable.json are already aggregated with sessions array
@@ -500,7 +564,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     localStorage.removeItem('timetable')
     setTimetable(null)
     setFilteredCourses([])
-    setSection('')
+    setSearchQuery('')
+    setHasSearched(false)
     fetchTimetable()
     vibrate([10])
   }
@@ -567,6 +632,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     const endDateISO = endDate.year && endDate.month && endDate.day
       ? `${endDate.year}-${String(endDate.month).padStart(2, '0')}-${String(endDate.day).padStart(2, '0')}`
       : null
+
+    // Validate end date is after start date
+    if (endDateISO && endDateISO <= startDateISO) {
+      setError('End date must be after start date')
+      return
+    }
 
     // Convert to app format and add date configuration
     const appCourses = selectedCourses
@@ -802,7 +873,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                   Select Courses from Timetable
                 </h2>
                 <p className="text-xs sm:text-sm text-content-tertiary mt-0.5 hidden sm:block">
-                  Choose your department and enter section
+                  Search by course, instructor, section, or day
                 </p>
               </div>
             </div>
@@ -831,7 +902,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             </div>
           </div>
 
-          {/* Department and Section Search */}
+          {/* Department and Fuzzy Search */}
           <div className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-1 sm:mb-2">
             {/* Department Dropdown */}
             <div>
@@ -840,7 +911,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               </label>
               <select
                 value={department}
-                onChange={(e) => setDepartment(e.target.value)}
+                onChange={(e) => {
+                  setDepartment(e.target.value)
+                  // Reset search when department changes
+                  setHasSearched(false)
+                  setFilteredCourses([])
+                }}
                 className="w-full px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
               >
                 {DEPARTMENTS.map(dept => (
@@ -851,51 +927,52 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               </select>
             </div>
 
-            {/* Section Input + Search Button */}
+            {/* Fuzzy Search Input */}
             <div>
               <label className="text-xs sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
-                Section (e.g., 5F, 3A, 7B)
+                Search by Course, Instructor, Section, or Day
               </label>
               <div className="flex gap-1.5 sm:gap-2">
                 <div className="relative flex-1">
                   <Search className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-content-tertiary" />
                   <input
                     type="text"
-                    value={section}
+                    value={searchQuery}
                     onChange={(e) => {
-                      setSection(e.target.value.toUpperCase())
+                      setSearchQuery(e.target.value)
                       // Reset search state when user types
                       setHasSearched(false)
                       setFilteredCourses([])
                     }}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    placeholder="e.g., 5F"
-                    className="w-full pl-8 sm:pl-10 pr-2 sm:pr-4 py-2 sm:py-2.5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base text-content-primary placeholder-content-tertiary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all uppercase"
+                    placeholder="e.g., DAA, Sameer, 5F, Monday..."
+                    className="w-full pl-8 sm:pl-10 pr-2 sm:pr-4 py-2 sm:py-2.5 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base text-content-primary placeholder-content-tertiary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
                     autoFocus
                   />
                 </div>
                 <button
                   onClick={handleSearch}
-                  disabled={!section.trim() || loading}
+                  disabled={loading}
                   className="px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-xs sm:text-sm md:text-base rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
                 >
                   Search
                 </button>
               </div>
               <p className="text-xs sm:text-xs text-content-tertiary mt-1 sm:mt-1.5">
-                Searching: <span className="text-accent font-medium">{department}-{section || '___'}</span>
+                Type multiple keywords (e.g., "sameer monday" or "daa 5f")
               </p>
             </div>
           </div>
 
-          {/* Clear Cache Button */}
+          {/* Reload Timetable Button */}
           <button
             onClick={clearCache}
-            className="mt-2 px-3 py-1.5 text-xs sm:text-sm text-accent hover:text-accent-hover bg-accent/10 hover:bg-accent/20 rounded-lg transition-all flex items-center gap-1.5 sm:gap-2 border border-accent/20 hover:border-accent/30"
+            className="mt-2 px-3 py-1.5 text-xs sm:text-sm text-content-secondary hover:text-accent bg-dark-surface-raised hover:bg-dark-surface-hover rounded-lg transition-all flex items-center gap-1.5 sm:gap-2 border border-dark-border hover:border-accent/30"
+            title="Reload timetable data"
           >
             <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">Clear cache & reload timetable</span>
-            <span className="sm:hidden">Clear cache</span>
+            <span className="hidden sm:inline">Reload Timetable Data</span>
+            <span className="sm:hidden">Reload Data</span>
           </button>
         </div>
 
@@ -1130,16 +1207,18 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             </div>
           )}
 
-          {!loading && !error && filteredCourses.length === 0 && section && hasSearched && (
+          {!loading && !error && filteredCourses.length === 0 && hasSearched && (
             <div className="text-center py-8 sm:py-12">
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-dark-surface-raised rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                 <Search className="w-7 h-7 sm:w-8 sm:h-8 text-content-tertiary" />
               </div>
               <p className="text-sm sm:text-base text-content-secondary mb-1">
-                No courses found for section "{section}"
+                {searchQuery
+                  ? `No courses found matching "${searchQuery}" in ${department}`
+                  : `No courses found in ${department}`}
               </p>
               <p className="text-xs sm:text-sm text-content-tertiary mb-6 sm:mb-8">
-                Try a different section (e.g., BCS-5F, BSE-5A)
+                Try different keywords (e.g., course code, instructor name, section, or day)
               </p>
 
               {/* Manual Add CTA - Enhanced Discoverability */}
@@ -1187,7 +1266,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           {!loading && filteredCourses.length > 0 && (
             <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
               <p className="text-xs sm:text-sm text-content-secondary mb-1.5 sm:mb-2 md:mb-3">
-                Found {filteredCourses.length} course{filteredCourses.length > 1 ? 's' : ''} for {section}
+                Found {filteredCourses.length} course{filteredCourses.length > 1 ? 's' : ''}
+                {searchQuery && <> matching "<span className="text-accent font-medium">{searchQuery}</span>"</>}
+                {' '}in <span className="text-accent font-medium">{department}</span>
               </p>
 
               {filteredCourses.map((course) => {

@@ -53,10 +53,10 @@ export default function GPAForOthers() {
     }
   }, [students, courses])
 
-  // Add student (max 5)
+  // Add student (max 20)
   const handleAddStudent = () => {
-    if (students.length >= 5) {
-      setToast({ message: 'Maximum 5 students allowed', type: 'warning' })
+    if (students.length >= 20) {
+      setToast({ message: 'Maximum 20 students allowed', type: 'warning' })
       vibrate([15])
       return
     }
@@ -143,12 +143,23 @@ export default function GPAForOthers() {
     }
 
     // Map My Courses to the format needed for GPAForOthers
-    const importedCourses = myCourses.map(course => ({
-      id: `imported-${course.id || Date.now()}-${Math.random()}`,
-      courseName: course.name || course.courseName || '',
-      creditHours: course.creditHours || 3,
-      grades: {} // Empty grades for all students
-    }))
+    const importedCourses = myCourses.map(course => {
+      // Use short name if available, otherwise use full name
+      const displayName = course.shortName || course.name || course.courseName || ''
+
+      // Check if it's a lab course (name or code contains 'Lab' or 'LAB')
+      const isLab = /lab/i.test(course.name || '') || /lab/i.test(course.code || course.courseCode || '')
+
+      // Labs typically have 1 credit hour, regular courses have 3
+      const defaultCredits = isLab ? 1 : 3
+
+      return {
+        id: `imported-${course.id || Date.now()}-${Math.random()}`,
+        courseName: displayName,
+        creditHours: course.creditHours || defaultCredits,
+        grades: {} // Empty grades for all students
+      }
+    })
 
     setCourses(importedCourses)
     setToast({ message: `${importedCourses.length} courses imported from My Courses`, type: 'success' })
@@ -247,42 +258,43 @@ export default function GPAForOthers() {
   }
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div>
-          <h3 className="text-base sm:text-lg font-bold text-content-primary mb-1">
+    <div className="space-y-3 sm:space-y-4">
+      {/* Header - Compact */}
+      <div className="flex items-center justify-between gap-2 sm:gap-3 flex-wrap">
+        <div className="min-w-0">
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-content-primary mb-0.5 sm:mb-1">
             GPA Calculator for Others
           </h3>
-          <p className="text-xs sm:text-sm text-content-secondary">
-            Calculate GPA for multiple students with shared courses
+          <p className="text-[10px] xs:text-xs sm:text-sm text-content-secondary">
+            Calculate GPA for multiple students
           </p>
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 xs:gap-2 flex-wrap">
           <button
             onClick={handleAutoImportCourses}
-            className="flex items-center gap-2 px-3 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg font-medium transition-all text-xs sm:text-sm"
+            className="flex items-center gap-1 xs:gap-1.5 px-2 xs:px-2.5 sm:px-3 py-1.5 xs:py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg font-medium transition-all text-[10px] xs:text-xs sm:text-sm"
             title="Import courses from My Courses"
           >
-            <BookOpen className="w-4 h-4" />
-            <span className="hidden sm:inline">Auto Import</span>
-            <span className="sm:hidden">Import</span>
+            <BookOpen className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4" />
+            <span>Import</span>
           </button>
           <button
             onClick={handleAddStudent}
             disabled={students.length >= 20}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all text-xs sm:text-sm ${
+            className={`flex items-center gap-1 xs:gap-1.5 px-2 xs:px-2.5 sm:px-3 py-1.5 xs:py-2 rounded-lg font-medium transition-all text-[10px] xs:text-xs sm:text-sm whitespace-nowrap ${
               students.length >= 20
                 ? 'bg-dark-surface-raised text-content-tertiary cursor-not-allowed'
                 : 'bg-accent hover:bg-accent-hover text-white'
             }`}
+            title={`${students.length}/20 students`}
           >
-            <Plus className="w-4 h-4" />
-            <span>Add Student</span>
+            <Plus className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden xs:inline">Add</span>
+            <span className="text-[9px] xs:text-[10px] opacity-80">({students.length}/20)</span>
           </button>
           <button
             onClick={handleReset}
-            className="px-3 py-2 bg-dark-surface-raised hover:bg-dark-surface-hover text-content-secondary hover:text-accent rounded-lg font-medium transition-all text-xs sm:text-sm border border-dark-border"
+            className="px-2 xs:px-2.5 sm:px-3 py-1.5 xs:py-2 bg-dark-surface-raised hover:bg-dark-surface-hover text-content-secondary hover:text-accent rounded-lg font-medium transition-all text-[10px] xs:text-xs sm:text-sm border border-dark-border"
           >
             Reset
           </button>
@@ -294,144 +306,147 @@ export default function GPAForOthers() {
         <div className="min-w-max">
           {/* Table Header */}
           <div className="flex border-b border-dark-border bg-dark-surface/50 sticky top-0 z-10">
-            {/* Course Name Column */}
-            <div className="w-48 sm:w-64 p-3 border-r border-dark-border flex-shrink-0">
-              <p className="text-xs font-semibold text-content-secondary uppercase tracking-wide">Course Name</p>
+            {/* Course Name Column - Compact */}
+            <div className="w-28 xs:w-32 sm:w-40 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border flex-shrink-0">
+              <p className="text-[10px] xs:text-xs font-semibold text-content-secondary uppercase tracking-wide">Course</p>
             </div>
 
-            {/* Credit Hours Column */}
-            <div className="w-24 p-3 border-r border-dark-border flex-shrink-0">
-              <p className="text-xs font-semibold text-content-secondary uppercase tracking-wide text-center">Credits</p>
+            {/* Credit Hours Column - Compact */}
+            <div className="w-14 xs:w-16 sm:w-20 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border flex-shrink-0">
+              <p className="text-[10px] xs:text-xs font-semibold text-content-secondary uppercase tracking-wide text-center">Cr</p>
             </div>
 
-            {/* Student Grade Columns */}
+            {/* Student Grade Columns - Compact */}
             {students.map((student, index) => (
-              <div key={student.id} className="w-32 sm:w-40 p-3 border-r border-dark-border flex-shrink-0">
+              <div key={student.id} className="w-24 xs:w-28 sm:w-32 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border flex-shrink-0">
                 <div className="flex flex-col gap-1">
                   <input
                     type="text"
                     value={student.name}
                     onChange={(e) => handleUpdateStudentName(student.id, e.target.value)}
                     placeholder={`Student ${index + 1}`}
-                    className="w-full bg-transparent border-none text-xs font-semibold text-content-primary placeholder:text-content-tertiary focus:outline-none text-center"
+                    maxLength="15"
+                    className="w-full bg-transparent border-none text-[10px] xs:text-xs font-semibold text-content-primary placeholder:text-content-tertiary focus:outline-none text-center truncate"
                   />
                   {students.length > 1 && (
                     <button
                       onClick={() => handleDeleteStudent(student.id)}
-                      className="w-full px-2 py-0.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded text-[10px] text-red-400 font-medium transition-all flex items-center justify-center gap-1"
+                      className="w-full px-1.5 py-0.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded text-[9px] xs:text-[10px] text-red-400 font-medium transition-all flex items-center justify-center gap-0.5"
                       title="Remove student"
                     >
-                      <Trash2 className="w-3 h-3" />
-                      <span>Remove</span>
+                      <Trash2 className="w-2.5 h-2.5 xs:w-3 xs:h-3" />
+                      <span className="hidden xs:inline">Remove</span>
+                      <X className="w-2.5 h-2.5 xs:hidden" />
                     </button>
                   )}
                 </div>
               </div>
             ))}
 
-            {/* Actions Column Header */}
-            <div className="w-20 p-3 flex-shrink-0">
-              <p className="text-xs font-semibold text-content-secondary uppercase tracking-wide text-center">Actions</p>
+            {/* Actions Column Header - Compact */}
+            <div className="w-12 xs:w-14 sm:w-16 p-2 xs:p-2.5 sm:p-3 flex-shrink-0">
+              <p className="text-[10px] xs:text-xs font-semibold text-content-secondary uppercase tracking-wide text-center hidden xs:block">Act</p>
             </div>
           </div>
 
           {/* Course Rows */}
           {courses.map((course, courseIndex) => (
             <div key={course.id} className="flex border-b border-dark-border/50 hover:bg-dark-surface/30 transition-colors">
-              {/* Course Name */}
-              <div className="w-48 sm:w-64 p-3 border-r border-dark-border/50 flex-shrink-0">
+              {/* Course Name - Compact */}
+              <div className="w-28 xs:w-32 sm:w-40 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border/50 flex-shrink-0">
                 <input
                   type="text"
                   value={course.courseName}
                   onChange={(e) => handleUpdateCourse(course.id, 'courseName', e.target.value)}
                   placeholder={`Course ${courseIndex + 1}`}
-                  className="w-full bg-dark-surface border border-dark-border rounded px-2.5 py-1.5 text-xs text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                  maxLength="12"
+                  className="w-full bg-dark-surface border border-dark-border rounded px-1.5 xs:px-2 py-1 xs:py-1.5 text-[10px] xs:text-xs text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50 transition-all"
                 />
               </div>
 
-              {/* Credit Hours */}
-              <div className="w-24 p-3 border-r border-dark-border/50 flex-shrink-0">
+              {/* Credit Hours - Compact */}
+              <div className="w-14 xs:w-16 sm:w-20 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border/50 flex-shrink-0">
                 <input
                   type="number"
                   min="1"
                   max="6"
                   value={course.creditHours}
                   onChange={(e) => handleUpdateCourse(course.id, 'creditHours', parseInt(e.target.value) || 1)}
-                  className="w-full bg-dark-surface border border-dark-border rounded px-2.5 py-1.5 text-xs text-content-primary text-center focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                  className="w-full bg-dark-surface border border-dark-border rounded px-1 xs:px-1.5 py-1 xs:py-1.5 text-[10px] xs:text-xs text-content-primary text-center focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50 transition-all tabular-nums"
                 />
               </div>
 
-              {/* Grade for each student */}
+              {/* Grade for each student - Compact */}
               {students.map((student) => (
-                <div key={student.id} className="w-32 sm:w-40 p-3 border-r border-dark-border/50 flex-shrink-0">
+                <div key={student.id} className="w-24 xs:w-28 sm:w-32 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border/50 flex-shrink-0">
                   <select
                     value={course.grades?.[student.id] || ''}
                     onChange={(e) => handleUpdateGrade(course.id, student.id, e.target.value)}
-                    className="w-full bg-dark-surface border border-dark-border rounded px-2 py-1.5 text-xs text-content-primary focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50 transition-all"
+                    className="w-full bg-dark-surface border border-dark-border rounded px-1 xs:px-1.5 py-1 xs:py-1.5 text-[10px] xs:text-xs text-content-primary focus:outline-none focus:ring-1 focus:ring-accent/30 focus:border-accent/50 transition-all"
                   >
                     <option value="">Grade</option>
                     {GRADE_SCALE.map((g) => (
                       <option key={g.grade} value={g.grade}>
-                        {g.label}
+                        {g.grade}
                       </option>
                     ))}
                   </select>
                 </div>
               ))}
 
-              {/* Delete Course Button - Always visible in Actions column */}
-              <div className="w-20 p-3 flex-shrink-0 flex items-center justify-center">
+              {/* Delete Course Button - Compact */}
+              <div className="w-12 xs:w-14 sm:w-16 p-2 xs:p-2.5 sm:p-3 flex-shrink-0 flex items-center justify-center">
                 {courses.length > 1 && (
                   <button
                     onClick={() => handleDeleteCourse(course.id)}
-                    className="p-1.5 hover:bg-red-500/10 rounded-lg transition-colors"
+                    className="p-1 xs:p-1.5 hover:bg-red-500/10 rounded-lg transition-colors"
                     title="Delete course"
                   >
-                    <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                    <Trash2 className="w-3 h-3 xs:w-3.5 xs:h-3.5 text-red-400" />
                   </button>
                 )}
               </div>
             </div>
           ))}
 
-          {/* Add Course Button Row */}
+          {/* Add Course Button Row - Compact */}
           <div className="flex border-b border-dark-border/50">
-            <div className="w-full p-3">
+            <div className="w-full p-2 xs:p-2.5 sm:p-3">
               <button
                 onClick={handleAddCourse}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-dark-surface border border-dashed border-dark-border hover:border-accent/50 hover:bg-dark-surface-hover text-content-secondary hover:text-accent rounded-lg transition-all text-xs"
+                className="w-full flex items-center justify-center gap-1.5 xs:gap-2 px-2 xs:px-3 py-1.5 xs:py-2 bg-dark-surface border border-dashed border-dark-border hover:border-accent/50 hover:bg-dark-surface-hover text-content-secondary hover:text-accent rounded-lg transition-all text-[10px] xs:text-xs"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3 h-3 xs:w-3.5 xs:h-3.5" />
                 <span>Add Course</span>
               </button>
             </div>
           </div>
 
-          {/* GPA Results Row */}
+          {/* GPA Results Row - Compact */}
           <div className="flex bg-accent/5 border-t-2 border-accent/30">
-            {/* Label */}
-            <div className="w-48 sm:w-64 p-3 border-r border-dark-border/50 flex-shrink-0 flex items-center">
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-accent" />
-                <p className="text-sm font-bold text-content-primary">GPA</p>
+            {/* Label - Compact */}
+            <div className="w-28 xs:w-32 sm:w-40 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border/50 flex-shrink-0 flex items-center">
+              <div className="flex items-center gap-1 xs:gap-1.5">
+                <Award className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 text-accent" />
+                <p className="text-[10px] xs:text-xs sm:text-sm font-bold text-content-primary">GPA</p>
               </div>
             </div>
 
-            {/* Empty Credits Column */}
-            <div className="w-24 p-3 border-r border-dark-border/50 flex-shrink-0" />
+            {/* Empty Credits Column - Compact */}
+            <div className="w-14 xs:w-16 sm:w-20 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border/50 flex-shrink-0" />
 
-            {/* Student GPAs */}
+            {/* Student GPAs - Compact */}
             {students.map((student) => {
               const gpa = calculateStudentGPA(student.id)
               const gpaColor = getGPAColor(gpa)
 
               return (
-                <div key={student.id} className="w-32 sm:w-40 p-3 border-r border-dark-border/50 flex-shrink-0">
-                  <div className={`px-3 py-2 rounded-lg ${gpaColor.bgColor} border ${gpaColor.borderColor}`}>
-                    <p className={`text-lg font-bold ${gpaColor.color} text-center tabular-nums`}>
+                <div key={student.id} className="w-24 xs:w-28 sm:w-32 p-2 xs:p-2.5 sm:p-3 border-r border-dark-border/50 flex-shrink-0">
+                  <div className={`px-1.5 xs:px-2 sm:px-3 py-1.5 xs:py-2 rounded-lg ${gpaColor.bgColor} border ${gpaColor.borderColor}`}>
+                    <p className={`text-sm xs:text-base sm:text-lg font-bold ${gpaColor.color} text-center tabular-nums`}>
                       {formatGPA(gpa)}
                     </p>
-                    <p className={`text-[10px] ${gpaColor.color} text-center font-medium mt-0.5`}>
+                    <p className={`text-[8px] xs:text-[9px] sm:text-[10px] ${gpaColor.color} text-center font-medium mt-0.5`}>
                       {gpaColor.label}
                     </p>
                   </div>
@@ -439,17 +454,17 @@ export default function GPAForOthers() {
               )
             })}
 
-            {/* Empty Actions column for alignment */}
-            <div className="w-20 p-3 flex-shrink-0" />
+            {/* Empty Actions column for alignment - Compact */}
+            <div className="w-12 xs:w-14 sm:w-16 p-2 xs:p-2.5 sm:p-3 flex-shrink-0" />
           </div>
         </div>
       </div>
 
-      {/* Info Footer */}
-      <div className="flex items-start gap-2 p-3 bg-accent/5 border border-accent/20 rounded-lg">
-        <AlertTriangle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-        <p className="text-xs text-content-secondary">
-          This calculator is independent from your semester GPAs. Calculations are saved automatically and won't affect your CGPA. Use horizontal scroll to view all students.
+      {/* Info Footer - Compact */}
+      <div className="flex items-start gap-1.5 xs:gap-2 p-2 xs:p-2.5 sm:p-3 bg-accent/5 border border-accent/20 rounded-lg">
+        <AlertTriangle className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 text-accent flex-shrink-0 mt-0.5" />
+        <p className="text-[9px] xs:text-[10px] sm:text-xs text-content-secondary leading-relaxed">
+          Independent from your semester GPAs. Auto-saved. Use horizontal scroll for multiple students.
         </p>
       </div>
 
