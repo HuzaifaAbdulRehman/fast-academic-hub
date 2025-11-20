@@ -58,6 +58,17 @@ export default function ExploreClassesView() {
   // Pagination for large result sets
   const [displayLimit, setDisplayLimit] = useState(50); // Show 50 results initially
 
+  // Track current grid columns for smart row-filling
+  // Initialize with proper detection based on current window width
+  const [gridColumns, setGridColumns] = useState(() => {
+    if (typeof window === 'undefined') return 1;
+    const width = window.innerWidth;
+    if (width >= 1280) return 4; // xl
+    if (width >= 1024) return 3; // lg
+    if (width >= 640) return 2; // sm
+    return 1; // mobile
+  });
+
   // Expanded card state - track which card is expanded with overlay
   const [expandedCardId, setExpandedCardId] = useState(null);
 
@@ -81,6 +92,31 @@ export default function ExploreClassesView() {
       setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Detect current grid breakpoint and update column count
+  useEffect(() => {
+    const updateGridColumns = () => {
+      const width = window.innerWidth;
+      // Match Tailwind breakpoints: sm:640, lg:1024, xl:1280
+      // Max 4 columns at xl breakpoint, full viewport width
+      if (width >= 1280) {
+        setGridColumns(4); // xl
+      } else if (width >= 1024) {
+        setGridColumns(3); // lg
+      } else if (width >= 640) {
+        setGridColumns(2); // sm
+      } else {
+        setGridColumns(1); // mobile
+      }
+    };
+
+    // Initial detection
+    updateGridColumns();
+
+    // Listen for resize
+    window.addEventListener('resize', updateGridColumns);
+    return () => window.removeEventListener('resize', updateGridColumns);
   }, []);
 
   // Fetch timetable data
@@ -157,18 +193,23 @@ export default function ExploreClassesView() {
   );
 
   // Paginated results for rendering (memoized)
-  // Round up to ensure all grid columns are filled
+  // Round down to ensure all grid rows are completely filled
   const displayedClasses = useMemo(() => {
-    const sliceEnd = Math.min(displayLimit, filteredClasses.length);
+    if (gridColumns === 0) return [];
 
-    // Calculate how many columns based on current viewport
-    // We'll always pad to fill the last row, but React can't know viewport width here
-    // Instead, we'll round up to nearest multiple that works for all layouts (6 = LCM of 1,2,3)
-    const gridLCM = 6; // Works for 1-col, 2-col, 3-col layouts
-    const paddedEnd = Math.ceil(sliceEnd / gridLCM) * gridLCM;
+    const baseLimit = Math.min(displayLimit, filteredClasses.length);
 
-    return filteredClasses.slice(0, Math.min(paddedEnd, filteredClasses.length));
-  }, [filteredClasses, displayLimit]);
+    // Round down to nearest multiple of gridColumns to ensure complete rows
+    // For example: if gridColumns=4 and baseLimit=53, show 52 (13 complete rows)
+    const adjustedLimit = Math.floor(baseLimit / gridColumns) * gridColumns;
+
+    // If adjusted limit is 0 but we have classes, show at least one row
+    const finalLimit = adjustedLimit === 0 && filteredClasses.length > 0
+      ? Math.min(gridColumns, filteredClasses.length)
+      : adjustedLimit;
+
+    return filteredClasses.slice(0, finalLimit);
+  }, [filteredClasses, displayLimit, gridColumns]);
 
   // Reset display limit when search changes (use raw input for immediate feedback)
   useEffect(() => {
@@ -896,8 +937,8 @@ export default function ExploreClassesView() {
 
         {!loading && !error && filteredClasses.length > 0 && (
           <div className="px-4 sm:px-6 py-4">
-            {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col laptop, 4 col desktop */}
-            <div className="max-w-[1400px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3">
+            {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col laptop, 4 col desktop - full viewport width */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {displayedClasses.map((classData) => {
                 const isAdded = addedClassIds.has(classData.courseCode);
                 const isAdding = addingClassId === classData.id;
@@ -959,7 +1000,7 @@ export default function ExploreClassesView() {
             </div>
 
             {/* Load More Button */}
-            {filteredClasses.length > displayLimit && (
+            {filteredClasses.length > displayedClasses.length && (
               <div className="flex justify-center mt-6">
                 <button
                   onClick={() => {
@@ -969,7 +1010,7 @@ export default function ExploreClassesView() {
                   className="flex items-center gap-2 px-6 py-3 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-xl text-content-primary font-medium transition-all hover:scale-105 active:scale-95"
                 >
                   <RefreshCw className="w-4 h-4" />
-                  Load More ({filteredClasses.length - displayLimit} remaining)
+                  Load More ({filteredClasses.length - displayedClasses.length} remaining)
                 </button>
               </div>
             )}
