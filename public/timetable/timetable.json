@@ -2,7 +2,7 @@
   "totalSections": 96,
   "totalCourses": 647,
   "daysProcessed": 5,
-  "lastUpdated": "2025-11-20T15:02:09.393Z",
+  "lastUpdated": "2025-11-20T15:06:44.174Z",
   "data": {
     "BCS-5B": [
       {
@@ -153,14 +153,19 @@
         "courseName": "Graph Theory",
         "section": "BCS-5B",
         "instructor": "Moheez-UR-Rahim",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "E-6 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:40-12:30",
+            "room": "E-6 Academic Block I (50)",
+            "slotNumber": 5
           },
           {
             "day": "Wednesday",
@@ -170,7 +175,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "E-6 Academic Block I (50)",
         "slotNumber": 4
       },
@@ -179,14 +184,19 @@
         "courseName": "Fundamentals of Project Management",
         "section": "BCS-5B",
         "instructor": "Ubaid Aftab",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "R-11 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:40-12:30",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 5
           },
           {
             "day": "Wednesday",
@@ -196,7 +206,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "R-11 Academic Block I (50)",
         "slotNumber": 4
       },
@@ -205,14 +215,19 @@
         "courseName": "Recommender Systems",
         "section": "BCS-5B",
         "instructor": "Dr. Farrukh Shahid",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 5
           },
           {
             "day": "Wednesday",
@@ -222,7 +237,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "C-14 Academic Block II (50)",
         "slotNumber": 4
       },
@@ -764,18 +779,29 @@
         "courseName": "Operating Systems",
         "section": "BCS-5A",
         "instructor": "Minhal Raza",
-        "creditHours": 1,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Friday",
-            "timeSlot": "10:45-13:25",
+            "timeSlot": "10:45-11:35",
             "room": "R-11 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 3
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 5
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "12:35-13:25",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 6
           }
         ],
         "day": "Friday",
-        "timeSlot": "10:45-13:25",
+        "timeSlot": "10:45-11:35",
         "room": "R-11 Academic Block I (50)",
         "slotNumber": 4
       }
@@ -817,14 +843,19 @@
         "courseName": "Design & Analysis of Algorithms",
         "section": "BSE-5A",
         "instructor": "Fizza Mansoor",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "A-3 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "12:35-13:25",
+            "room": "A-3 Academic Block II (50)",
+            "slotNumber": 6
           },
           {
             "day": "Tuesday",
@@ -834,7 +865,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "A-3 Academic Block II (50)",
         "slotNumber": 5
       },
@@ -874,14 +905,19 @@
         "courseName": "Software Construction & Development",
         "section": "BSE-5A",
         "instructor": "Ali Fatmi",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:55-10:40",
+            "timeSlot": "08:55-09:45",
             "room": "A-5 Academic Block II (50)",
-            "slotNumber": 2,
-            "slotCount": 2
+            "slotNumber": 2
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "09:50-10:40",
+            "room": "A-5 Academic Block II (50)",
+            "slotNumber": 3
           },
           {
             "day": "Tuesday",
@@ -891,7 +927,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:55-10:40",
+        "timeSlot": "08:55-09:45",
         "room": "A-5 Academic Block II (50)",
         "slotNumber": 2
       },
@@ -910,15 +946,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "08:55-09:45",
-            "room": "E-6 Academic Block I (50)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Thursday",
             "timeSlot": "10:45-11:35",
             "room": "E-3 Academic Block I (50)",
             "slotNumber": 4
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-6 Academic Block I (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Tuesday",
@@ -1083,7 +1119,7 @@
         "courseName": "Graph Theory",
         "section": "BCS-5C",
         "instructor": "Moheez-UR-Rahim",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -1093,10 +1129,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-19 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Wednesday",
@@ -1273,14 +1314,19 @@
         "courseName": "Programming Fundamentals",
         "section": "BCY-1B",
         "instructor": "Uzma Raza (VF)",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-35 Academic Block II (52)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-35 Academic Block II (52)",
+            "slotNumber": 2
           },
           {
             "day": "Thursday",
@@ -1290,7 +1336,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "E-35 Academic Block II (52)",
         "slotNumber": 1
       },
@@ -1341,21 +1387,21 @@
         "sessions": [
           {
             "day": "Friday",
-            "timeSlot": "08:55-09:45",
-            "room": "E-33 Academic Block II (52)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Friday",
             "timeSlot": "11:40-12:30",
             "room": "C-18 Academic Block II (50)",
             "slotNumber": 5
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-33 Academic Block II (52)",
+            "slotNumber": 2
           }
         ],
         "day": "Friday",
-        "timeSlot": "08:55-09:45",
-        "room": "E-33 Academic Block II (52)",
-        "slotNumber": 2
+        "timeSlot": "11:40-12:30",
+        "room": "C-18 Academic Block II (50)",
+        "slotNumber": 5
       }
     ],
     "BCS-5G": [
@@ -1532,15 +1578,15 @@
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-08:50",
-            "room": "A-2Academic Block II (50)",
-            "slotNumber": 1
-          },
-          {
-            "day": "Monday",
             "timeSlot": "13:30-14:20",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 7
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:00-08:50",
+            "room": "A-2Academic Block II (50)",
+            "slotNumber": 1
           },
           {
             "day": "Tuesday",
@@ -1550,9 +1596,9 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-08:50",
-        "room": "A-2Academic Block II (50)",
-        "slotNumber": 1
+        "timeSlot": "13:30-14:20",
+        "room": "E-2 Academic Block I (50)",
+        "slotNumber": 7
       },
       {
         "courseCode": "DS",
@@ -1659,7 +1705,7 @@
         "courseName": "Discrete Mathematics",
         "section": "BCS-3H",
         "instructor": "Dr. Ghufran Ahmed",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -1669,10 +1715,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "R-12 Academic Block I (70)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 5
           }
         ],
         "day": "Wednesday",
@@ -1685,14 +1736,19 @@
         "courseName": "Linear Algebra",
         "section": "BCS-3H",
         "instructor": "Abdul Basit (VF)",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "E-31 Academic Block II (52)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "15:20-16:05",
+            "room": "E-31 Academic Block II (52)",
+            "slotNumber": 9
           },
           {
             "day": "Friday",
@@ -1702,7 +1758,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "E-31 Academic Block II (52)",
         "slotNumber": 8
       }
@@ -1717,15 +1773,15 @@
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "10:45-11:35",
-            "room": "R-12 Academic Block I (70)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Monday",
             "timeSlot": "14:25-15:15",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "10:45-11:35",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 4
           },
           {
             "day": "Tuesday",
@@ -1735,23 +1791,28 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "10:45-11:35",
-        "room": "R-12 Academic Block I (70)",
-        "slotNumber": 4
+        "timeSlot": "14:25-15:15",
+        "room": "E-2 Academic Block I (50)",
+        "slotNumber": 8
       },
       {
         "courseCode": "SDA",
         "courseName": "Software Design & Architecture",
         "section": "BCS-5J",
         "instructor": "Ahmed Qaiser (VF)",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-4 Academic Block I (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-4 Academic Block I (50)",
+            "slotNumber": 2
           },
           {
             "day": "Wednesday",
@@ -1761,7 +1822,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "E-4 Academic Block I (50)",
         "slotNumber": 1
       },
@@ -1801,14 +1862,19 @@
         "courseName": "Database Systems",
         "section": "BCS-5J",
         "instructor": "Dr. Zulfiqar Ali Memon",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "R-12 Academic Block I (70)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "13:30-14:20",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 7
           },
           {
             "day": "Tuesday",
@@ -1818,7 +1884,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "R-12 Academic Block I (70)",
         "slotNumber": 6
       },
@@ -1898,14 +1964,19 @@
         "courseName": "Database Systems",
         "section": "BCS-5E",
         "instructor": "Basit Jasani",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "E-5 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "11:40-12:30",
+            "room": "E-5 Academic Block I (50)",
+            "slotNumber": 5
           },
           {
             "day": "Tuesday",
@@ -1915,7 +1986,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "E-5 Academic Block I (50)",
         "slotNumber": 4
       },
@@ -1924,7 +1995,7 @@
         "courseName": "Computer Networks",
         "section": "BCS-5E",
         "instructor": "Kashan Hussain",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -1934,10 +2005,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "A-2Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "13:30-14:20",
+            "room": "A-2Academic Block II (50)",
+            "slotNumber": 7
           }
         ],
         "day": "Monday",
@@ -1950,7 +2026,7 @@
         "courseName": "Software Design & Architecture",
         "section": "BCS-5E",
         "instructor": "Farrukh Hasan Syed",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -1960,10 +2036,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "D-23 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "11:40-12:30",
+            "room": "D-23 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Monday",
@@ -2078,14 +2159,19 @@
         "courseName": "Software Design & Architecture",
         "section": "BCS-5H",
         "instructor": "Engr. Abdul Rahman",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "E-4 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "11:40-12:30",
+            "room": "E-4 Academic Block I (50)",
+            "slotNumber": 5
           },
           {
             "day": "Thursday",
@@ -2095,7 +2181,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "E-4 Academic Block I (50)",
         "slotNumber": 4
       },
@@ -2104,14 +2190,19 @@
         "courseName": "Computer Networks",
         "section": "BCS-5H",
         "instructor": "Dr. Nadeem Kafi",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-6 Academic Block I (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-6 Academic Block I (50)",
+            "slotNumber": 2
           },
           {
             "day": "Thursday",
@@ -2121,7 +2212,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "E-6 Academic Block I (50)",
         "slotNumber": 1
       },
@@ -2521,14 +2612,19 @@
         "courseName": "Linear Algebra",
         "section": "BCS-3B",
         "instructor": "Urooj",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "D-25 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "12:35-13:25",
+            "room": "D-25 Academic Block II (50)",
+            "slotNumber": 6
           },
           {
             "day": "Friday",
@@ -2538,7 +2634,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "D-25 Academic Block II (50)",
         "slotNumber": 5
       },
@@ -2572,14 +2668,19 @@
         "courseName": "Object Oriented Programming",
         "section": "BCS-3B",
         "instructor": "Sarah Ahmed",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 4
           },
           {
             "day": "Friday",
@@ -2589,7 +2690,7 @@
           }
         ],
         "day": "Thursday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "C-17 Academic Block II (59)",
         "slotNumber": 3
       },
@@ -2650,14 +2751,19 @@
         "courseName": "Discrete Mathematics",
         "section": "BSE-3B",
         "instructor": "Aemon",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "C-16 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-16 Academic Block II (50)",
+            "slotNumber": 8
           },
           {
             "day": "Tuesday",
@@ -2667,7 +2773,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "13:30-15:15",
+        "timeSlot": "13:30-14:20",
         "room": "C-16 Academic Block II (50)",
         "slotNumber": 7
       },
@@ -2730,15 +2836,15 @@
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "08:55-09:45",
-            "room": "A-6 Academic Block II (50)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Tuesday",
             "timeSlot": "14:25-15:15",
             "room": "E-1 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "08:55-09:45",
+            "room": "A-6 Academic Block II (50)",
+            "slotNumber": 2
           },
           {
             "day": "Wednesday",
@@ -2748,9 +2854,9 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "08:55-09:45",
-        "room": "A-6 Academic Block II (50)",
-        "slotNumber": 2
+        "timeSlot": "14:25-15:15",
+        "room": "E-1 Academic Block I (50)",
+        "slotNumber": 8
       },
       {
         "courseCode": "LA",
@@ -3120,15 +3226,15 @@
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "08:55-09:45",
-            "room": "D-23 Academic Block II (50)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Tuesday",
             "timeSlot": "12:35-13:25",
             "room": "R-11 Academic Block I (50)",
             "slotNumber": 6
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "08:55-09:45",
+            "room": "D-23 Academic Block II (50)",
+            "slotNumber": 2
           },
           {
             "day": "Wednesday",
@@ -3138,9 +3244,9 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "08:55-09:45",
-        "room": "D-23 Academic Block II (50)",
-        "slotNumber": 2
+        "timeSlot": "12:35-13:25",
+        "room": "R-11 Academic Block I (50)",
+        "slotNumber": 6
       },
       {
         "courseCode": "LA",
@@ -3151,15 +3257,15 @@
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "08:55-09:45",
-            "room": "E-31 Academic Block II (52)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "13:30-14:20",
             "room": "A-7 Academic Block II (50)",
             "slotNumber": 7
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-31 Academic Block II (52)",
+            "slotNumber": 2
           },
           {
             "day": "Friday",
@@ -3169,9 +3275,9 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "08:55-09:45",
-        "room": "E-31 Academic Block II (52)",
-        "slotNumber": 2
+        "timeSlot": "13:30-14:20",
+        "room": "A-7 Academic Block II (50)",
+        "slotNumber": 7
       },
       {
         "courseCode": "DS Lab",
@@ -3411,7 +3517,7 @@
         "courseName": "Linear Algebra",
         "section": "BCS-3D",
         "instructor": "Urooj",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -3421,10 +3527,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "D-22 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "D-22 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Wednesday",
@@ -3439,14 +3550,19 @@
         "courseName": "Database Systems",
         "section": "BAI-5A",
         "instructor": "Huzaifa Khan (VF)",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "R-11 Academic Block I (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 2
           },
           {
             "day": "Wednesday",
@@ -3456,7 +3572,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "R-11 Academic Block I (50)",
         "slotNumber": 1
       },
@@ -3590,14 +3706,19 @@
         "courseName": "Design & Analysis of Algorithms",
         "section": "BAI-5A",
         "instructor": "Dr. Kamran",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "D-23 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "12:35-13:25",
+            "room": "D-23 Academic Block II (50)",
+            "slotNumber": 6
           },
           {
             "day": "Thursday",
@@ -3607,7 +3728,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "D-23 Academic Block II (50)",
         "slotNumber": 5
       },
@@ -3668,14 +3789,19 @@
         "courseName": "Computer Organization & Assembly Language",
         "section": "BDS-3B",
         "instructor": "Dr. Muhammad Adeel",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 8
           },
           {
             "day": "Tuesday",
@@ -3685,7 +3811,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "13:30-15:15",
+        "timeSlot": "13:30-14:20",
         "room": "C-17 Academic Block II (59)",
         "slotNumber": 7
       },
@@ -3744,7 +3870,7 @@
         "courseName": "Linear Algebra",
         "section": "BDS-3B",
         "instructor": "Mairaj Ahmed",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -3754,10 +3880,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 9
           }
         ],
         "day": "Tuesday",
@@ -3770,7 +3901,7 @@
         "courseName": "Introduction to Data Science",
         "section": "BDS-3B",
         "instructor": "Mahrukh Khan",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -3780,10 +3911,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "08:55-10:40",
+            "timeSlot": "08:55-09:45",
             "room": "B-10 Academic Block II (53)",
-            "slotNumber": 2,
-            "slotCount": 2
+            "slotNumber": 2
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "09:50-10:40",
+            "room": "B-10 Academic Block II (53)",
+            "slotNumber": 3
           }
         ],
         "day": "Tuesday",
@@ -3915,15 +4051,15 @@
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:55-09:45",
-            "room": "A-8 Academic Block II (53)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Monday",
             "timeSlot": "14:25-15:15",
             "room": "R-11 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "A-8 Academic Block II (53)",
+            "slotNumber": 2
           },
           {
             "day": "Tuesday",
@@ -3933,9 +4069,9 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:55-09:45",
-        "room": "A-8 Academic Block II (53)",
-        "slotNumber": 2
+        "timeSlot": "14:25-15:15",
+        "room": "R-11 Academic Block I (50)",
+        "slotNumber": 8
       },
       {
         "courseCode": "Discrete",
@@ -4023,7 +4159,7 @@
         "courseName": "Data Structures",
         "section": "BCS-3E",
         "instructor": "Basit Jasani",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -4033,10 +4169,15 @@
           },
           {
             "day": "Wednesday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "D-27 Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "13:30-14:20",
+            "room": "D-27 Academic Block II (50)",
+            "slotNumber": 7
           }
         ],
         "day": "Tuesday",
@@ -4093,14 +4234,19 @@
         "courseName": "Linear Algebra",
         "section": "BCS-3E",
         "instructor": "Uzma Saleh",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "D-27 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "11:40-12:30",
+            "room": "D-27 Academic Block II (50)",
+            "slotNumber": 5
           },
           {
             "day": "Friday",
@@ -4110,7 +4256,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "D-27 Academic Block II (50)",
         "slotNumber": 4
       }
@@ -4355,20 +4501,14 @@
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "10:45-11:35",
-            "room": "C-15 Academic Block II (50)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "15:20-16:05",
             "room": "R-12 Academic Block I (70)",
             "slotNumber": 9
           },
           {
-            "day": "Thursday",
+            "day": "Wednesday",
             "timeSlot": "10:45-11:35",
-            "room": "R-11 Academic Block I (50)",
+            "room": "C-15 Academic Block II (50)",
             "slotNumber": 4
           },
           {
@@ -4376,26 +4516,37 @@
             "timeSlot": "12:35-13:25",
             "room": "E-6 Academic Block I (50)",
             "slotNumber": 6
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "10:45-11:35",
-        "room": "C-15 Academic Block II (50)",
-        "slotNumber": 4
+        "timeSlot": "15:20-16:05",
+        "room": "R-12 Academic Block I (70)",
+        "slotNumber": 9
       },
       {
         "courseCode": "OOP",
         "courseName": "Object Oriented Programming",
         "section": "BCS-3A",
         "instructor": "Nida Munawar",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "R-11 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "12:35-13:25",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 6
           },
           {
             "day": "Friday",
@@ -4405,7 +4556,7 @@
           }
         ],
         "day": "Thursday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "R-11 Academic Block I (50)",
         "slotNumber": 5
       },
@@ -4414,14 +4565,19 @@
         "courseName": "Multivariable Calculus",
         "section": "BCS-3A",
         "instructor": "Mairaj Ahmed",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 9
           },
           {
             "day": "Friday",
@@ -4431,7 +4587,7 @@
           }
         ],
         "day": "Thursday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "C-17 Academic Block II (59)",
         "slotNumber": 8
       },
@@ -4642,14 +4798,19 @@
         "courseName": "Computer Organization & Assembly Language",
         "section": "BDS-3A",
         "instructor": "Dr. Muhammad Adeel",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "C-21 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-21 Academic Block II (50)",
+            "slotNumber": 8
           },
           {
             "day": "Wednesday",
@@ -4659,7 +4820,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "13:30-15:15",
+        "timeSlot": "13:30-14:20",
         "room": "C-21 Academic Block II (50)",
         "slotNumber": 7
       },
@@ -4743,15 +4904,15 @@
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "12:35-13:25",
-            "room": "A-6 Academic Block II (50)",
-            "slotNumber": 6
-          },
-          {
-            "day": "Monday",
             "timeSlot": "15:20-16:05",
             "room": "R-12 Academic Block I (70)",
             "slotNumber": 9
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "12:35-13:25",
+            "room": "A-6 Academic Block II (50)",
+            "slotNumber": 6
           },
           {
             "day": "Wednesday",
@@ -4761,9 +4922,9 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "12:35-13:25",
-        "room": "A-6 Academic Block II (50)",
-        "slotNumber": 6
+        "timeSlot": "15:20-16:05",
+        "room": "R-12 Academic Block I (70)",
+        "slotNumber": 9
       },
       {
         "courseCode": "DF Lab",
@@ -4870,14 +5031,19 @@
         "courseName": "DF",
         "section": "BCY-5A",
         "instructor": "Dr. Shahbaz Siddiqui",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "Academic Block I LAB-4 (46)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "13:30-14:20",
+            "room": "Academic Block I LAB-4 (46)",
+            "slotNumber": 7
           },
           {
             "day": "Thursday",
@@ -4887,7 +5053,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "Academic Block I LAB-4 (46)",
         "slotNumber": 6
       }
@@ -4929,14 +5095,19 @@
         "courseName": "Data Structures",
         "section": "BCS-3K",
         "instructor": "Mubashra Fayyaz",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "A-1 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "10:45-11:35",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 4
           },
           {
             "day": "Wednesday",
@@ -4946,7 +5117,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "A-1 Academic Block II (50)",
         "slotNumber": 3
       },
@@ -4955,7 +5126,7 @@
         "courseName": "Discrete Mathematics",
         "section": "BCS-3K",
         "instructor": "Aemon",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -4965,10 +5136,15 @@
           },
           {
             "day": "Tuesday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "B-9 Academic Block II (53)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "14:25-15:15",
+            "room": "B-9 Academic Block II (53)",
+            "slotNumber": 8
           }
         ],
         "day": "Monday",
@@ -4981,14 +5157,19 @@
         "courseName": "Computer Organization & Assembly Language",
         "section": "BCS-3K",
         "instructor": "Aashir Mehboob",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "D-22 Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "13:30-14:20",
+            "room": "D-22 Academic Block II (50)",
+            "slotNumber": 7
           },
           {
             "day": "Wednesday",
@@ -4998,7 +5179,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "D-22 Academic Block II (50)",
         "slotNumber": 6
       },
@@ -5026,7 +5207,7 @@
         "courseName": "Linear Algebra",
         "section": "BCS-3K",
         "instructor": "Abdul Basit (VF)",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -5036,10 +5217,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-21 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-21 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Wednesday",
@@ -5195,15 +5381,15 @@
           },
           {
             "day": "Wednesday",
-            "timeSlot": "13:30-14:20",
-            "room": "E-3 Academic Block I (50)",
-            "slotNumber": 7
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "14:25-15:15",
             "room": "E-1 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "13:30-14:20",
+            "room": "E-3 Academic Block I (50)",
+            "slotNumber": 7
           }
         ],
         "day": "Tuesday",
@@ -5216,7 +5402,7 @@
         "courseName": "Discrete Mathematics",
         "section": "BSE-3A",
         "instructor": "Hira Tunio",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -5226,10 +5412,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "C-16 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-16 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Tuesday",
@@ -5319,7 +5510,7 @@
         "courseName": "Technical & Business Writing",
         "section": "BCY-5B",
         "instructor": "Atifa Batool",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -5329,10 +5520,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "E-5 Academic Block I (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "14:25-15:15",
+            "room": "E-5 Academic Block I (50)",
+            "slotNumber": 8
           }
         ],
         "day": "Monday",
@@ -5345,14 +5541,19 @@
         "courseName": "Design & Analysis of Algorithms",
         "section": "BCY-5B",
         "instructor": "Zulfiqar Ali",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "A-3 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "10:45-11:35",
+            "room": "A-3 Academic Block II (50)",
+            "slotNumber": 4
           },
           {
             "day": "Thursday",
@@ -5362,7 +5563,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "A-3 Academic Block II (50)",
         "slotNumber": 3
       },
@@ -5452,14 +5653,19 @@
         "courseName": "DF",
         "section": "BCY-5B",
         "instructor": "Dr. Shahbaz Siddiqui",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "Academic Block I LAB-3 (47)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "10:45-11:35",
+            "room": "Academic Block I LAB-3 (47)",
+            "slotNumber": 4
           },
           {
             "day": "Thursday",
@@ -5469,7 +5675,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "Academic Block I LAB-3 (47)",
         "slotNumber": 3
       },
@@ -5901,18 +6107,23 @@
         "courseName": "ICP",
         "section": "BDS-1A",
         "instructor": "Aliya Zahid Bhatti (VF)",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Friday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-35 Academic Block II (52)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-35 Academic Block II (52)",
+            "slotNumber": 2
           }
         ],
         "day": "Friday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "E-35 Academic Block II (52)",
         "slotNumber": 1
       }
@@ -6495,14 +6706,19 @@
         "courseName": "Data Structures",
         "section": "BCS-3C",
         "instructor": "Farrukh Hasan Syed",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "D-22 Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "13:30-14:20",
+            "room": "D-22 Academic Block II (50)",
+            "slotNumber": 7
           },
           {
             "day": "Wednesday",
@@ -6512,7 +6728,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "D-22 Academic Block II (50)",
         "slotNumber": 6
       },
@@ -6710,14 +6926,19 @@
         "courseName": "Foundations of Algorithms",
         "section": "BSFT-1B",
         "instructor": "Dr. Mohsin Ali",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "B-9 Academic Block II (53)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "08:55-09:45",
+            "room": "B-9 Academic Block II (53)",
+            "slotNumber": 2
           },
           {
             "day": "Friday",
@@ -6727,7 +6948,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "B-9 Academic Block II (53)",
         "slotNumber": 1
       },
@@ -6978,14 +7199,19 @@
         "courseName": "BE",
         "section": "BSFT-5A",
         "instructor": "Dr. Anwar Mughees",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "B-9 Academic Block II (53)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "B-9 Academic Block II (53)",
+            "slotNumber": 2
           },
           {
             "day": "Friday",
@@ -6995,7 +7221,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "B-9 Academic Block II (53)",
         "slotNumber": 1
       },
@@ -7014,15 +7240,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-11:35",
-            "room": "A-3 Academic Block II (50)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Friday",
             "timeSlot": "14:25-15:15",
             "room": "A-1 Academic Block II (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "10:45-11:35",
+            "room": "A-3 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Monday",
@@ -7035,7 +7261,7 @@
         "courseName": "Enterprise Information Systems",
         "section": "BSFT-5A",
         "instructor": "Dr. Anwar Mughees",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -7045,10 +7271,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-29Academic Block II (52)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-29Academic Block II (52)",
+            "slotNumber": 2
           }
         ],
         "day": "Monday",
@@ -7080,7 +7311,7 @@
         "courseName": "Macroeconomics",
         "section": "BSFT-5A",
         "instructor": "Michael Simon",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
@@ -7090,10 +7321,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "A-3 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "08:55-09:45",
+            "room": "A-3 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Thursday",
@@ -7430,18 +7666,23 @@
         "courseName": "FE",
         "section": "BSBA-1A",
         "instructor": "Atifa Batool",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "A-7 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "15:20-16:05",
+            "room": "A-7 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "A-7 Academic Block II (50)",
         "slotNumber": 8
       },
@@ -7558,7 +7799,7 @@
         "courseName": "Analog & Digital Communication",
         "section": "BSEE-5AB",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -7568,10 +7809,15 @@
           },
           {
             "day": "Tuesday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Monday",
@@ -7584,14 +7830,19 @@
         "courseName": "Electromagnetic Theory",
         "section": "BSEE-5AB",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "C-19 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 4
           },
           {
             "day": "Friday",
@@ -7601,7 +7852,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "C-19 Academic Block II (50)",
         "slotNumber": 3
       },
@@ -7629,7 +7880,7 @@
         "courseName": "Data Structures & Algorithms",
         "section": "BSEE-5AB",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -7639,10 +7890,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Wednesday",
@@ -7728,7 +7984,7 @@
         "courseName": "Engineering Mathematics",
         "section": "BSEE-7AB",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -7738,10 +7994,15 @@
           },
           {
             "day": "Wednesday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Monday",
@@ -7754,7 +8015,7 @@
         "courseName": "Applied Machine Learning",
         "section": "BSEE-7AB",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -7764,10 +8025,15 @@
           },
           {
             "day": "Wednesday",
-            "timeSlot": "08:55-10:40",
+            "timeSlot": "08:55-09:45",
             "room": "D-24 Academic Block II (50)",
-            "slotNumber": 2,
-            "slotCount": 2
+            "slotNumber": 2
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "09:50-10:40",
+            "room": "D-24 Academic Block II (50)",
+            "slotNumber": 3
           }
         ],
         "day": "Monday",
@@ -7799,18 +8065,23 @@
         "courseName": "Technical & Business Writing",
         "section": "BSEE-7AB",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Thursday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "C-15 Academic Block II (50)",
         "slotNumber": 1
       },
@@ -7838,18 +8109,29 @@
         "courseName": "Computer Architecture",
         "section": "BSEE-7AB",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Friday",
-            "timeSlot": "08:00-10:40",
+            "timeSlot": "08:00-08:50",
             "room": "C-20 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 3
+            "slotNumber": 1
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-20 Academic Block II (50)",
+            "slotNumber": 2
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "09:50-10:40",
+            "room": "C-20 Academic Block II (50)",
+            "slotNumber": 3
           }
         ],
         "day": "Friday",
-        "timeSlot": "08:00-10:40",
+        "timeSlot": "08:00-08:50",
         "room": "C-20 Academic Block II (50)",
         "slotNumber": 1
       }
@@ -7864,28 +8146,28 @@
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "10:45-11:35",
-            "room": "C-14 Academic Block II (50)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Monday",
             "timeSlot": "12:35-13:25",
             "room": "C-12 Academic Block II (50)",
             "slotNumber": 6
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Monday",
-        "timeSlot": "10:45-11:35",
-        "room": "C-14 Academic Block II (50)",
-        "slotNumber": 4
+        "timeSlot": "12:35-13:25",
+        "room": "C-12 Academic Block II (50)",
+        "slotNumber": 6
       },
       {
         "courseCode": "ENG",
         "courseName": "English",
         "section": "BSEE-1B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -7895,10 +8177,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Monday",
@@ -7911,18 +8198,23 @@
         "courseName": "Information & Communication Technologies",
         "section": "BSEE-1B",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "13:30-14:20",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 7
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 6
       },
@@ -7975,14 +8267,19 @@
         "courseName": "Applied Calculus",
         "section": "BSEE-1B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 9
           },
           {
             "day": "Thursday",
@@ -7992,7 +8289,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 8
       },
@@ -8058,18 +8355,23 @@
         "courseName": "ICP",
         "section": "BSEE-1B",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Friday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Friday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 8
       },
@@ -8099,14 +8401,19 @@
         "courseName": "Electrical Network Analysis",
         "section": "BSEE-3A",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 2
           },
           {
             "day": "Tuesday",
@@ -8116,7 +8423,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 1
       },
@@ -8125,7 +8432,7 @@
         "courseName": "Object Oriented Data Structures",
         "section": "BSEE-3A",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -8135,10 +8442,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Monday",
@@ -8151,7 +8463,7 @@
         "courseName": "Multivariable Calculus",
         "section": "BSEE-3A",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -8161,10 +8473,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "08:55-10:40",
+            "timeSlot": "08:55-09:45",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 2,
-            "slotCount": 2
+            "slotNumber": 2
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "09:50-10:40",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 3
           }
         ],
         "day": "Monday",
@@ -8227,7 +8544,7 @@
         "courseName": "Computer Vision Techniques",
         "section": "BSEE-3A",
         "instructor": "Dr. Haider Mehdi",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -8237,10 +8554,15 @@
           },
           {
             "day": "Wednesday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 8
           }
         ],
         "day": "Tuesday",
@@ -8272,18 +8594,23 @@
         "courseName": "Probability & Statistics",
         "section": "BSEE-3A",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 1
       },
@@ -8319,14 +8646,19 @@
         "courseName": "Electrical Network Analysis",
         "section": "BSEE-3B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 5
           },
           {
             "day": "Tuesday",
@@ -8336,7 +8668,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "10:45-12:30",
+        "timeSlot": "10:45-11:35",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 4
       },
@@ -8432,18 +8764,23 @@
         "courseName": "Probability & Statistics",
         "section": "BSEE-3B",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "D-24 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "14:25-15:15",
+            "room": "D-24 Academic Block II (50)",
+            "slotNumber": 8
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "13:30-15:15",
+        "timeSlot": "13:30-14:20",
         "room": "D-24 Academic Block II (50)",
         "slotNumber": 7
       },
@@ -8452,7 +8789,7 @@
         "courseName": "Object Oriented Data Structures",
         "section": "BSEE-3B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -8462,10 +8799,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "08:55-10:40",
+            "timeSlot": "08:55-09:45",
             "room": "C-12 Academic Block II (50)",
-            "slotNumber": 2,
-            "slotCount": 2
+            "slotNumber": 2
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "09:50-10:40",
+            "room": "C-12 Academic Block II (50)",
+            "slotNumber": 3
           }
         ],
         "day": "Wednesday",
@@ -8478,7 +8820,7 @@
         "courseName": "Computer Vision Techniques",
         "section": "BSEE-3B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -8488,10 +8830,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Wednesday",
@@ -8544,7 +8891,7 @@
         "courseName": "Applied Calculus",
         "section": "BSCE-1B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
@@ -8554,10 +8901,15 @@
           },
           {
             "day": "Tuesday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Monday",
@@ -8570,14 +8922,19 @@
         "courseName": "English",
         "section": "BSCE-1B",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 9
           },
           {
             "day": "Friday",
@@ -8587,7 +8944,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 8
       },
@@ -8646,18 +9003,23 @@
         "courseName": "ICP",
         "section": "BSCE-1B",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "13:30-14:20",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 7
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "C-14 Academic Block II (50)",
         "slotNumber": 6
       },
@@ -8794,18 +9156,23 @@
         "courseName": "ICP",
         "section": "BSCE-1A",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "10:45-11:35",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Monday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "C-15 Academic Block II (50)",
         "slotNumber": 3
       },
@@ -8839,7 +9206,7 @@
         "courseName": "English",
         "section": "BSCE-1A",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -8849,10 +9216,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "12:35-13:25",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 6
           }
         ],
         "day": "Tuesday",
@@ -8903,18 +9275,23 @@
         "courseName": "Information & Communication Technologies",
         "section": "BSCE-1A",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "12:35-13:25",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 6
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "C-15 Academic Block II (50)",
         "slotNumber": 5
       },
@@ -8923,14 +9300,19 @@
         "courseName": "Applied Calculus",
         "section": "BSCE-1A",
         "instructor": "Engr. Qurat ul Ain",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "D-26 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "10:45-11:35",
+            "room": "D-26 Academic Block II (50)",
+            "slotNumber": 4
           },
           {
             "day": "Thursday",
@@ -8940,7 +9322,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "D-26 Academic Block II (50)",
         "slotNumber": 3
       },
@@ -9039,14 +9421,19 @@
         "courseName": "English",
         "section": "BSEE-1A",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 2
           },
           {
             "day": "Friday",
@@ -9056,7 +9443,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "C-15 Academic Block II (50)",
         "slotNumber": 1
       },
@@ -9103,18 +9490,23 @@
         "courseName": "Information & Communication Technologies",
         "section": "BSEE-1A",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "08:55-10:40",
+            "timeSlot": "08:55-09:45",
             "room": "C-14 Academic Block II (50)",
-            "slotNumber": 2,
-            "slotCount": 2
+            "slotNumber": 2
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "09:50-10:40",
+            "room": "C-14 Academic Block II (50)",
+            "slotNumber": 3
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "08:55-10:40",
+        "timeSlot": "08:55-09:45",
         "room": "C-14 Academic Block II (50)",
         "slotNumber": 2
       },
@@ -9186,18 +9578,23 @@
         "courseName": "IST",
         "section": "BSEE-1A",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "08:55-09:45",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Thursday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "C-13 Academic Block II (50)",
         "slotNumber": 1
       },
@@ -9667,14 +10064,19 @@
         "courseName": "Linear Algebra",
         "section": "BCY-3A",
         "instructor": "Dr. Fahad Riaz",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "12:35-13:25",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 6
           },
           {
             "day": "Friday",
@@ -9684,7 +10086,7 @@
           }
         ],
         "day": "Monday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "C-17 Academic Block II (59)",
         "slotNumber": 5
       },
@@ -9703,15 +10105,15 @@
           },
           {
             "day": "Tuesday",
-            "timeSlot": "08:55-09:45",
-            "room": "D-26 Academic Block II (50)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Tuesday",
             "timeSlot": "13:30-14:20",
             "room": "A-6 Academic Block II (50)",
             "slotNumber": 7
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "08:55-09:45",
+            "room": "D-26 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Monday",
@@ -9994,7 +10396,7 @@
         "courseName": "Computer Architecture & Logic Design",
         "section": "BCS-1D",
         "instructor": "Shahid Ashraf",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -10004,10 +10406,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "E-31 Academic Block II (52)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "E-31 Academic Block II (52)",
+            "slotNumber": 4
           }
         ],
         "day": "Tuesday",
@@ -10185,7 +10592,7 @@
         "courseName": "Computer Architecture & Logic Design",
         "section": "BCS-1B",
         "instructor": "Shahid Ashraf",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -10195,10 +10602,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "E-35 Academic Block II (52)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "E-35 Academic Block II (52)",
+            "slotNumber": 5
           }
         ],
         "day": "Tuesday",
@@ -10255,18 +10667,23 @@
         "courseName": "FE",
         "section": "BCS-1B",
         "instructor": "Khadija Shireen",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "14:25-16:05",
+            "timeSlot": "14:25-15:15",
             "room": "A-6 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 2
+            "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "15:20-16:05",
+            "room": "A-6 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Thursday",
-        "timeSlot": "14:25-16:05",
+        "timeSlot": "14:25-15:15",
         "room": "A-6 Academic Block II (50)",
         "slotNumber": 8
       },
@@ -10433,18 +10850,23 @@
         "courseName": "IST",
         "section": "BCS-1A",
         "instructor": "Abdul Muqtadir (VF)",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "D-27 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "08:55-09:45",
+            "room": "D-27 Academic Block II (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "D-27 Academic Block II (50)",
         "slotNumber": 1
       },
@@ -11361,18 +11783,23 @@
         "courseName": "FE",
         "section": "BCS-1H",
         "instructor": "Javeria Ali Wadho",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "D-28 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:35-13:25",
+            "room": "D-28 Academic Block II (50)",
+            "slotNumber": 6
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "D-28 Academic Block II (50)",
         "slotNumber": 5
       },
@@ -11600,15 +12027,15 @@
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "13:30-14:20",
-            "room": "D-28 Academic Block II (50)",
-            "slotNumber": 7
-          },
-          {
-            "day": "Thursday",
             "timeSlot": "14:25-15:15",
             "room": "D-27 Academic Block II (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "13:30-14:20",
+            "room": "D-28 Academic Block II (50)",
+            "slotNumber": 7
           },
           {
             "day": "Friday",
@@ -11618,9 +12045,9 @@
           }
         ],
         "day": "Thursday",
-        "timeSlot": "13:30-14:20",
-        "room": "D-28 Academic Block II (50)",
-        "slotNumber": 7
+        "timeSlot": "14:25-15:15",
+        "room": "D-27 Academic Block II (50)",
+        "slotNumber": 8
       },
       {
         "courseCode": "FE Lab",
@@ -11729,18 +12156,23 @@
         "courseName": "FE",
         "section": "BCS-1K",
         "instructor": "Javeria Ali Wadho",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Monday",
-            "timeSlot": "12:35-14:20",
+            "timeSlot": "12:35-13:25",
             "room": "E-29Academic Block II (52)",
-            "slotNumber": 6,
-            "slotCount": 2
+            "slotNumber": 6
+          },
+          {
+            "day": "Monday",
+            "timeSlot": "13:30-14:20",
+            "room": "E-29Academic Block II (52)",
+            "slotNumber": 7
           }
         ],
         "day": "Monday",
-        "timeSlot": "12:35-14:20",
+        "timeSlot": "12:35-13:25",
         "room": "E-29Academic Block II (52)",
         "slotNumber": 6
       },
@@ -11759,15 +12191,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "10:45-11:35",
-            "room": "E-34 Academic Block II (52)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Thursday",
             "timeSlot": "11:40-12:30",
             "room": "D-27 Academic Block II (50)",
             "slotNumber": 5
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "E-34 Academic Block II (52)",
+            "slotNumber": 4
           }
         ],
         "day": "Tuesday",
@@ -11799,14 +12231,19 @@
         "courseName": "Applied Physics",
         "section": "BCS-1K",
         "instructor": "Rameez",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-32 Academic Block II (52)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-32 Academic Block II (52)",
+            "slotNumber": 2
           },
           {
             "day": "Friday",
@@ -11816,7 +12253,7 @@
           }
         ],
         "day": "Thursday",
-        "timeSlot": "08:00-09:45",
+        "timeSlot": "08:00-08:50",
         "room": "E-32 Academic Block II (52)",
         "slotNumber": 1
       },
@@ -12481,18 +12918,23 @@
         "courseName": "FE",
         "section": "BCS-1G",
         "instructor": "Javeria Ali Wadho",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Thursday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "D-26 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "14:25-15:15",
+            "room": "D-26 Academic Block II (50)",
+            "slotNumber": 8
           }
         ],
         "day": "Thursday",
-        "timeSlot": "13:30-15:15",
+        "timeSlot": "13:30-14:20",
         "room": "D-26 Academic Block II (50)",
         "slotNumber": 7
       },
@@ -13507,14 +13949,19 @@
         "courseName": "Deep Learning Projects",
         "section": "BCS-7B",
         "instructor": "Dr. Maria",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "E-1 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:35-13:25",
+            "room": "E-1 Academic Block I (50)",
+            "slotNumber": 6
           },
           {
             "day": "Wednesday",
@@ -13524,7 +13971,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "E-1 Academic Block I (50)",
         "slotNumber": 5
       },
@@ -13564,14 +14011,19 @@
         "courseName": "Software Testing",
         "section": "BCS-7B",
         "instructor": "Alina Arshad",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "E-2 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:35-13:25",
+            "room": "E-2 Academic Block I (50)",
+            "slotNumber": 6
           },
           {
             "day": "Wednesday",
@@ -13581,7 +14033,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "E-2 Academic Block I (50)",
         "slotNumber": 5
       },
@@ -13625,15 +14077,15 @@
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:50-10:40",
-            "room": "A-2Academic Block II (50)",
-            "slotNumber": 3
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "14:25-15:15",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "09:50-10:40",
+            "room": "A-2Academic Block II (50)",
+            "slotNumber": 3
           },
           {
             "day": "Thursday",
@@ -13643,9 +14095,9 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:50-10:40",
-        "room": "A-2Academic Block II (50)",
-        "slotNumber": 3
+        "timeSlot": "14:25-15:15",
+        "room": "E-2 Academic Block I (50)",
+        "slotNumber": 8
       }
     ],
     "BCS-7C": [
@@ -14005,15 +14457,15 @@
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "08:55-09:45",
-            "room": "E-34 Academic Block II (52)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Tuesday",
             "timeSlot": "09:50-10:40",
             "room": "A-2Academic Block II (50)",
             "slotNumber": 3
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-34 Academic Block II (52)",
+            "slotNumber": 2
           },
           {
             "day": "Thursday",
@@ -14023,9 +14475,9 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "08:55-09:45",
-        "room": "E-34 Academic Block II (52)",
-        "slotNumber": 2
+        "timeSlot": "09:50-10:40",
+        "room": "A-2Academic Block II (50)",
+        "slotNumber": 3
       },
       {
         "courseCode": "FSPM",
@@ -14063,14 +14515,19 @@
         "courseName": "Introduction to Cloud Computing",
         "section": "BSE-7B",
         "instructor": "Sudais",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "Academic Block I CY LAB-2 (48)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:35-13:25",
+            "room": "Academic Block I CY LAB-2 (48)",
+            "slotNumber": 6
           },
           {
             "day": "Wednesday",
@@ -14080,7 +14537,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "Academic Block I CY LAB-2 (48)",
         "slotNumber": 5
       }
@@ -14095,15 +14552,15 @@
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "12:35-13:25",
-            "room": "E-3 Academic Block I (50)",
-            "slotNumber": 6
-          },
-          {
-            "day": "Tuesday",
             "timeSlot": "14:25-15:15",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:35-13:25",
+            "room": "E-3 Academic Block I (50)",
+            "slotNumber": 6
           },
           {
             "day": "Wednesday",
@@ -14113,9 +14570,9 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "12:35-13:25",
-        "room": "E-3 Academic Block I (50)",
-        "slotNumber": 6
+        "timeSlot": "14:25-15:15",
+        "room": "E-2 Academic Block I (50)",
+        "slotNumber": 8
       },
       {
         "courseCode": "DLP",
@@ -14153,14 +14610,19 @@
         "courseName": "Information Security",
         "section": "BCS-7A",
         "instructor": "Dr. Nadeem Kafi",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "R-12 Academic Block I (70)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "10:45-11:35",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 4
           },
           {
             "day": "Wednesday",
@@ -14170,7 +14632,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "R-12 Academic Block I (70)",
         "slotNumber": 3
       },
@@ -14241,7 +14703,7 @@
         "courseName": "Neural Computing",
         "section": "BCS-7A",
         "instructor": "Jamil Usmani",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -14251,10 +14713,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 5
           }
         ],
         "day": "Tuesday",
@@ -14783,15 +15250,15 @@
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:50-10:40",
-            "room": "C-18 Academic Block II (50)",
-            "slotNumber": 3
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "10:45-11:35",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 4
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "09:50-10:40",
+            "room": "C-18 Academic Block II (50)",
+            "slotNumber": 3
           },
           {
             "day": "Thursday",
@@ -14801,9 +15268,9 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:50-10:40",
-        "room": "C-18 Academic Block II (50)",
-        "slotNumber": 3
+        "timeSlot": "10:45-11:35",
+        "room": "E-2 Academic Block I (50)",
+        "slotNumber": 4
       }
     ],
     "BAI-7B": [
@@ -14812,14 +15279,19 @@
         "courseName": "Generative AI",
         "section": "BAI-7B",
         "instructor": "Omer Qureshi",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "E-4 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:35-13:25",
+            "room": "E-4 Academic Block I (50)",
+            "slotNumber": 6
           },
           {
             "day": "Wednesday",
@@ -14829,7 +15301,7 @@
           }
         ],
         "day": "Tuesday",
-        "timeSlot": "11:40-13:25",
+        "timeSlot": "11:40-12:30",
         "room": "E-4 Academic Block I (50)",
         "slotNumber": 5
       },
@@ -14975,15 +15447,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "10:45-11:35",
-            "room": "E-4 Academic Block I (50)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Thursday",
             "timeSlot": "14:25-15:15",
             "room": "E-1 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "E-4 Academic Block I (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Tuesday",
@@ -15101,15 +15573,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "08:55-09:45",
-            "room": "E-33 Academic Block II (52)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Thursday",
             "timeSlot": "14:25-15:15",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 8
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-33 Academic Block II (52)",
+            "slotNumber": 2
           }
         ],
         "day": "Wednesday",
@@ -15323,15 +15795,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "10:45-11:35",
-            "room": "A-1 Academic Block II (50)",
-            "slotNumber": 4
-          },
-          {
-            "day": "Thursday",
             "timeSlot": "11:40-12:30",
             "room": "E-6 Academic Block I (50)",
             "slotNumber": 5
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Tuesday",
@@ -15396,7 +15868,7 @@
         "courseName": "Mathematical Foundations",
         "section": "BSBA-7A",
         "instructor": "Dr. Mohsin Ali",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -15406,10 +15878,15 @@
           },
           {
             "day": "Tuesday",
-            "timeSlot": "13:30-15:15",
+            "timeSlot": "13:30-14:20",
             "room": "C-12 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 2
+            "slotNumber": 7
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-12 Academic Block II (50)",
+            "slotNumber": 8
           }
         ],
         "day": "Tuesday",
@@ -15422,7 +15899,7 @@
         "courseName": "Probability & Statistics",
         "section": "BSBA-7A",
         "instructor": "Dr. Shahnawaz",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -15432,10 +15909,15 @@
           },
           {
             "day": "Thursday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "D-25 Academic Block II (50)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "10:45-11:35",
+            "room": "D-25 Academic Block II (50)",
+            "slotNumber": 4
           }
         ],
         "day": "Tuesday",
@@ -15473,14 +15955,19 @@
         "courseName": "Entrepreneurship",
         "section": "BSBA-7A",
         "instructor": "Asiya Zaheer",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "E-30 Academic Block II (52)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "10:45-11:35",
+            "room": "E-30 Academic Block II (52)",
+            "slotNumber": 4
           },
           {
             "day": "Thursday",
@@ -15490,7 +15977,7 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "E-30 Academic Block II (52)",
         "slotNumber": 3
       }
@@ -15567,15 +16054,15 @@
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "08:55-09:45",
-            "room": "E-6 Academic Block I (50)",
-            "slotNumber": 2
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "12:35-13:25",
             "room": "E-2 Academic Block I (50)",
             "slotNumber": 6
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-6 Academic Block I (50)",
+            "slotNumber": 2
           },
           {
             "day": "Thursday",
@@ -15585,9 +16072,9 @@
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "08:55-09:45",
-        "room": "E-6 Academic Block I (50)",
-        "slotNumber": 2
+        "timeSlot": "12:35-13:25",
+        "room": "E-2 Academic Block I (50)",
+        "slotNumber": 6
       }
     ],
     "BSBA-5A": [
@@ -15720,18 +16207,29 @@
         "courseName": "DS&BA",
         "section": "BSBA-5A",
         "instructor": "Mohsin Javaid",
-        "creditHours": 1,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "13:30-16:05",
+            "timeSlot": "13:30-14:20",
             "room": "C-19 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 3
+            "slotNumber": 7
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 8
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "13:30-16:05",
+        "timeSlot": "13:30-14:20",
         "room": "C-19 Academic Block II (50)",
         "slotNumber": 7
       },
@@ -15955,7 +16453,7 @@
         "courseName": "Business Finance",
         "section": "BSFT-3A",
         "instructor": "Shoaib Anwar",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
@@ -15965,10 +16463,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "A-1 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Thursday",
@@ -16463,7 +16966,7 @@
         "courseName": "Managerial Economics",
         "section": "BSBA-3A",
         "instructor": "Michael Simon",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Tuesday",
@@ -16473,10 +16976,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "11:40-13:25",
+            "timeSlot": "11:40-12:30",
             "room": "E-5 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 2
+            "slotNumber": 5
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "12:35-13:25",
+            "room": "E-5 Academic Block I (50)",
+            "slotNumber": 6
           }
         ],
         "day": "Tuesday",
@@ -16589,7 +17097,7 @@
         "courseName": "Database Systems 2",
         "section": "BSBA-3A",
         "instructor": "Dr. Anwar Mughees",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Thursday",
@@ -16599,10 +17107,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "08:00-09:45",
+            "timeSlot": "08:00-08:50",
             "room": "E-6 Academic Block I (50)",
-            "slotNumber": 1,
-            "slotCount": 2
+            "slotNumber": 1
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "08:55-09:45",
+            "room": "E-6 Academic Block I (50)",
+            "slotNumber": 2
           }
         ],
         "day": "Thursday",
@@ -16636,18 +17149,29 @@
         "courseName": "Data Communication & Networking",
         "section": "BSEE-5B",
         "instructor": "TBA",
-        "creditHours": 1,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Friday",
-            "timeSlot": "13:30-16:05",
+            "timeSlot": "13:30-14:20",
             "room": "C-15 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 3
+            "slotNumber": 7
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "14:25-15:15",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 8
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "15:20-16:05",
+            "room": "C-15 Academic Block II (50)",
+            "slotNumber": 9
           }
         ],
         "day": "Friday",
-        "timeSlot": "13:30-16:05",
+        "timeSlot": "13:30-14:20",
         "room": "C-15 Academic Block II (50)",
         "slotNumber": 7
       }
@@ -16710,7 +17234,7 @@
         "courseName": "Programming Fundamentals",
         "section": "BSEE-3AB",
         "instructor": "TBA",
-        "creditHours": 2,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Wednesday",
@@ -16720,10 +17244,15 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "10:45-12:30",
+            "timeSlot": "10:45-11:35",
             "room": "C-13 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 2
+            "slotNumber": 4
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "11:40-12:30",
+            "room": "C-13 Academic Block II (50)",
+            "slotNumber": 5
           }
         ],
         "day": "Wednesday",
@@ -16757,18 +17286,23 @@
         "courseName": "Ethics",
         "section": "BCS-1N",
         "instructor": "Dr. Wajiha Raheeq",
-        "creditHours": 1,
+        "creditHours": 2,
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:50-11:35",
+            "timeSlot": "09:50-10:40",
             "room": "E-31 Academic Block II (52)",
-            "slotNumber": 3,
-            "slotCount": 2
+            "slotNumber": 3
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "10:45-11:35",
+            "room": "E-31 Academic Block II (52)",
+            "slotNumber": 4
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:50-11:35",
+        "timeSlot": "09:50-10:40",
         "room": "E-31 Academic Block II (52)",
         "slotNumber": 3
       }
