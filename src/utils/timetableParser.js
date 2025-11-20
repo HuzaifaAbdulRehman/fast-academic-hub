@@ -379,7 +379,8 @@ export function parseTimetable(csvFiles) {
           day: entry.day,
           timeSlot: entry.timeSlot,
           room: entry.room,
-          slotNumber: entry.slotNumber
+          slotNumber: entry.slotNumber,
+          slotCount: entry.slotCount || 1
         })
       } else {
         // Create new course with sessions array
@@ -393,7 +394,8 @@ export function parseTimetable(csvFiles) {
             day: entry.day,
             timeSlot: entry.timeSlot,
             room: entry.room,
-            slotNumber: entry.slotNumber
+            slotNumber: entry.slotNumber,
+            slotCount: entry.slotCount || 1
           }]
         })
       }
@@ -412,6 +414,7 @@ export function parseTimetable(csvFiles) {
         course.timeSlot = firstSession.timeSlot
         course.room = firstSession.room
         course.slotNumber = firstSession.slotNumber
+        course.slotCount = firstSession.slotCount
       }
     })
 

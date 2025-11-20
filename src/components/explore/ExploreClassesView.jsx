@@ -1,227 +1,316 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Search, Loader, AlertCircle, BookOpen, RefreshCw, X, CheckSquare, Square, Info } from 'lucide-react'
-import { useApp } from '../../context/AppContext'
-import { useClassSearch } from '../../hooks/useClassSearch'
-import { detectConflicts, formatConflictMessage } from '../../utils/conflictDetection'
-import { vibrate } from '../../utils/uiHelpers'
-import { getTodayISO, formatTimeTo12Hour } from '../../utils/dateHelpers'
-import { clearTimetableCache } from '../../utils/cacheManager'
-import ClassCard from './ClassCard'
-import Toast from '../shared/Toast'
-import ConfirmModal from '../shared/ConfirmModal'
-import CourseForm from '../courses/CourseForm'
-import PullToRefresh from 'react-simple-pull-to-refresh'
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useDeferredValue,
+  useRef,
+} from "react";
+import {
+  Search,
+  Loader,
+  AlertCircle,
+  BookOpen,
+  RefreshCw,
+  X,
+  CheckSquare,
+  Square,
+  Info,
+} from "lucide-react";
+import { useApp } from "../../context/AppContext";
+import { useClassSearch } from "../../hooks/useClassSearch";
+import {
+  detectConflicts,
+  formatConflictMessage,
+} from "../../utils/conflictDetection";
+import { vibrate } from "../../utils/uiHelpers";
+import { getTodayISO, formatTimeTo12Hour } from "../../utils/dateHelpers";
+import { clearTimetableCache } from "../../utils/cacheManager";
+import { useDebounce } from "../../hooks/useDebounce";
+import ClassCard from "./ClassCard";
+import Toast from "../shared/Toast";
+import ConfirmModal from "../shared/ConfirmModal";
+import CourseForm from "../courses/CourseForm";
+import PullToRefresh from "react-simple-pull-to-refresh";
 
 /**
  * ExploreClassesView - Production-grade class explorer
  * Features: Fuzzy search, inline filters, conflict detection, animated interactions, responsive grid
  */
 export default function ExploreClassesView() {
-  const { addCourse, addMultipleCourses, deleteCourse, courses } = useApp()
+  const { addCourse, addMultipleCourses, deleteCourse, courses } = useApp();
 
   // State
-  const [searchInput, setSearchInput] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [timetableData, setTimetableData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [toast, setToast] = useState(null)
-  const [confirmDialog, setConfirmDialog] = useState(null)
-  const [addingClassId, setAddingClassId] = useState(null)
-  const [courseFormData, setCourseFormData] = useState(null) // For CourseForm modal
-  const [multiSelectMode, setMultiSelectMode] = useState(false) // Multi-select mode
-  const [selectedClasses, setSelectedClasses] = useState([]) // Selected classes in multi-select
+  const [searchInput, setSearchInput] = useState("");
+  const [timetableData, setTimetableData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState(null);
+  const [addingClassId, setAddingClassId] = useState(null);
+  const [courseFormData, setCourseFormData] = useState(null); // For CourseForm modal
+  const [multiSelectMode, setMultiSelectMode] = useState(false); // Multi-select mode
+  const [selectedClasses, setSelectedClasses] = useState([]); // Selected classes in multi-select
 
   // Undo state for course additions
-  const [lastAddedCourses, setLastAddedCourses] = useState([]) // Track last added courses for undo
+  const [lastAddedCourses, setLastAddedCourses] = useState([]); // Track last added courses for undo
+
+  // Pagination for large result sets
+  const [displayLimit, setDisplayLimit] = useState(50); // Show 50 results initially
+
+  // Expanded card state - track which card is expanded with overlay
+  const [expandedCardId, setExpandedCardId] = useState(null);
+
+  // Debounce search input for performance (300ms delay)
+  const debouncedSearchInput = useDebounce(searchInput, 300);
+
+  // Defer the debounced value for non-blocking rendering (React 18 optimization)
+  const deferredSearchInput = useDeferredValue(debouncedSearchInput);
 
   // Search placeholder rotation
-  const [placeholderIndex, setPlaceholderIndex] = useState(0)
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const placeholders = [
-    'Search by course (DAA, Algo)...',
-    'Search by teacher (Sameer, Nasir)...',
-    'Search by section (BCS-5F, 5F)...',
-    'Search by day (Monday, Friday)...'
-  ]
+    "Search by course (DAA, Algo)...",
+    "Search by teacher (Sameer, Nasir)...",
+    "Search by section (BCS-5F, 5F)...",
+    "Search by day (Monday, Friday)...",
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPlaceholderIndex(prev => (prev + 1) % placeholders.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+      setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Fetch timetable data
   useEffect(() => {
-    fetchTimetable()
-  }, [])
+    fetchTimetable();
+  }, []);
 
   const fetchTimetable = async (forceRefresh = false) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
 
     try {
       // Add cache-busting parameter when force refreshing
-      const cacheBuster = forceRefresh ? `?t=${Date.now()}` : ''
+      const cacheBuster = forceRefresh ? `?t=${Date.now()}` : "";
       const response = await fetch(`/timetable/timetable.json${cacheBuster}`, {
-        cache: forceRefresh ? 'reload' : 'default'
-      })
+        cache: forceRefresh ? "reload" : "default",
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch timetable data')
+        throw new Error("Failed to fetch timetable data");
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       // Flatten timetable structure into array of classes
-      const allClasses = []
+      const allClasses = [];
       if (data.data) {
-        Object.keys(data.data).forEach(sectionKey => {
-          const sectionClasses = data.data[sectionKey]
+        Object.keys(data.data).forEach((sectionKey) => {
+          const sectionClasses = data.data[sectionKey];
           if (Array.isArray(sectionClasses)) {
-            sectionClasses.forEach(classData => {
+            sectionClasses.forEach((classData) => {
               allClasses.push({
                 ...classData,
-                id: `${classData.courseCode}-${classData.section}-${classData.instructor || 'unknown'}`,
-                days: classData.sessions?.map(s => s.day) || [classData.day].filter(Boolean)
-              })
-            })
+                id: `${classData.courseCode}-${classData.section}-${
+                  classData.instructor || "unknown"
+                }`,
+                days:
+                  classData.sessions?.map((s) => s.day) ||
+                  [classData.day].filter(Boolean),
+              });
+            });
           }
-        })
+        });
       }
 
-      setTimetableData(allClasses)
-      setLoading(false)
+      setTimetableData(allClasses);
+      setLoading(false);
     } catch (err) {
-      console.error('Error fetching timetable:', err)
-      setError(err.message)
-      setLoading(false)
+      console.error("Error fetching timetable:", err);
+      setError(err.message);
+      setLoading(false);
     }
-  }
+  };
 
   // Handle pull-to-refresh
   const handleRefresh = async () => {
-    vibrate(15)
+    vibrate(15);
     // Clear localStorage cache
-    clearTimetableCache()
+    clearTimetableCache();
     // Fetch with cache-busting
-    await fetchTimetable(true)
-    setToast({ message: 'Timetable refreshed successfully', type: 'success', duration: 2000 })
-  }
+    await fetchTimetable(true);
+    setToast({
+      message: "Timetable refreshed successfully",
+      type: "success",
+      duration: 2000,
+    });
+  };
 
-  // Search and filter classes
-  const filteredClasses = useClassSearch(timetableData, searchTerm, {})
+  // Search and filter classes (use deferred debounced input for non-blocking performance)
+  const filteredClasses = useClassSearch(
+    timetableData,
+    deferredSearchInput,
+    {}
+  );
+
+  // Paginated results for rendering (memoized)
+  // Round up to ensure all grid columns are filled
+  const displayedClasses = useMemo(() => {
+    const sliceEnd = Math.min(displayLimit, filteredClasses.length);
+
+    // Calculate how many columns based on current viewport
+    // We'll always pad to fill the last row, but React can't know viewport width here
+    // Instead, we'll round up to nearest multiple that works for all layouts (6 = LCM of 1,2,3)
+    const gridLCM = 6; // Works for 1-col, 2-col, 3-col layouts
+    const paddedEnd = Math.ceil(sliceEnd / gridLCM) * gridLCM;
+
+    return filteredClasses.slice(0, Math.min(paddedEnd, filteredClasses.length));
+  }, [filteredClasses, displayLimit]);
+
+  // Reset display limit when search changes (use raw input for immediate feedback)
+  useEffect(() => {
+    setDisplayLimit(50);
+  }, [searchInput]);
 
   // Check which classes are already added
   const addedClassIds = useMemo(() => {
-    return new Set(courses.map(c => c.courseCode || c.code))
-  }, [courses])
+    return new Set(courses.map((c) => c.courseCode || c.code));
+  }, [courses]);
 
-  // Check conflicts for each class
-  const getClassConflicts = (classData) => {
-    const conflicts = detectConflicts(
-      {
-        courseCode: classData.courseCode,
-        section: classData.section,
-        days: classData.days || [],
-        startTime: classData.sessions?.[0]?.timeSlot?.split('-')[0] || classData.timeSlot?.split('-')[0] || '',
-        endTime: classData.sessions?.[0]?.timeSlot?.split('-')[1] || classData.timeSlot?.split('-')[1] || '',
-        creditHours: classData.creditHours
-      },
-      courses
-    )
-    return conflicts
-  }
+  // Memoize conflict detection results for all displayed classes
+  const classConflicts = useMemo(() => {
+    const conflictMap = new Map();
+    displayedClasses.forEach((classData) => {
+      const conflicts = detectConflicts(
+        {
+          courseCode: classData.courseCode,
+          section: classData.section,
+          days: classData.days || [],
+          startTime:
+            classData.sessions?.[0]?.timeSlot?.split("-")[0] ||
+            classData.timeSlot?.split("-")[0] ||
+            "",
+          endTime:
+            classData.sessions?.[0]?.timeSlot?.split("-")[1] ||
+            classData.timeSlot?.split("-")[1] ||
+            "",
+          creditHours: classData.creditHours,
+        },
+        courses
+      );
+      conflictMap.set(classData.id, conflicts);
+    });
+    return conflictMap;
+  }, [displayedClasses, courses]);
 
   // Handle adding a class
   const handleAddClass = (classData) => {
-    vibrate(15)
-    setAddingClassId(classData.id)
+    vibrate(15);
+    setAddingClassId(classData.id);
 
-    const conflicts = getClassConflicts(classData)
+    const conflicts = classConflicts.get(classData.id) || {
+      hasConflict: false,
+    };
 
     // If exact duplicate, just show toast
-    if (conflicts.type === 'exact_duplicate') {
+    if (conflicts.type === "exact_duplicate") {
       setToast({
-        message: 'This class is already in your courses',
-        type: 'info'
-      })
-      setAddingClassId(null)
-      return
+        message: "This class is already in your courses",
+        type: "info",
+      });
+      setAddingClassId(null);
+      return;
     }
 
     // If has conflicts, show confirmation dialog
     if (conflicts.hasConflict) {
-      setAddingClassId(null)
+      setAddingClassId(null);
       setConfirmDialog({
-        title: 'Scheduling Conflict Detected',
+        title: "Scheduling Conflict Detected",
         message: formatConflictMessage(conflicts),
-        confirmText: 'Add Anyway',
-        cancelText: 'Cancel',
-        isDanger: conflicts.type === 'time_conflict',
+        confirmText: "Add Anyway",
+        cancelText: "Cancel",
+        isDanger: conflicts.type === "time_conflict",
         onConfirm: () => {
-          setAddingClassId(classData.id)
-          showCourseConfigModal(classData)
-          setConfirmDialog(null)
+          setAddingClassId(classData.id);
+          showCourseConfigModal(classData);
+          setConfirmDialog(null);
         },
         onCancel: () => {
-          setConfirmDialog(null)
-        }
-      })
-      return
+          setConfirmDialog(null);
+        },
+      });
+      return;
     }
 
     // No conflicts, show configuration modal
-    showCourseConfigModal(classData)
-  }
+    showCourseConfigModal(classData);
+  };
 
   // Show course configuration modal
   const showCourseConfigModal = (classData) => {
     // Extract weekdays
-    const dayNames = classData.days || (classData.sessions ? classData.sessions.map(s => s.day) : [])
+    const dayNames =
+      classData.days ||
+      (classData.sessions ? classData.sessions.map((s) => s.day) : []);
 
     // Convert day names to numbers
     const dayNameToNumber = {
-      'Sunday': 0,
-      'Monday': 1,
-      'Tuesday': 2,
-      'Wednesday': 3,
-      'Thursday': 4,
-      'Friday': 5,
-      'Saturday': 6
-    }
+      Sunday: 0,
+      Monday: 1,
+      Tuesday: 2,
+      Wednesday: 3,
+      Thursday: 4,
+      Friday: 5,
+      Saturday: 6,
+    };
 
     const weekdays = dayNames
-      .map(day => dayNameToNumber[day])
-      .filter(day => day !== undefined)
+      .map((day) => dayNameToNumber[day])
+      .filter((day) => day !== undefined);
 
     // Build schedule array from sessions (for timetable display)
-    const schedule = classData.sessions?.map(session => {
-      const startTime = session.timeSlot?.split('-')[0]?.trim() || session.startTime || '9:00'
-      const endTime = session.timeSlot?.split('-')[1]?.trim() || session.endTime || '10:00'
+    const schedule =
+      classData.sessions?.map((session) => {
+        const startTime =
+          session.timeSlot?.split("-")[0]?.trim() ||
+          session.startTime ||
+          "9:00";
+        const endTime =
+          session.timeSlot?.split("-")[1]?.trim() || session.endTime || "10:00";
 
-      return {
-        day: session.day,
-        startTime: formatTimeTo12Hour(startTime),
-        endTime: formatTimeTo12Hour(endTime),
-        room: session.room || classData.room,
-        building: session.building || classData.building
-      }
-    }) || []
+        return {
+          day: session.day,
+          startTime: formatTimeTo12Hour(startTime),
+          endTime: formatTimeTo12Hour(endTime),
+          room: session.room || classData.room,
+          building: session.building || classData.building,
+          slotCount: session.slotCount || 1, // Include slot count for LAB badge detection
+        };
+      }) || [];
 
     // Prepare initial course data for the form
-    const today = new Date()
-    const startDate = getTodayISO()
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 4, today.getDate())
+    const today = new Date();
+    const startDate = getTodayISO();
+    const endDate = new Date(
+      today.getFullYear(),
+      today.getMonth() + 4,
+      today.getDate()
+    )
       .toISOString()
-      .split('T')[0]
+      .split("T")[0];
 
     // Convert timeSlot to 12-hour format
-    const timeSlot = classData.timeSlot || classData.sessions?.[0]?.timeSlot
-    const timeSlot12Hour = timeSlot ? (() => {
-      const [start, end] = timeSlot.split('-').map(t => t.trim())
-      return `${formatTimeTo12Hour(start)}-${formatTimeTo12Hour(end)}`
-    })() : undefined
+    const timeSlot = classData.timeSlot || classData.sessions?.[0]?.timeSlot;
+    const timeSlot12Hour = timeSlot
+      ? (() => {
+          const [start, end] = timeSlot.split("-").map((t) => t.trim());
+          return `${formatTimeTo12Hour(start)}-${formatTimeTo12Hour(end)}`;
+        })()
+      : undefined;
 
     const initialCourseData = {
       name: classData.courseName,
@@ -239,136 +328,161 @@ export default function ExploreClassesView() {
       // Include timetable metadata
       schedule: schedule,
       room: classData.room || classData.sessions?.[0]?.room,
-      roomNumber: classData.roomNumber || classData.room || classData.sessions?.[0]?.room,
+      roomNumber:
+        classData.roomNumber || classData.room || classData.sessions?.[0]?.room,
       building: classData.building || classData.sessions?.[0]?.building,
-      timeSlot: timeSlot12Hour
-    }
+      timeSlot: timeSlot12Hour,
+    };
 
-    setCourseFormData(initialCourseData)
-  }
+    setCourseFormData(initialCourseData);
+  };
 
   // Handle course form save
   const handleCourseFormSave = (configuredCourseData) => {
     // The CourseForm already calls addCourse internally, just close the modal
-    setCourseFormData(null)
+    setCourseFormData(null);
 
     // Keep the adding state briefly to allow courses state to update
     setTimeout(() => {
-      setAddingClassId(null)
-    }, 100)
-  }
+      setAddingClassId(null);
+    }, 100);
+  };
 
   // Handle course form close
   const handleCourseFormClose = () => {
-    setCourseFormData(null)
-    setAddingClassId(null)
-  }
+    setCourseFormData(null);
+    setAddingClassId(null);
+  };
 
   // Toggle multi-select mode
   const toggleMultiSelectMode = () => {
-    vibrate(15)
-    setMultiSelectMode(!multiSelectMode)
-    setSelectedClasses([])
-  }
+    vibrate(15);
+    setMultiSelectMode(!multiSelectMode);
+    setSelectedClasses([]);
+  };
 
   // Handle class selection in multi-select mode
   const handleClassSelect = (classData) => {
-    vibrate(10)
-    setSelectedClasses(prev => {
-      const isSelected = prev.some(c => c.id === classData.id)
+    vibrate(10);
+    setSelectedClasses((prev) => {
+      const isSelected = prev.some((c) => c.id === classData.id);
 
       if (isSelected) {
         // Deselecting: simply remove it
-        return prev.filter(c => c.id !== classData.id)
+        return prev.filter((c) => c.id !== classData.id);
       } else {
         // Selecting: check if another section of same course is already selected
-        const conflictingSection = prev.find(c => c.courseCode === classData.courseCode)
+        const conflictingSection = prev.find(
+          (c) => c.courseCode === classData.courseCode
+        );
 
         if (conflictingSection) {
           // Show toast warning and don't add
           setToast({
             message: `Already selected ${classData.courseCode} Section ${conflictingSection.section}. Deselect it first to choose Section ${classData.section}.`,
-            type: 'warning',
-            duration: 4000
-          })
-          vibrate([20, 50, 20]) // Warning vibration pattern
-          return prev // Don't modify selection
+            type: "warning",
+            duration: 4000,
+          });
+          vibrate([20, 50, 20]); // Warning vibration pattern
+          return prev; // Don't modify selection
         }
 
         // No conflict: add to selection
-        return [...prev, classData]
+        return [...prev, classData];
       }
-    })
-  }
+    });
+  };
 
   // Add all selected courses with batch operation
   const addSelectedCourses = () => {
-    if (selectedClasses.length === 0) return
+    if (selectedClasses.length === 0) return;
 
-    vibrate(15)
+    vibrate(15);
 
     const dayNameToNumber = {
-      'Sunday': 0,
-      'Monday': 1,
-      'Tuesday': 2,
-      'Wednesday': 3,
-      'Thursday': 4,
-      'Friday': 5,
-      'Saturday': 6
-    }
+      Sunday: 0,
+      Monday: 1,
+      Tuesday: 2,
+      Wednesday: 3,
+      Thursday: 4,
+      Friday: 5,
+      Saturday: 6,
+    };
 
-    const today = new Date()
-    const startDate = getTodayISO()
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 4, today.getDate())
+    const today = new Date();
+    const startDate = getTodayISO();
+    const endDate = new Date(
+      today.getFullYear(),
+      today.getMonth() + 4,
+      today.getDate()
+    )
       .toISOString()
-      .split('T')[0]
+      .split("T")[0];
 
     // Filter out already-added courses (check for exact section match)
-    const newClasses = selectedClasses.filter(classData => {
-      const existingCourse = courses.find(c =>
-        (c.courseCode || c.code) === classData.courseCode && c.section === classData.section
-      )
-      return !existingCourse // Only include if not already added
-    })
+    const newClasses = selectedClasses.filter((classData) => {
+      const existingCourse = courses.find(
+        (c) =>
+          (c.courseCode || c.code) === classData.courseCode &&
+          c.section === classData.section
+      );
+      return !existingCourse; // Only include if not already added
+    });
 
     if (newClasses.length === 0) {
       setToast({
-        message: `All ${selectedClasses.length} selected ${selectedClasses.length === 1 ? 'course is' : 'courses are'} already in My Courses`,
-        type: 'info',
-        duration: 3000
-      })
-      setMultiSelectMode(false)
-      setSelectedClasses([])
-      return
+        message: `All ${selectedClasses.length} selected ${
+          selectedClasses.length === 1 ? "course is" : "courses are"
+        } already in My Courses`,
+        type: "info",
+        duration: 3000,
+      });
+      setMultiSelectMode(false);
+      setSelectedClasses([]);
+      return;
     }
 
-    const skippedCount = selectedClasses.length - newClasses.length
+    const skippedCount = selectedClasses.length - newClasses.length;
 
     // Prepare all course data for batch addition
-    const coursesData = newClasses.map(classData => {
-      const dayNames = classData.days || (classData.sessions ? classData.sessions.map(s => s.day) : [])
-      const weekdays = dayNames.map(day => dayNameToNumber[day]).filter(day => day !== undefined)
+    const coursesData = newClasses.map((classData) => {
+      const dayNames =
+        classData.days ||
+        (classData.sessions ? classData.sessions.map((s) => s.day) : []);
+      const weekdays = dayNames
+        .map((day) => dayNameToNumber[day])
+        .filter((day) => day !== undefined);
 
       // Build schedule array from sessions (for timetable display)
-      const schedule = classData.sessions?.map(session => {
-        const startTime = session.timeSlot?.split('-')[0]?.trim() || session.startTime || '9:00'
-        const endTime = session.timeSlot?.split('-')[1]?.trim() || session.endTime || '10:00'
+      const schedule =
+        classData.sessions?.map((session) => {
+          const startTime =
+            session.timeSlot?.split("-")[0]?.trim() ||
+            session.startTime ||
+            "9:00";
+          const endTime =
+            session.timeSlot?.split("-")[1]?.trim() ||
+            session.endTime ||
+            "10:00";
 
-        return {
-          day: session.day,
-          startTime: formatTimeTo12Hour(startTime),
-          endTime: formatTimeTo12Hour(endTime),
-          room: session.room || classData.room,
-          building: session.building || classData.building
-        }
-      }) || []
+          return {
+            day: session.day,
+            startTime: formatTimeTo12Hour(startTime),
+            endTime: formatTimeTo12Hour(endTime),
+            room: session.room || classData.room,
+            building: session.building || classData.building,
+            slotCount: session.slotCount || 1, // Include slot count for LAB badge detection
+          };
+        }) || [];
 
       // Convert timeSlot to 12-hour format
-      const timeSlot = classData.timeSlot || classData.sessions?.[0]?.timeSlot
-      const timeSlot12Hour = timeSlot ? (() => {
-        const [start, end] = timeSlot.split('-').map(t => t.trim())
-        return `${formatTimeTo12Hour(start)}-${formatTimeTo12Hour(end)}`
-      })() : undefined
+      const timeSlot = classData.timeSlot || classData.sessions?.[0]?.timeSlot;
+      const timeSlot12Hour = timeSlot
+        ? (() => {
+            const [start, end] = timeSlot.split("-").map((t) => t.trim());
+            return `${formatTimeTo12Hour(start)}-${formatTimeTo12Hour(end)}`;
+          })()
+        : undefined;
 
       return {
         name: classData.courseName,
@@ -386,107 +500,126 @@ export default function ExploreClassesView() {
         // Include timetable metadata
         schedule: schedule,
         room: classData.room || classData.sessions?.[0]?.room,
-        roomNumber: classData.roomNumber || classData.room || classData.sessions?.[0]?.room,
+        roomNumber:
+          classData.roomNumber ||
+          classData.room ||
+          classData.sessions?.[0]?.room,
         building: classData.building || classData.sessions?.[0]?.building,
-        timeSlot: timeSlot12Hour
-      }
-    })
+        timeSlot: timeSlot12Hour,
+      };
+    });
 
     // Use addMultipleCourses for batch operation
-    const result = addMultipleCourses(coursesData)
+    const result = addMultipleCourses(coursesData);
 
     if (result.success) {
-      const addedCount = result.added.length
-      const duplicateCount = result.duplicates.length + skippedCount
-      const errorCount = result.errors.length
+      const addedCount = result.added.length;
+      const duplicateCount = result.duplicates.length + skippedCount;
+      const errorCount = result.errors.length;
 
       if (addedCount > 0) {
         // Store added courses for undo
-        setLastAddedCourses(result.added)
+        setLastAddedCourses(result.added);
 
         setToast({
-          message: `${addedCount} course${addedCount > 1 ? 's' : ''} added successfully! Configure start/end dates and absences in the Courses tab > Edit option.`,
-          type: 'success',
+          message: `${addedCount} course${
+            addedCount > 1 ? "s" : ""
+          } added successfully! Configure start/end dates and absences in the Courses tab > Edit option.`,
+          type: "success",
           duration: 7000,
           action: {
-            label: 'Undo',
+            label: "Undo",
             onClick: () => {
               // Remove all added courses
-              result.added.forEach(course => {
-                deleteCourse(course.id)
-              })
-              setLastAddedCourses([])
+              result.added.forEach((course) => {
+                deleteCourse(course.id);
+              });
+              setLastAddedCourses([]);
               setToast({
-                message: `Removed ${addedCount} course${addedCount > 1 ? 's' : ''}`,
-                type: 'info',
-                duration: 3000
-              })
-            }
-          }
-        })
+                message: `Removed ${addedCount} course${
+                  addedCount > 1 ? "s" : ""
+                }`,
+                type: "info",
+                duration: 3000,
+              });
+            },
+          },
+        });
       }
 
       if (duplicateCount > 0) {
         setTimeout(() => {
           setToast({
-            message: `${duplicateCount} course${duplicateCount > 1 ? 's were' : ' was'} already added and skipped.`,
-            type: 'info',
-            duration: 5000
-          })
-        }, 500)
+            message: `${duplicateCount} course${
+              duplicateCount > 1 ? "s were" : " was"
+            } already added and skipped.`,
+            type: "info",
+            duration: 5000,
+          });
+        }, 500);
       }
 
       if (errorCount > 0) {
         setTimeout(() => {
           setToast({
-            message: `${errorCount} course${errorCount > 1 ? 's' : ''} failed to add due to validation errors.`,
-            type: 'error',
-            duration: 5000
-          })
-        }, 1000)
+            message: `${errorCount} course${
+              errorCount > 1 ? "s" : ""
+            } failed to add due to validation errors.`,
+            type: "error",
+            duration: 5000,
+          });
+        }, 1000);
       }
     } else {
       setToast({
-        message: 'No courses were added. All courses may already exist.',
-        type: 'info',
-        duration: 5000
-      })
+        message: "No courses were added. All courses may already exist.",
+        type: "info",
+        duration: 5000,
+      });
     }
 
     // Exit multi-select mode
-    setMultiSelectMode(false)
-    setSelectedClasses([])
-  }
+    setMultiSelectMode(false);
+    setSelectedClasses([]);
+  };
 
-  // Handle search
-  const handleSearch = () => {
-    vibrate(10)
-    setSearchTerm(searchInput)
-  }
+  // Clear search with focus management
+  const searchInputRef = useRef(null);
+  const clearSearch = useCallback(() => {
+    vibrate(10);
+    setSearchInput("");
+    // Refocus search input after clearing
+    setTimeout(() => searchInputRef.current?.focus(), 50);
+  }, []);
 
-  // Handle Enter key
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
-  }
+  // Handle Enter key for search (already instant, but provides haptic feedback)
+  const handleSearchKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        vibrate(10);
+        e.target.blur(); // Hide mobile keyboard
+      } else if (e.key === "Escape") {
+        clearSearch();
+      }
+    },
+    [clearSearch]
+  );
 
-  // Clear search
-  const clearSearch = () => {
-    vibrate(10)
-    setSearchInput('')
-    setSearchTerm('')
-  }
-
-  // Auto-clear search results when input becomes empty
+  // Cleanup multi-select state on unmount
   useEffect(() => {
-    if (!searchInput && searchTerm) {
-      setSearchTerm('')
-    }
-  }, [searchInput, searchTerm])
+    return () => {
+      setMultiSelectMode(false);
+      setSelectedClasses([]);
+    };
+  }, []);
+
+  // Handle card expansion - only one card can be expanded at a time
+  const handleCardExpand = useCallback((cardId) => {
+    setExpandedCardId(prev => prev === cardId ? null : cardId);
+  }, []);
 
   // Show welcome banner for first-time users
-  const showWelcomeBanner = !loading && courses.length === 0
+  const showWelcomeBanner = !loading && courses.length === 0;
 
   // Render content function for pull-to-refresh
   const renderContent = () => (
@@ -504,7 +637,9 @@ export default function ExploreClassesView() {
                   Welcome to Explore! 👋
                 </h3>
                 <p className="text-xs sm:text-sm text-content-secondary leading-relaxed">
-                  Browse all available classes, search by course, instructor, or section, and add them to your schedule individually or in bulk.
+                  Browse all available classes, search by course, instructor, or
+                  section, and add them to your schedule individually or in
+                  bulk.
                 </p>
               </div>
             </div>
@@ -525,13 +660,20 @@ export default function ExploreClassesView() {
                 <h2 className="text-base sm:text-lg font-semibold text-content-primary">
                   Explore Classes
                 </h2>
-                <p className="text-xs sm:text-sm text-content-tertiary">
-                  {loading ? 'Loading...' : (
+                <p
+                  className="text-xs sm:text-sm text-content-tertiary"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {loading ? (
+                    "Loading..."
+                  ) : (
                     <>
-                      <span className="font-semibold text-accent">{filteredClasses.length}</span>
-                      {' '}
-                      {filteredClasses.length === 1 ? 'class' : 'classes'}
-                      {searchTerm && ` for "${searchTerm}"`}
+                      <span className="font-semibold text-accent">
+                        {filteredClasses.length}
+                      </span>{" "}
+                      {filteredClasses.length === 1 ? "class" : "classes"}
+                      {searchInput && ` for "${searchInput}"`}
                     </>
                   )}
                 </p>
@@ -554,14 +696,24 @@ export default function ExploreClassesView() {
                 onClick={toggleMultiSelectMode}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                   multiSelectMode
-                    ? 'bg-accent text-dark-bg'
-                    : 'text-content-secondary hover:text-content-primary bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border'
+                    ? "bg-accent text-dark-bg"
+                    : "text-content-secondary hover:text-content-primary bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border"
                 }`}
-                aria-label={multiSelectMode ? 'Exit multi-select mode' : 'Enable multi-select mode'}
+                aria-label={
+                  multiSelectMode
+                    ? "Exit multi-select mode"
+                    : "Enable multi-select mode"
+                }
                 aria-pressed={multiSelectMode}
               >
-                {multiSelectMode ? <CheckSquare className="w-3 h-3" /> : <Square className="w-3 h-3" />}
-                <span className="hidden sm:inline">{multiSelectMode ? 'Exit Select' : 'Multi-Select'}</span>
+                {multiSelectMode ? (
+                  <CheckSquare className="w-3 h-3" />
+                ) : (
+                  <Square className="w-3 h-3" />
+                )}
+                <span className="hidden sm:inline">
+                  {multiSelectMode ? "Exit Select" : "Multi-Select"}
+                </span>
               </button>
             </div>
           </div>
@@ -573,15 +725,19 @@ export default function ExploreClassesView() {
               <div className="flex-1">
                 <p className="text-sm text-blue-400 font-medium">
                   {selectedClasses.length > 0
-                    ? `${selectedClasses.length} ${selectedClasses.length === 1 ? 'course' : 'courses'} selected. Configure absences individually in Courses > Edit.`
-                    : 'Select multiple courses to add them with default settings.'}
+                    ? `${selectedClasses.length} ${
+                        selectedClasses.length === 1 ? "course" : "courses"
+                      } selected. Configure absences individually in Courses > Edit.`
+                    : "Select multiple courses to add them with default settings."}
                 </p>
               </div>
               {selectedClasses.length > 0 && (
                 <button
                   onClick={addSelectedCourses}
                   className="px-3 py-1 bg-accent hover:bg-accent-hover text-dark-bg rounded-lg text-xs font-semibold transition-all hover:scale-105 active:scale-95"
-                  aria-label={`Add ${selectedClasses.length} selected course${selectedClasses.length > 1 ? 's' : ''} to My Courses`}
+                  aria-label={`Add ${selectedClasses.length} selected course${
+                    selectedClasses.length > 1 ? "s" : ""
+                  } to My Courses`}
                 >
                   Add All
                 </button>
@@ -596,32 +752,46 @@ export default function ExploreClassesView() {
             </p>
           )}
 
-          {/* Search Bar */}
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-content-tertiary pointer-events-none" />
-              <input
-                type="text"
-                placeholder={placeholders[placeholderIndex]}
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-full pl-10 pr-3 py-2.5 sm:py-3 bg-dark-bg border border-dark-border rounded-xl text-content-primary placeholder:text-content-tertiary text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
-                aria-label="Search for classes by course, instructor, section, or day"
-                aria-describedby="search-help-text"
-              />
-            </div>
-            <button
-              onClick={handleSearch}
-              className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-accent hover:bg-accent-hover text-dark-bg rounded-xl font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/30 active:scale-95"
-              aria-label={`Search classes${searchInput ? ` for ${searchInput}` : ''}`}
-            >
-              <Search className="w-4 h-4" />
-              <span className="hidden sm:inline">Search</span>
-            </button>
+          {/* Search Bar - Instant Search with Debouncing */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-content-tertiary pointer-events-none z-10" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder={placeholders[placeholderIndex]}
+              value={searchInput}
+              onChange={(e) => {
+                // Update input immediately for responsive typing
+                setSearchInput(e.target.value);
+              }}
+              onKeyDown={handleSearchKeyDown}
+              className="w-full pl-10 pr-10 py-2 sm:py-2.5 bg-dark-bg border border-dark-border rounded-xl text-content-primary placeholder:text-content-tertiary text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
+              aria-label="Search for classes by course, instructor, section, or day"
+              aria-describedby="search-help-text"
+              aria-live="polite"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck="false"
+            />
+            {/* Loading indicator during search processing */}
+            {searchInput.length > 0 && debouncedSearchInput !== searchInput && (
+              <div
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                aria-label="Searching"
+              >
+                <Loader
+                  className="w-4 h-4 text-accent animate-spin"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
           </div>
-          <p id="search-help-text" className="text-xs sm:text-xs text-content-tertiary mt-1.5">
-            Type multiple keywords (e.g., "sameer monday" or "daa 5f")
+          <p
+            id="search-help-text"
+            className="text-xs sm:text-xs text-content-tertiary mt-1.5"
+          >
+            Instant search - type course, teacher, section, or day (e.g.,
+            "sameer monday", "daa 5f", "algo")
           </p>
         </div>
       </div>
@@ -629,149 +799,200 @@ export default function ExploreClassesView() {
       {/* Content Area - Responsive Grid */}
       <div className="flex-1 overflow-y-auto">
         {loading && (
-            <div className="flex flex-col items-center justify-center py-16">
-              <Loader className="w-10 h-10 text-accent animate-spin mb-4" />
-              <p className="text-sm text-content-secondary">Loading classes...</p>
-            </div>
-          )}
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader className="w-10 h-10 text-accent animate-spin mb-4" />
+            <p className="text-sm text-content-secondary">Loading classes...</p>
+          </div>
+        )}
 
-          {error && (
-            <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="p-4 bg-attendance-danger/10 rounded-full mb-4">
-                <AlertCircle className="w-10 h-10 text-attendance-danger" />
-              </div>
-              <p className="text-sm text-content-secondary mb-4 text-center">{error}</p>
-              <button
-                onClick={fetchTimetable}
-                className="flex items-center gap-2 px-4 py-2.5 bg-accent/20 hover:bg-accent/30 text-accent rounded-lg transition-all font-medium"
-              >
-                <RefreshCw className="w-4 h-4" />
-                Retry
-              </button>
+        {error && (
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <div className="p-4 bg-attendance-danger/10 rounded-full mb-4">
+              <AlertCircle className="w-10 h-10 text-attendance-danger" />
             </div>
-          )}
+            <p className="text-sm text-content-secondary mb-4 text-center">
+              {error}
+            </p>
+            <button
+              onClick={fetchTimetable}
+              className="flex items-center gap-2 px-4 py-2.5 bg-accent/20 hover:bg-accent/30 text-accent rounded-lg transition-all font-medium"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Retry
+            </button>
+          </div>
+        )}
 
-          {!loading && !error && filteredClasses.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="p-4 bg-accent/10 rounded-full mb-4">
-                <Search className="w-10 h-10 text-accent" />
-              </div>
-              <p className="text-base font-semibold text-content-primary mb-2">No classes found</p>
-              <p className="text-sm text-content-tertiary text-center mb-4">
-                {searchTerm ? 'Try a different search term' : 'No classes available'}
-              </p>
-              {searchTerm && timetableData.length > 0 && (
-                <>
-                  <div className="max-w-sm mb-4 space-y-2">
-                    <p className="text-xs text-content-secondary text-center font-medium">Try searching for:</p>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      <button
-                        onClick={() => {
-                          setSearchInput('Monday')
-                          setSearchTerm('Monday')
-                        }}
-                        className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
-                      >
-                        Monday
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSearchInput('DAA')
-                          setSearchTerm('DAA')
-                        }}
-                        className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
-                      >
-                        DAA
-                      </button>
-                      <button
-                        onClick={() => {
-                          const sampleInstructor = timetableData.find(c => c.instructor)?.instructor
-                          if (sampleInstructor) {
-                            const firstName = sampleInstructor.split(' ')[0]
-                            setSearchInput(firstName)
-                            setSearchTerm(firstName)
-                          }
-                        }}
-                        className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
-                      >
-                        Instructor name
-                      </button>
-                    </div>
+        {!loading && !error && filteredClasses.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <div className="p-4 bg-accent/10 rounded-full mb-4">
+              <Search className="w-10 h-10 text-accent" />
+            </div>
+            <p className="text-base font-semibold text-content-primary mb-2">
+              No classes found
+            </p>
+            <p className="text-sm text-content-tertiary text-center mb-4">
+              {debouncedSearchInput
+                ? "Try a different search term"
+                : "No classes available"}
+            </p>
+            {debouncedSearchInput && timetableData.length > 0 && (
+              <>
+                <div className="max-w-sm mb-4 space-y-2">
+                  <p className="text-xs text-content-secondary text-center font-medium">
+                    Try searching for:
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    <button
+                      onClick={() => setSearchInput("Monday")}
+                      className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
+                    >
+                      Monday
+                    </button>
+                    <button
+                      onClick={() => setSearchInput("DAA")}
+                      className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
+                    >
+                      DAA
+                    </button>
+                    <button
+                      onClick={() => {
+                        const sampleInstructor = timetableData.find(
+                          (c) => c.instructor
+                        )?.instructor;
+                        if (sampleInstructor) {
+                          const firstName = sampleInstructor.split(" ")[0];
+                          setSearchInput(firstName);
+                        }
+                      }}
+                      className="px-3 py-1.5 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg text-xs font-medium text-content-secondary hover:text-accent transition-all"
+                    >
+                      Instructor name
+                    </button>
                   </div>
-                  <button
-                    onClick={clearSearch}
-                    className="flex items-center gap-2 px-4 py-2 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg transition-all text-sm font-medium"
-                    aria-label="Clear search and show all classes"
-                  >
-                    <X className="w-4 h-4" />
-                    Clear search
-                  </button>
-                </>
-              )}
-              {searchTerm && timetableData.length === 0 && (
+                </div>
                 <button
                   onClick={clearSearch}
                   className="flex items-center gap-2 px-4 py-2 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg transition-all text-sm font-medium"
-                  aria-label="Clear search"
+                  aria-label="Clear search and show all classes"
                 >
                   <X className="w-4 h-4" />
                   Clear search
                 </button>
-              )}
+              </>
+            )}
+            {debouncedSearchInput && timetableData.length === 0 && (
+              <button
+                onClick={clearSearch}
+                className="flex items-center gap-2 px-4 py-2 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-lg transition-all text-sm font-medium"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+                Clear search
+              </button>
+            )}
+          </div>
+        )}
+
+        {!loading && !error && filteredClasses.length > 0 && (
+          <div className="p-2 sm:p-3 md:p-4 lg:p-6">
+            {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+              {displayedClasses.map((classData) => {
+                const isAdded = addedClassIds.has(classData.courseCode);
+                const isAdding = addingClassId === classData.id;
+                const conflicts = classConflicts.get(classData.id) || {
+                  hasConflict: false,
+                };
+
+                // Check if this is the exact course added (same section)
+                const addedCourse = courses.find(
+                  (c) => (c.courseCode || c.code) === classData.courseCode
+                );
+                const isExactMatch =
+                  addedCourse && addedCourse.section === classData.section;
+
+                const isSelected = selectedClasses.some(
+                  (c) => c.id === classData.id
+                );
+
+                // Check if a different section of the same course is selected
+                const selectedDifferentSection = multiSelectMode
+                  ? selectedClasses.find(
+                      (c) =>
+                        c.courseCode === classData.courseCode &&
+                        c.section !== classData.section
+                    )
+                  : null;
+
+                return (
+                  <ClassCard
+                    key={classData.id}
+                    classData={classData}
+                    onAdd={
+                      multiSelectMode
+                        ? () => handleClassSelect(classData)
+                        : handleAddClass
+                    }
+                    isAdded={isAdded}
+                    isExactMatch={isExactMatch}
+                    enrolledCourse={addedCourse}
+                    isAdding={isAdding}
+                    hasConflict={
+                      conflicts.hasConflict &&
+                      conflicts.type !== "exact_duplicate"
+                    }
+                    conflictMessage={
+                      conflicts.hasConflict
+                        ? formatConflictMessage(conflicts)
+                        : null
+                    }
+                    searchTerm={searchInput}
+                    multiSelectMode={multiSelectMode}
+                    isSelected={isSelected}
+                    selectedDifferentSection={selectedDifferentSection}
+                    isExpanded={expandedCardId === classData.id}
+                    onToggleExpand={() => handleCardExpand(classData.id)}
+                  />
+                );
+              })}
             </div>
-          )}
 
-          {!loading && !error && filteredClasses.length > 0 && (
-            <div className="p-3 sm:p-4 md:p-6">
-              {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
-                {filteredClasses.map((classData) => {
-                  const isAdded = addedClassIds.has(classData.courseCode)
-                  const isAdding = addingClassId === classData.id
-                  const conflicts = getClassConflicts(classData)
-
-                  // Check if this is the exact course added (same section)
-                  const addedCourse = courses.find(c => (c.courseCode || c.code) === classData.courseCode)
-                  const isExactMatch = addedCourse && addedCourse.section === classData.section
-
-                  const isSelected = selectedClasses.some(c => c.id === classData.id)
-
-                  // Check if a different section of the same course is selected
-                  const selectedDifferentSection = multiSelectMode
-                    ? selectedClasses.find(c => c.courseCode === classData.courseCode && c.section !== classData.section)
-                    : null
-
-                  return (
-                    <ClassCard
-                      key={classData.id}
-                      classData={classData}
-                      onAdd={multiSelectMode ? () => handleClassSelect(classData) : handleAddClass}
-                      isAdded={isAdded}
-                      isExactMatch={isExactMatch}
-                      enrolledCourse={addedCourse}
-                      isAdding={isAdding}
-                      hasConflict={conflicts.hasConflict && conflicts.type !== 'exact_duplicate'}
-                      conflictMessage={conflicts.hasConflict ? formatConflictMessage(conflicts) : null}
-                      searchTerm={searchTerm}
-                      multiSelectMode={multiSelectMode}
-                      isSelected={isSelected}
-                      selectedDifferentSection={selectedDifferentSection}
-                    />
-                  )
-                })}
+            {/* Load More Button */}
+            {filteredClasses.length > displayLimit && (
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={() => {
+                    setDisplayLimit((prev) => prev + 50);
+                    vibrate(10);
+                  }}
+                  className="flex items-center gap-2 px-6 py-3 bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border rounded-xl text-content-primary font-medium transition-all hover:scale-105 active:scale-95"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Load More ({filteredClasses.length - displayLimit} remaining)
+                </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        )}
       </div>
     </>
-  )
+  );
 
   return (
     <>
       <PullToRefresh
         onRefresh={handleRefresh}
-        pullingContent={<div className="text-center py-4 text-content-secondary text-sm">Pull to refresh...</div>}
-        refreshingContent={<div className="text-center py-4 text-accent text-sm font-semibold">Refreshing timetable...</div>}
+        pullingContent={
+          <div className="text-center py-4 text-content-secondary text-sm">
+            Pull to refresh...
+          </div>
+        }
+        refreshingContent={
+          <div className="text-center py-4 text-accent text-sm font-semibold">
+            Refreshing timetable...
+          </div>
+        }
         isPullable={true}
         resistance={2}
       >
@@ -816,5 +1037,5 @@ export default function ExploreClassesView() {
         />
       )}
     </>
-  )
+  );
 }

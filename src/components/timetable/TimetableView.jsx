@@ -542,7 +542,7 @@ export default function TimetableView() {
                             {/* Multi-slot indicator for LAB classes */}
                             {classInfo.isMultiSlot && (
                               <span className="px-1.5 sm:px-2 py-0.5 bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] sm:text-[10px] font-medium rounded" title={`${classInfo.slotCount} consecutive slots`}>
-                                LAB ({classInfo.slotCount}h)
+                                LAB
                               </span>
                             )}
                           </div>

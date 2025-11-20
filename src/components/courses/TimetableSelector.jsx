@@ -606,9 +606,13 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   const handleFinalSubmit = () => {
     if (!selectedCourses || selectedCourses.length === 0) return
 
+    // Immediate haptic feedback on button press
+    vibrate(15)
+
     // Validate required fields - Start Date is mandatory
     if (!startDate.year || !startDate.month || !startDate.day) {
       setError('Please select a start date')
+      vibrate([20, 50, 20]) // Error vibration
       return
     }
 
@@ -616,16 +620,19 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     if (selectedCourses.length === 1) {
       if (allowedAbsences !== null && (isNaN(allowedAbsences) || allowedAbsences < 0)) {
         setError('Maximum allowed absences must be a positive number')
+        vibrate([20, 50, 20]) // Error vibration
         return
       }
 
       if (initialAbsences < 0 || isNaN(initialAbsences)) {
         setError('Absences so far must be a positive number')
+        vibrate([20, 50, 20]) // Error vibration
         return
       }
     }
 
     setError(null)
+    setLoading(true) // Show loading state immediately
 
     // Build date strings
     const startDateISO = `${startDate.year}-${String(startDate.month).padStart(2, '0')}-${String(startDate.day).padStart(2, '0')}`
@@ -636,6 +643,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Validate end date is after start date
     if (endDateISO && endDateISO <= startDateISO) {
       setError('End date must be after start date')
+      setLoading(false)
+      vibrate([20, 50, 20]) // Error vibration
       return
     }
 
@@ -663,6 +672,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       if (process.env.NODE_ENV === 'development') {
         console.error('No valid courses to add')
       }
+      setLoading(false)
+      vibrate([20, 50, 20]) // Error vibration
       return
     }
 
@@ -692,6 +703,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           setToast({ message, type: 'success' })
           onCoursesSelected(appCourses)
           vibrate([10, 50, 10])
+          setLoading(false)
         } else if (result.duplicates.length > 0 && result.added.length === 0) {
           const duplicateNames = result.duplicates.map(d => {
             const courseId = d.courseCode || d.name
@@ -704,8 +716,10 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             message: `All selected courses already exist: ${duplicateNames}`,
             type: 'warning'
           })
+          setLoading(false)
         } else {
           setError('Failed to add courses. Please check the console for details.')
+          setLoading(false)
         }
       } else {
         const result = addCourse(appCourses[0])
@@ -714,10 +728,13 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           setToast({ message: `Successfully added ${result.course.name}!`, type: 'success' })
           onCoursesSelected(appCourses)
           vibrate([10, 50, 10])
+          setLoading(false)
         } else if (result.error === 'DUPLICATE') {
           setToast({ message: result.message, type: 'warning' })
+          setLoading(false)
         } else {
           setError(result.message || 'Failed to add course')
+          setLoading(false)
         }
       }
     } catch (error) {
@@ -725,6 +742,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         console.error('Error adding courses:', error)
       }
       setError('An error occurred while adding courses. Please try again.')
+      setLoading(false)
     }
   }
 
@@ -778,7 +796,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           // Include per-session metadata
           // Note: instructor is at course level, not session level, so use course.instructor
           instructor: s.instructor || course.instructor || 'TBA',
-          room: s.room || 'TBA'
+          room: s.room || 'TBA',
+          slotCount: s.slotCount || 1  // Include slot count for LAB badge detection
         }
         if (process.env.NODE_ENV === 'development') {
           console.log('Creating schedule slot:', {
@@ -1291,7 +1310,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
                 return (
                   <div
-                    key={course.courseCode}
+                    key={`${course.courseCode}-${course.section}`}
                     onClick={() => {
                       // Allow clicking if not already added, OR if selected in different section
                       if (!isAlreadyAdded) {
@@ -1518,12 +1537,21 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 </button>
                 <button
                   onClick={handleFinalSubmit}
-                  disabled={selectedCourses.length === 0}
+                  disabled={selectedCourses.length === 0 || loading}
                   className="flex-1 px-3 py-2.5 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-xs sm:text-xs md:text-sm rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-1 sm:gap-2"
                 >
-                  <Check className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
-                  <span className="hidden sm:inline">Add {selectedCourses.length} Course{selectedCourses.length > 1 ? 's' : ''}</span>
-                  <span className="sm:hidden">Add {selectedCourses.length}</span>
+                  {loading ? (
+                    <>
+                      <div className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      <span>Adding...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                      <span className="hidden sm:inline">Add {selectedCourses.length} Course{selectedCourses.length > 1 ? 's' : ''}</span>
+                      <span className="sm:hidden">Add {selectedCourses.length}</span>
+                    </>
+                  )}
                 </button>
               </>
             )}
