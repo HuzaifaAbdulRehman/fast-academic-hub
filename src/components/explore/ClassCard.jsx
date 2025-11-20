@@ -114,7 +114,7 @@ const ClassCard = memo(function ClassCard({
       <div
         className={`
           relative group
-          bg-dark-surface rounded-xl overflow-hidden
+          bg-dark-surface rounded-xl
           border-l-[3px] border-r border-t border-b
           min-h-[180px]
           transition-all duration-300 ease-out
@@ -130,24 +130,13 @@ const ClassCard = memo(function ClassCard({
         style={{ borderLeftColor: dayColor }}
       >
       {/* Compact View - Always Visible */}
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-3">
-          {/* Course Info */}
-          <div
-            onClick={handleToggle}
-            className="flex-1 min-w-0 text-left cursor-pointer focus:outline-none group"
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                handleToggle()
-              }
-            }}
-          >
-            {/* Course Code + Section - Primary */}
+      <div className="p-4 flex flex-col rounded-t-xl">
+        {/* Fixed header with button */}
+        <div className="flex items-start justify-between gap-3 mb-2">
+          {/* Course Code + Section - Primary */}
+          <div className="flex-1 min-w-0">
             <div className="flex items-baseline gap-2 mb-1 flex-wrap">
-              <h3 className="text-lg font-bold text-content-primary group-hover:text-accent transition-colors">
+              <h3 className="text-lg font-bold text-content-primary hover:text-accent transition-colors">
                 <HighlightedText text={classData.courseCode || 'N/A'} searchTerm={searchTerm} />
               </h3>
               <span className="text-sm font-semibold text-accent px-2 py-0.5 rounded-full bg-accent/10">
@@ -167,114 +156,18 @@ const ClassCard = memo(function ClassCard({
                       : `Cannot enroll - Already enrolled in Section ${enrolledCourse?.section}${enrolledCourse?.instructor ? `\nInstructor: ${enrolledCourse.instructor}` : ''}\n\nTo change sections, go to Courses tab and click the Change Section button.`
                   }
                 >
-                  {isExactMatch ? 'Added' : `Enrolled in ${enrolledCourse?.section}`}
+                  {isExactMatch ? 'Added' : (
+                    <span className="inline-flex items-baseline gap-1 flex-wrap">
+                      <span className="whitespace-nowrap">Already enrolled in {enrolledCourse?.section}</span>
+                      {enrolledCourse?.instructor && (
+                        <>
+                          <span className="text-amber-500/50 dark:text-amber-400/50">·</span>
+                          <span className="truncate max-w-[100px] sm:max-w-[120px]">{enrolledCourse.instructor}</span>
+                        </>
+                      )}
+                    </span>
+                  )}
                 </span>
-              )}
-            </div>
-
-            {/* Course Name - Secondary with expand-on-tap */}
-            <div
-              onClick={(e) => {
-                e.stopPropagation()
-                vibrate(5)
-                setShowFullCourseName(!showFullCourseName)
-              }}
-              className={`text-sm sm:text-base text-content-secondary mb-2 group-hover:text-content-primary transition-colors text-left w-full break-words cursor-pointer ${
-                showFullCourseName ? '' : 'line-clamp-2'
-              }`}
-              title="Tap to expand full name"
-              role="button"
-              tabIndex={0}
-              aria-expanded={showFullCourseName}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  vibrate(5)
-                  setShowFullCourseName(!showFullCourseName)
-                }
-              }}
-            >
-              <HighlightedText text={(classData.courseName || 'Unnamed Course').substring(0, 150)} searchTerm={searchTerm} />
-            </div>
-
-            {/* Quick Info Row - Tertiary */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-content-tertiary">
-              {/* Instructor with expand-on-tap */}
-              {classData.instructor && (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    vibrate(5)
-                    setShowFullInstructor(!showFullInstructor)
-                  }}
-                  className="flex items-center gap-1 hover:text-content-secondary transition-colors cursor-pointer"
-                  title="Tap to expand full name"
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      vibrate(5)
-                      setShowFullInstructor(!showFullInstructor)
-                    }
-                  }}
-                >
-                  <User className="w-3 h-3 flex-shrink-0" />
-                  <span className={showFullInstructor ? '' : 'truncate max-w-[150px]'}>
-                    <HighlightedText text={classData.instructor} searchTerm={searchTerm} />
-                  </span>
-                </div>
-              )}
-
-              {/* Days */}
-              {days.length > 0 && (
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 flex-shrink-0" />
-                  <span>{days.map(d => d.substring(0, 3)).join(', ')}</span>
-                </div>
-              )}
-
-              {/* Credit Hours */}
-              {classData.creditHours && (
-                <div className="flex items-center gap-1">
-                  <BookOpen className="w-3 h-3 flex-shrink-0" />
-                  <span>{classData.creditHours} CH</span>
-                </div>
-              )}
-            </div>
-
-            {/* Conflict Warning */}
-            {hasConflict && !isAdded && (
-              <div className="flex items-center gap-1.5 mt-2 px-2 py-1 rounded-md bg-attendance-warning/10 border border-attendance-warning/30">
-                <AlertTriangle className="w-3 h-3 flex-shrink-0 text-attendance-warning" />
-                <span className="text-xs text-attendance-warning font-medium">Scheduling Conflict</span>
-              </div>
-            )}
-
-            {/* Section Conflict Warning (Multiselect) */}
-            {multiSelectMode && selectedDifferentSection && !isSelected && (
-              <div className="flex items-center gap-1.5 mt-2 px-2 py-1 rounded-md bg-orange-500/10 border border-orange-400/30">
-                <AlertTriangle className="w-3 h-3 flex-shrink-0 text-orange-400" />
-                <span className="text-xs text-orange-400 font-medium">
-                  Section {selectedDifferentSection.section} selected
-                </span>
-              </div>
-            )}
-
-            {/* Expand Indicator - Larger touch target for mobile */}
-            <div className="flex items-center gap-1 mt-2 -ml-1 -mb-1 px-1 py-1 text-xs text-content-tertiary group-hover:text-accent transition-colors">
-              {isExpanded ? (
-                <>
-                  <ChevronUp className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
-                  <span>Less details</span>
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
-                  <span>View schedule</span>
-                </>
               )}
             </div>
           </div>
@@ -362,12 +255,132 @@ const ClassCard = memo(function ClassCard({
             </div>
           </button>
         </div>
+
+        {/* Flexible content area */}
+        <div
+          onClick={handleToggle}
+          className="flex-1 flex flex-col text-left cursor-pointer focus:outline-none group"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              handleToggle()
+            }
+          }}
+        >
+          {/* Course Name - Secondary with expand-on-tap */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation()
+              vibrate(5)
+              setShowFullCourseName(!showFullCourseName)
+            }}
+            className={`text-sm sm:text-base text-content-secondary mb-2 group-hover:text-content-primary transition-colors text-left w-full break-words cursor-pointer ${
+              showFullCourseName ? '' : 'line-clamp-2'
+            }`}
+            title="Tap to expand full name"
+            role="button"
+            tabIndex={0}
+            aria-expanded={showFullCourseName}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                e.stopPropagation()
+                vibrate(5)
+                setShowFullCourseName(!showFullCourseName)
+              }
+            }}
+          >
+            <HighlightedText text={(classData.courseName || 'Unnamed Course').substring(0, 150)} searchTerm={searchTerm} />
+          </div>
+
+          {/* Quick Info Row - Tertiary */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-content-tertiary">
+            {/* Instructor with expand-on-tap */}
+            {classData.instructor && (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  vibrate(5)
+                  setShowFullInstructor(!showFullInstructor)
+                }}
+                className="flex items-center gap-1 hover:text-content-secondary transition-colors cursor-pointer"
+                title="Tap to expand full name"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    vibrate(5)
+                    setShowFullInstructor(!showFullInstructor)
+                  }
+                }}
+              >
+                <User className="w-3 h-3 flex-shrink-0" />
+                <span className={showFullInstructor ? '' : 'truncate max-w-[150px]'}>
+                  <HighlightedText text={classData.instructor} searchTerm={searchTerm} />
+                </span>
+              </div>
+            )}
+
+            {/* Days */}
+            {days.length > 0 && (
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3 flex-shrink-0" />
+                <span>{days.map(d => d.substring(0, 3)).join(', ')}</span>
+              </div>
+            )}
+
+            {/* Credit Hours */}
+            {classData.creditHours && (
+              <div className="flex items-center gap-1">
+                <BookOpen className="w-3 h-3 flex-shrink-0" />
+                <span>{classData.creditHours} CH</span>
+              </div>
+            )}
+          </div>
+
+          {/* Conflict Warning */}
+          {hasConflict && !isAdded && (
+            <div className="flex items-center gap-1.5 mt-2 px-2 py-1 rounded-md bg-attendance-warning/10 border border-attendance-warning/30">
+              <AlertTriangle className="w-3 h-3 flex-shrink-0 text-attendance-warning" />
+              <span className="text-xs text-attendance-warning font-medium">Scheduling Conflict</span>
+            </div>
+          )}
+
+          {/* Section Conflict Warning (Multiselect) */}
+          {multiSelectMode && selectedDifferentSection && !isSelected && (
+            <div className="flex items-center gap-1.5 mt-2 px-2 py-1 rounded-md bg-orange-500/10 border border-orange-400/30">
+              <AlertTriangle className="w-3 h-3 flex-shrink-0 text-orange-400" />
+              <span className="text-xs text-orange-400 font-medium">
+                Section {selectedDifferentSection.section} selected
+              </span>
+            </div>
+          )}
+
+          {/* Expand Indicator - Pushed to bottom */}
+          <div className="flex items-center gap-1 mt-auto pt-2 -ml-1 -mb-1 px-1 py-1 text-xs text-content-tertiary group-hover:text-accent transition-colors">
+            {isExpanded ? (
+              <>
+                <ChevronUp className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                <span>Hide schedule</span>
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                <span>View schedule</span>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
 
       {/* Inline Expansion - Mobile Only (< 640px) */}
       {isExpanded && (
-        <div className="sm:hidden border-t border-dark-border/50 bg-dark-bg/40 animate-slideDown overflow-hidden">
+        <div className="sm:hidden border-t-2 border-accent bg-dark-bg/80 rounded-b-xl">
           <div className="px-3 py-3 space-y-3">
             {/* Schedule */}
             {days.length > 0 ? (
@@ -391,14 +404,14 @@ const ClassCard = memo(function ClassCard({
                             style={{ backgroundColor: DAY_COLORS[day] }}
                           />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-2 mb-1">
+                            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mb-1">
                               <span className="font-semibold text-content-primary text-sm">{day}</span>
-                              <span className="text-xs text-content-tertiary font-mono">{formattedTime}</span>
+                              <span className="text-xs text-content-tertiary font-mono whitespace-nowrap">{formattedTime}</span>
                             </div>
                             {session.room && (
                               <div className="flex items-center gap-1 text-xs text-content-secondary">
                                 <MapPin className="w-3 h-3 flex-shrink-0" />
-                                <span>{session.room}</span>
+                                <span className="truncate">{session.room}</span>
                               </div>
                             )}
                           </div>
@@ -547,14 +560,14 @@ const ClassCard = memo(function ClassCard({
 
                                 {/* Content */}
                                 <div className="flex-1 min-w-0 pl-3">
-                                  <div className="flex items-baseline justify-between gap-3 mb-2">
+                                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
                                     <span className="text-lg font-bold text-content-primary">{day}</span>
                                     <span className="text-sm font-semibold text-content-secondary tabular-nums whitespace-nowrap">{formattedTime}</span>
                                   </div>
                                   {session.room && (
                                     <div className="flex items-center gap-2 text-sm text-content-tertiary">
                                       <MapPin className="w-4 h-4 flex-shrink-0" />
-                                      <span>{session.room}</span>
+                                      <span className="truncate">{session.room}</span>
                                     </div>
                                   )}
                                 </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus, RefreshCcw } from 'lucide-react'
+import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus, RefreshCcw, ChevronDown, ChevronUp } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
 import { vibrate, isMobile } from '../../utils/uiHelpers'
 import { useApp } from '../../context/AppContext'
@@ -161,6 +161,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   const [toast, setToast] = useState(null) // Toast notification state
   const [confirmDialog, setConfirmDialog] = useState(null) // Confirmation dialog state
   const [displayLimit, setDisplayLimit] = useState(50) // Pagination limit
+  const [expandedCards, setExpandedCards] = useState(new Set()) // Track which cards are expanded
 
   // Rotating placeholder for search input
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -1324,6 +1325,10 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 const isSelected = !!selectedCourseMatch
                 const isSelectedInSameSection = isSelected && selectedCourseMatch?.section === course.section
 
+                // Check if this card is expanded
+                const cardKey = `${course.courseCode}-${course.section}`
+                const isExpanded = expandedCards.has(cardKey)
+
                 // Check if already added to app (by course code only, regardless of section)
                 const existingCourseMatch = courses.find(existingCourse => {
                   if (course.courseCode && existingCourse.courseCode) {
@@ -1336,9 +1341,24 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 const existingSection = existingCourseMatch?.section
                 const isSameSection = existingSection === course.section
 
+                // Toggle expand/collapse for schedule
+                const handleToggleExpand = (e) => {
+                  e.stopPropagation()
+                  vibrate(10)
+                  setExpandedCards(prev => {
+                    const newSet = new Set(prev)
+                    if (newSet.has(cardKey)) {
+                      newSet.delete(cardKey)
+                    } else {
+                      newSet.add(cardKey)
+                    }
+                    return newSet
+                  })
+                }
+
                 return (
                   <div
-                    key={`${course.courseCode}-${course.section}`}
+                    key={cardKey}
                     onClick={() => {
                       // Completely prevent interaction with already enrolled courses
                       if (isAlreadyAdded) {
@@ -1355,7 +1375,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                       // Only allow selection of non-enrolled courses
                       toggleCourse(course)
                     }}
-                    className={`relative bg-dark-surface rounded-xl border-l-[3px] border-r border-t border-b p-4 sm:min-h-[200px] transition-all duration-300 ease-out ${
+                    className={`relative bg-dark-surface rounded-xl border-l-[3px] border-r border-t border-b p-4 transition-all duration-300 ease-out flex flex-col ${
                       isAlreadyAdded
                         ? 'border-l-yellow-500/60 border-yellow-600/40 dark:border-yellow-500/30 bg-yellow-500/8 dark:bg-yellow-500/5 cursor-not-allowed opacity-80 pointer-events-auto'
                         : isSelected
@@ -1439,11 +1459,17 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                           <AlertCircle className="w-3 h-3 text-amber-500 flex-shrink-0" />
                           <span className="text-xs text-amber-600 font-medium">
                             Already enrolled in {existingSection}
+                            {existingCourseMatch?.instructor && (
+                              <>
+                                <span className="text-amber-500/50 mx-1">·</span>
+                                <span className="truncate max-w-[120px] sm:max-w-[150px]">{existingCourseMatch.instructor}</span>
+                              </>
+                            )}
                           </span>
                         </div>
                       )}
 
-                      {/* Details Grid */}
+                      {/* Basic Info - Always Visible */}
                       <div className="space-y-1.5 mt-2">
                         <div className="flex items-center gap-1.5">
                           <User className="w-4 h-4 text-content-tertiary flex-shrink-0" />
@@ -1461,44 +1487,76 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                             </span>
                           </div>
                         )}
+                      </div>
 
-                        {/* Show schedule for each day */}
-                        {(() => {
-                          // Group sessions by day
-                          const sessionsByDay = {}
-                          course.sessions?.forEach(session => {
-                            if (!sessionsByDay[session.day]) {
-                              sessionsByDay[session.day] = []
-                            }
-                            sessionsByDay[session.day].push(session)
-                          })
+                      {/* Collapsible Schedule Section */}
+                      {isExpanded && (
+                        <div className="space-y-1.5 mt-2 pt-2 border-t border-dark-border/30">
+                          {(() => {
+                            // Group sessions by day
+                            const sessionsByDay = {}
+                            course.sessions?.forEach(session => {
+                              if (!sessionsByDay[session.day]) {
+                                sessionsByDay[session.day] = []
+                              }
+                              sessionsByDay[session.day].push(session)
+                            })
 
-                          return Object.entries(sessionsByDay).map(([day, sessions]) => {
-                            // Sort sessions by slot number for this day
-                            const sortedSessions = sessions.sort((a, b) => a.slotNumber - b.slotNumber)
+                            return Object.entries(sessionsByDay).map(([day, sessions]) => {
+                              // Sort sessions by slot number for this day
+                              const sortedSessions = sessions.sort((a, b) => a.slotNumber - b.slotNumber)
 
-                            // Get time range (start of first slot to end of last slot)
-                            const startTime = sortedSessions[0].timeSlot.split('-')[0]
-                            const endTime = sortedSessions[sortedSessions.length - 1].timeSlot.split('-')[1]
-                            const timeRange = `${formatTimeTo12Hour(startTime)} - ${formatTimeTo12Hour(endTime)}`
+                              // Get time range (start of first slot to end of last slot)
+                              const startTime = sortedSessions[0].timeSlot.split('-')[0]
+                              const endTime = sortedSessions[sortedSessions.length - 1].timeSlot.split('-')[1]
+                              const timeRange = `${formatTimeTo12Hour(startTime)} - ${formatTimeTo12Hour(endTime)}`
 
-                            // Get room (use first session's room)
-                            const room = sortedSessions[0].room
+                              // Get room (use first session's room)
+                              const room = sortedSessions[0].room
 
-                            return (
-                              <div key={day} className="flex items-start gap-1.5 text-xs">
-                                <Calendar className="w-4 h-4 text-content-tertiary flex-shrink-0 mt-0.5" />
-                                <div className="flex-1">
-                                  <span className="text-content-primary font-medium">{day.slice(0, 3)}</span>
-                                  <span className="text-content-tertiary mx-0.5 sm:mx-1">•</span>
-                                  <span className="text-content-secondary">{timeRange}</span>
-                                  <span className="text-content-tertiary mx-0.5 sm:mx-1">•</span>
-                                  <span className="text-content-secondary">{room}</span>
+                              return (
+                                <div key={day} className="flex items-start gap-1.5 text-xs">
+                                  <Calendar className="w-4 h-4 text-content-tertiary flex-shrink-0 mt-0.5" />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex flex-wrap items-baseline gap-x-1 gap-y-0.5">
+                                      <span className="text-content-primary font-medium">{day.slice(0, 3)}</span>
+                                      <span className="text-content-tertiary">•</span>
+                                      <span className="text-content-secondary whitespace-nowrap">{timeRange}</span>
+                                      <span className="text-content-tertiary">•</span>
+                                      <span className="text-content-secondary truncate">{room}</span>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            )
-                          })
-                        })()}
+                              )
+                            })
+                          })()}
+                        </div>
+                      )}
+
+                      {/* Toggle Button - Always at bottom */}
+                      <div
+                        onClick={handleToggleExpand}
+                        className="flex items-center gap-1 mt-auto pt-2 -ml-1 -mb-1 px-1 py-1 text-xs text-content-tertiary hover:text-accent transition-colors cursor-pointer"
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            handleToggleExpand(e)
+                          }
+                        }}
+                      >
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                            <span>Hide schedule</span>
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                            <span>View schedule</span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
