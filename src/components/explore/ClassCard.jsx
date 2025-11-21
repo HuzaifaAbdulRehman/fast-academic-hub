@@ -172,11 +172,11 @@ const ClassCard = memo(function ClassCard({
                 >
                   {isExactMatch ? 'Added' : (
                     <>
-                      <span className="whitespace-nowrap">In {enrolledCourse?.section}</span>
+                      <span className="whitespace-nowrap">Enrolled in {enrolledCourse?.section}</span>
                       {enrolledCourse?.instructor && (
                         <>
-                          <span className="text-amber-500/50 dark:text-amber-400/50 hidden sm:inline">·</span>
-                          <span className="truncate max-w-[60px] sm:max-w-[100px] hidden sm:inline">{enrolledCourse.instructor}</span>
+                          <span className="text-amber-500/50 dark:text-amber-400/50">·</span>
+                          <span className="truncate max-w-[80px] sm:max-w-[120px]">{enrolledCourse.instructor}</span>
                         </>
                       )}
                     </>
