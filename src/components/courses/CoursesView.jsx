@@ -48,9 +48,9 @@ export default function CoursesView({ onNavigate }) {
 
     if (!cachedTimetable || !Array.isArray(cachedTimetable)) {
       setToast({
-        message: 'Please refresh your timetable data first',
+        message: 'Please refresh your timetable data first (go to Add from Timetable)',
         type: 'info',
-        duration: 3000
+        duration: 4000
       })
       return
     }
