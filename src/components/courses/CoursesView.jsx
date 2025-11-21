@@ -541,6 +541,26 @@ export default function CoursesView({ onNavigate }) {
                         </div>
                       </div>
                     )}
+
+                    {/* Fallback: Show weekdays for manual courses */}
+                    {(!course.schedule || course.schedule.length === 0) && course.weekdays && course.weekdays.length > 0 && (
+                      <div className="sm:col-span-2">
+                        <p className="text-content-tertiary text-xs">Class Days</p>
+                        <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-1">
+                          {course.weekdays.map((dayIndex, idx) => {
+                            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                            return (
+                              <span
+                                key={idx}
+                                className="px-2 py-0.5 bg-accent/10 text-accent text-[10px] sm:text-xs font-medium rounded border border-accent/20"
+                              >
+                                {dayNames[dayIndex] || `Day ${dayIndex}`}
+                              </span>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

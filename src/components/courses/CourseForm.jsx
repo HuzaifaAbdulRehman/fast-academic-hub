@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useApp } from '../../context/AppContext'
-import { Calendar, BookOpen, Hash, ChevronDown, ChevronUp, User, MapPin, Tag } from 'lucide-react'
+import { Calendar, BookOpen, Hash, ChevronDown, ChevronUp, User, MapPin, Tag, Clock } from 'lucide-react'
 import { getTodayISO } from '../../utils/dateHelpers'
 import { WEEKDAY_FULL_NAMES } from '../../utils/constants'
 import Toast from '../shared/Toast'
@@ -44,6 +44,10 @@ export default function CourseForm({ onClose, onSave, existingCourse = null, isN
     courseCode: existingCourse?.courseCode,
     section: existingCourse?.section,
     timeSlot: existingCourse?.timeSlot,
+    // Per-session rooms (array of room strings, one per credit hour/session)
+    sessionRooms: existingCourse?.sessionRooms || [],
+    // Per-session time slots (array of time strings like "09:00-10:00")
+    sessionTimes: existingCourse?.sessionTimes || [],
   })
 
   const [userModifiedAbsences, setUserModifiedAbsences] = useState(!!existingCourse?.allowedAbsences)
@@ -112,7 +116,15 @@ export default function CourseForm({ onClose, onSave, existingCourse = null, isN
 
   const handleCreditHoursChange = (hours) => {
     vibrate([10]) // Quick tap feedback
-    setFormData(prev => ({ ...prev, creditHours: hours, weekdays: [] }))
+    setFormData(prev => ({
+      ...prev,
+      creditHours: hours,
+      weekdays: [],
+      // Resize sessionRooms array to match new credit hours
+      sessionRooms: Array(hours).fill('').map((_, i) => prev.sessionRooms?.[i] || ''),
+      // Resize sessionTimes array to match new credit hours
+      sessionTimes: Array(hours).fill('').map((_, i) => prev.sessionTimes?.[i] || '')
+    }))
     setSessionSelections(Array(hours).fill(''))
     // Reset user modification flag so it auto-calculates with new credit hours
     setUserModifiedAbsences(false)
@@ -190,17 +202,13 @@ export default function CourseForm({ onClose, onSave, existingCourse = null, isN
 
       if (result.success) {
         vibrate([10, 50, 10]) // Success pattern
-        setToast({ message: `Successfully added ${result.course.name}!`, type: 'success' })
-
-        // Close after showing toast briefly
-        setTimeout(() => {
-          if (typeof onSave === 'function') {
-            onSave()
-          }
-          if (typeof onClose === 'function' && onClose !== onSave) {
-            onClose()
-          }
-        }, 500)
+        // Close immediately - the course appearing in the list is sufficient feedback
+        if (typeof onSave === 'function') {
+          onSave()
+        }
+        if (typeof onClose === 'function' && onClose !== onSave) {
+          onClose()
+        }
       } else if (result.error === 'DUPLICATE') {
         setToast({ message: result.message, type: 'warning' })
       } else {
@@ -683,19 +691,62 @@ export default function CourseForm({ onClose, onSave, existingCourse = null, isN
                   />
                 </div>
 
-                {/* Room / Location */}
+                {/* Schedule per Session (Time + Room) */}
                 <div>
                   <label className="block text-sm font-medium text-content-primary mb-2 flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4" />
-                    Room / Location
+                    <Clock className="w-4 h-4" />
+                    Schedule per Session
                   </label>
-                  <input
-                    type="text"
-                    value={formData.room || ''}
-                    onChange={(e) => setFormData({ ...formData, room: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-dark-bg/50 border border-dark-border/30 rounded-xl text-content-primary placeholder-content-disabled focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
-                    placeholder="e.g., Room 301, Block A"
-                  />
+                  <div className="space-y-3">
+                    {Array.from({ length: formData.creditHours }).map((_, index) => {
+                      const selectedDay = sessionSelections[index]
+                      const dayName = selectedDay !== '' && selectedDay !== undefined
+                        ? WEEKDAY_FULL_NAMES[selectedDay]
+                        : `Session ${index + 1}`
+                      return (
+                        <div key={index} className="p-3 bg-dark-bg/30 rounded-xl border border-dark-border/20">
+                          <span className="text-sm font-medium text-content-primary mb-2 block">
+                            {dayName}
+                          </span>
+                          <div className="grid grid-cols-2 gap-2">
+                            {/* Time Input */}
+                            <div>
+                              <label className="text-xs text-content-tertiary mb-1 block">Time</label>
+                              <input
+                                type="text"
+                                value={formData.sessionTimes?.[index] || ''}
+                                onChange={(e) => {
+                                  const newTimes = [...(formData.sessionTimes || [])]
+                                  newTimes[index] = e.target.value
+                                  setFormData({ ...formData, sessionTimes: newTimes })
+                                }}
+                                className="w-full px-3 py-2 bg-dark-bg/50 border border-dark-border/30 rounded-lg text-content-primary placeholder-content-disabled focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all text-sm"
+                                placeholder="e.g., 09:00-10:00"
+                              />
+                            </div>
+                            {/* Room Input */}
+                            <div>
+                              <label className="text-xs text-content-tertiary mb-1 block">Room</label>
+                              <input
+                                type="text"
+                                value={formData.sessionRooms?.[index] || ''}
+                                onChange={(e) => {
+                                  const newRooms = [...(formData.sessionRooms || [])]
+                                  newRooms[index] = e.target.value
+                                  setFormData({ ...formData, sessionRooms: newRooms })
+                                }}
+                                className="w-full px-3 py-2 bg-dark-bg/50 border border-dark-border/30 rounded-lg text-content-primary placeholder-content-disabled focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all text-sm"
+                                placeholder={`Room ${301 + index}`}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <p className="text-xs text-content-tertiary mt-2">
+                    Set time and room for each session day
+                  </p>
                 </div>
               </div>
             )}
