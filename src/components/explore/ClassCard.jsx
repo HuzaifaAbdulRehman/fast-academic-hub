@@ -117,7 +117,7 @@ const ClassCard = memo(function ClassCard({
           relative group
           bg-dark-surface rounded-xl
           border-l-[3px] border-r border-t border-b
-          min-h-[140px] sm:min-h-[160px]
+          min-h-[150px] sm:min-h-[165px] lg:min-h-[175px]
           transition-all duration-300 ease-out
           ${isAdded
             ? 'border-r-attendance-safe/30 border-t-attendance-safe/30 border-b-attendance-safe/30 bg-attendance-safe/5 shadow-[0_0_15px_rgba(16,185,129,0.15)]'
@@ -131,58 +131,56 @@ const ClassCard = memo(function ClassCard({
         style={{ borderLeftColor: dayColor }}
       >
       {/* Compact View - Always Visible */}
-      <div className="p-3 sm:p-4 flex flex-col rounded-t-xl">
+      <div className="p-3.5 sm:p-4 lg:p-5 flex flex-col rounded-t-xl">
         {/* Fixed header with button */}
         <div className="flex items-start justify-between gap-2 sm:gap-3">
           {/* Course Info - Primary */}
           <div className="flex-1 min-w-0">
             {/* Row 1: Course Code + Section Badge */}
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-              <h3 className="text-sm sm:text-base lg:text-lg font-bold text-content-primary hover:text-accent transition-colors">
+              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-content-primary hover:text-accent transition-colors">
                 <HighlightedText text={classData.courseCode || 'N/A'} searchTerm={searchTerm} />
               </h3>
               {/* Show auto-generated short name for long course codes (>12 chars) */}
               {classData.courseCode && classData.courseCode.length > 12 && (
-                <span className="text-[9px] sm:text-[10px] font-medium text-content-tertiary" title="Auto-generated short name for timetable">
+                <span className="text-[10px] sm:text-xs font-medium text-content-tertiary" title="Auto-generated short name for timetable">
                   ({generateShortName(classData.courseName, classData.courseCode, 10)})
                 </span>
               )}
-              <span className="text-[10px] sm:text-xs font-semibold text-accent px-1.5 sm:px-2 py-0.5 rounded-full bg-accent/10">
+              <span className="text-xs sm:text-sm font-semibold text-accent px-1.5 sm:px-2 py-0.5 rounded-full bg-accent/10">
                 <HighlightedText text={classData.section || 'N/A'} searchTerm={searchTerm} />
               </span>
             </div>
             {/* Row 2: Course Name - Always on separate line */}
-            <p className="text-xs sm:text-sm text-content-secondary mt-1 leading-snug line-clamp-2 w-full">
+            <p className="text-sm sm:text-base text-content-secondary mt-1 leading-snug line-clamp-2 w-full">
               <HighlightedText text={classData.courseName || 'Unnamed Course'} searchTerm={searchTerm} />
             </p>
             {/* Row 2: Enrollment status indicator (separate row for cleaner layout) */}
             {isAdded && (
-              <div className="mt-1 sm:mt-1.5">
-                <span
-                  className={`inline-flex items-center gap-1 text-[9px] sm:text-[10px] md:text-xs font-medium px-1.5 sm:px-2 py-0.5 rounded cursor-help transition-all ${
-                    isExactMatch
-                      ? 'text-green-700 dark:text-green-400 bg-green-500/10 hover:bg-green-500/20'
-                      : 'text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20'
-                  }`}
-                  title={
-                    isExactMatch
-                      ? `Already enrolled in ${classData.courseCode} Section ${enrolledCourse?.section || classData.section}${enrolledCourse?.instructor ? `\nInstructor: ${enrolledCourse.instructor}` : ''}`
-                      : `Cannot enroll - Already enrolled in Section ${enrolledCourse?.section}${enrolledCourse?.instructor ? `\nInstructor: ${enrolledCourse.instructor}` : ''}\n\nTo change sections, go to Courses tab and click the Change Section button.`
-                  }
-                >
-                  {isExactMatch ? 'Added' : (
-                    <>
-                      <span className="whitespace-nowrap">Enrolled in {enrolledCourse?.section}</span>
-                      {enrolledCourse?.instructor && (
-                        <>
-                          <span className="text-amber-500/50 dark:text-amber-400/50">·</span>
-                          <span className="truncate max-w-[80px] sm:max-w-[120px]">{enrolledCourse.instructor}</span>
-                        </>
-                      )}
-                    </>
-                  )}
-                </span>
-              </div>
+              <p
+                className={`mt-1.5 sm:mt-2 text-[11px] sm:text-xs md:text-sm font-medium ${
+                  isExactMatch
+                    ? 'text-green-700 dark:text-green-400'
+                    : 'text-amber-700 dark:text-amber-400'
+                }`}
+                title={
+                  isExactMatch
+                    ? `Already enrolled in ${classData.courseCode} Section ${enrolledCourse?.section || classData.section}${enrolledCourse?.instructor ? `\nInstructor: ${enrolledCourse.instructor}` : ''}`
+                    : `To change sections, go to Courses tab and click the Change Section button.`
+                }
+              >
+                {isExactMatch ? 'Added' : (
+                  <>
+                    Enrolled in {enrolledCourse?.section}
+                    {enrolledCourse?.instructor && (
+                      <>
+                        <span className="text-amber-500/50 dark:text-amber-400/50"> · </span>
+                        {enrolledCourse.instructor}
+                      </>
+                    )}
+                  </>
+                )}
+              </p>
             )}
           </div>
 
@@ -284,7 +282,7 @@ const ClassCard = memo(function ClassCard({
           }}
         >
           {/* Quick Info Row - Tertiary */}
-          <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-0.5 sm:gap-y-1 text-[10px] sm:text-xs md:text-sm text-content-tertiary">
+          <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1 sm:gap-y-1.5 text-xs sm:text-sm text-content-tertiary mt-2 sm:mt-2.5">
             {/* Instructor - show full name naturally, tap to expand if truncated */}
             {classData.instructor && (
               <div
@@ -306,7 +304,7 @@ const ClassCard = memo(function ClassCard({
                   }
                 }}
               >
-                <User className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
+                <User className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                 <span className={showFullInstructor ? 'break-words' : ''}>
                   <HighlightedText text={classData.instructor} searchTerm={searchTerm} />
                 </span>
@@ -315,16 +313,16 @@ const ClassCard = memo(function ClassCard({
 
             {/* Days */}
             {days.length > 0 && (
-              <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
-                <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
+              <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                 <span>{days.map(d => d.substring(0, 3)).join(', ')}</span>
               </div>
             )}
 
             {/* Credit Hours */}
             {classData.creditHours && (
-              <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
-                <BookOpen className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
+              <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                <BookOpen className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                 <span>{classData.creditHours} CH</span>
               </div>
             )}
@@ -332,32 +330,32 @@ const ClassCard = memo(function ClassCard({
 
           {/* Conflict Warning */}
           {hasConflict && !isAdded && (
-            <div className="flex items-center gap-1 sm:gap-1.5 mt-1.5 sm:mt-2 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-attendance-warning/10 border border-attendance-warning/30">
-              <AlertTriangle className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0 text-attendance-warning" />
-              <span className="text-[10px] sm:text-xs text-attendance-warning font-medium">Conflict</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 mt-2 sm:mt-2.5 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md bg-attendance-warning/10 border border-attendance-warning/30">
+              <AlertTriangle className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-attendance-warning" />
+              <span className="text-xs sm:text-sm text-attendance-warning font-medium">Conflict</span>
             </div>
           )}
 
           {/* Section Conflict Warning (Multiselect) */}
           {multiSelectMode && selectedDifferentSection && !isSelected && (
-            <div className="flex items-center gap-1 sm:gap-1.5 mt-1.5 sm:mt-2 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-orange-500/10 border border-orange-400/30">
-              <AlertTriangle className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0 text-orange-400" />
-              <span className="text-[10px] sm:text-xs text-orange-400 font-medium">
+            <div className="flex items-center gap-1.5 sm:gap-2 mt-2 sm:mt-2.5 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md bg-orange-500/10 border border-orange-400/30">
+              <AlertTriangle className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-orange-400" />
+              <span className="text-xs sm:text-sm text-orange-400 font-medium">
                 {selectedDifferentSection.section} selected
               </span>
             </div>
           )}
 
           {/* Expand Indicator - Pushed to bottom */}
-          <div className="flex items-center gap-0.5 sm:gap-1 mt-auto pt-1.5 sm:pt-2 -ml-0.5 sm:-ml-1 -mb-0.5 sm:-mb-1 px-0.5 sm:px-1 py-0.5 sm:py-1 text-[10px] sm:text-xs text-content-tertiary group-hover:text-accent transition-colors">
+          <div className="flex items-center gap-1 sm:gap-1.5 mt-auto pt-2 sm:pt-2.5 -ml-0.5 sm:-ml-1 -mb-0.5 sm:-mb-1 px-1 sm:px-1.5 py-1 sm:py-1.5 text-xs sm:text-sm text-content-tertiary group-hover:text-accent transition-colors">
             {isExpanded ? (
               <>
-                <ChevronUp className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <ChevronUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>Hide</span>
               </>
             ) : (
               <>
-                <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>View schedule</span>
               </>
             )}

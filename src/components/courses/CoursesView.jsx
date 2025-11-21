@@ -271,17 +271,6 @@ export default function CoursesView({ onNavigate }) {
         <SemesterSelector compact={true} />
       </div>
 
-      {/* Cache Reminder - Only show when data issues detected */}
-      {showCacheReminder && courses.length > 0 && (
-        <CacheReminderBanner
-          message="Some course data may be missing. Refresh to reload."
-          onRefresh={handleCacheClear}
-          dismissible={true}
-          show={showCacheReminder}
-          autoDismissAfter={10000}
-        />
-      )}
-
         {courses.length === 0 ? (
           // Welcome Screen - No Courses Yet
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-3 sm:px-4">
