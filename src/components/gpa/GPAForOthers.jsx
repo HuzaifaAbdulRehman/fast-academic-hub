@@ -329,7 +329,9 @@ export default function GPAForOthers() {
                     onChange={(e) => handleUpdateStudentName(student.id, e.target.value)}
                     placeholder={`Student ${index + 1}`}
                     maxLength="20"
-                    className="w-full bg-transparent border-none text-[10px] xs:text-xs sm:text-sm md:text-base font-semibold text-content-primary placeholder:text-content-tertiary focus:outline-none text-center truncate"
+                    className="w-full bg-dark-surface/30 hover:bg-dark-surface/50 border border-dark-border/50 hover:border-dark-border rounded px-1.5 xs:px-2 py-1 xs:py-1.5 text-[10px] xs:text-xs sm:text-sm md:text-base font-semibold text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 focus:bg-dark-surface transition-all text-center truncate"
+                    title="Click to rename student"
+                    aria-label={`Rename ${student.name || `Student ${index + 1}`}`}
                   />
                   {students.length > 1 && (
                     <button
