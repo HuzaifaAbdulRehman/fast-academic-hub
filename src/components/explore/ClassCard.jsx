@@ -1,4 +1,4 @@
-import { useState, memo, useMemo } from 'react'
+import { useState, memo, useMemo, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Plus, Check, Clock, MapPin, User, BookOpen, AlertTriangle, ChevronDown, ChevronUp, CheckCheck, CheckSquare, Square, X, Lock } from 'lucide-react'
 import { vibrate } from '../../utils/uiHelpers'
@@ -59,12 +59,86 @@ const ClassCard = memo(function ClassCard({
   isSelected = false,
   selectedDifferentSection = null,
   isExpanded = false,
-  onToggleExpand
+  onToggleExpand,
+  onLongPress
 }) {
   const [showFullCourseName, setShowFullCourseName] = useState(false)
   const [showFullInstructor, setShowFullInstructor] = useState(false)
+  const [isLongPressing, setIsLongPressing] = useState(false)
+  const longPressTimerRef = useRef(null)
+  const touchStartPosRef = useRef(null)
+
+  // Long-press detection (500ms for smartphones)
+  const LONG_PRESS_DURATION = 500
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current)
+      }
+    }
+  }, [])
+
+  const handleTouchStart = (e) => {
+    // Only handle long-press if not already in multi-select mode and not already added
+    if (multiSelectMode || isAdded || isAdding) return
+
+    // Store touch position to detect if user moved finger
+    const touch = e.touches[0]
+    touchStartPosRef.current = { x: touch.clientX, y: touch.clientY }
+
+    // Start long-press timer
+    longPressTimerRef.current = setTimeout(() => {
+      setIsLongPressing(true)
+      vibrate([10, 20, 10]) // Haptic feedback for long-press activation
+      
+      // Trigger long-press callback
+      if (onLongPress) {
+        onLongPress(classData)
+      }
+    }, LONG_PRESS_DURATION)
+  }
+
+  const handleTouchMove = (e) => {
+    // Cancel long-press if user moved finger significantly
+    if (!touchStartPosRef.current) return
+
+    const touch = e.touches[0]
+    const deltaX = Math.abs(touch.clientX - touchStartPosRef.current.x)
+    const deltaY = Math.abs(touch.clientY - touchStartPosRef.current.y)
+    const moveThreshold = 10 // pixels
+
+    if (deltaX > moveThreshold || deltaY > moveThreshold) {
+      // User moved finger, cancel long-press
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current)
+        longPressTimerRef.current = null
+      }
+      setIsLongPressing(false)
+      touchStartPosRef.current = null
+    }
+  }
+
+  const handleTouchEnd = () => {
+    // Cancel long-press timer if touch ended before duration
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current)
+      longPressTimerRef.current = null
+    }
+    
+    // Reset long-press state after a short delay for visual feedback
+    setTimeout(() => {
+      setIsLongPressing(false)
+    }, 100)
+    
+    touchStartPosRef.current = null
+  }
 
   const handleToggle = () => {
+    // Don't toggle expand if long-press was just triggered
+    if (isLongPressing) return
+    
     vibrate(10)
     if (onToggleExpand) {
       onToggleExpand()
@@ -127,8 +201,12 @@ const ClassCard = memo(function ClassCard({
           }
           ${!isAdded && !hasConflict && 'hover:shadow-lg hover:shadow-accent/10'}
           sm:hover:-translate-y-0.5 active:translate-y-0
+          ${isLongPressing ? 'scale-95 opacity-80 ring-2 ring-accent/50' : ''}
         `}
         style={{ borderLeftColor: dayColor }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
       {/* Compact View - Always Visible */}
       <div className="p-3.5 sm:p-4 lg:p-5 flex flex-col rounded-t-xl">

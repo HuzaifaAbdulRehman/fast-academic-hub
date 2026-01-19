@@ -87,10 +87,10 @@ export default function ExploreClassesView() {
   // Search placeholder rotation
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const placeholders = [
-    "Search by course (DAA, Algo)...",
-    "Search by teacher (Sameer, Nasir)...",
-    "Search by section (BCS-5F, 5F)...",
-    "Search by day (Monday, Friday)...",
+    "Search by course (AI, DSA, PF)...",
+    "Search by teacher (Sameer, Sandesh, Hajra)...",
+    "Search by section (BCS-6F, 6F)...",
+    "Search by day (Monday, Thursday)...",
   ];
 
   useEffect(() => {
@@ -194,7 +194,6 @@ export default function ExploreClassesView() {
       setTimetableData(allClasses);
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching timetable:", err);
       setError(err.message);
       setLoading(false);
     }
@@ -449,6 +448,22 @@ export default function ExploreClassesView() {
     vibrate(15);
     setMultiSelectMode(!multiSelectMode);
     setSelectedClasses([]);
+  };
+
+  // Handle long-press to activate multi-select mode and select card
+  const handleLongPress = (classData) => {
+    // Activate multi-select mode if not already active
+    if (!multiSelectMode) {
+      setMultiSelectMode(true);
+      setToast({
+        message: "Multi-select mode activated! Tap cards to select more.",
+        type: "success",
+        duration: 3000,
+      });
+    }
+
+    // Select the long-pressed card
+    handleClassSelect(classData);
   };
 
   // Handle class selection in multi-select mode
@@ -898,7 +913,7 @@ export default function ExploreClassesView() {
             className="text-xs text-content-tertiary"
           >
             Instant search - type course, teacher, section, or day (e.g.,
-            "sameer monday", "daa 5f", "algo")
+            "shaheer monday", "ai 6f", "tbw")
           </p>
         </div>
       </div>
@@ -1041,6 +1056,7 @@ export default function ExploreClassesView() {
                         ? () => handleClassSelect(classData)
                         : handleAddClass
                     }
+                    onLongPress={handleLongPress}
                     isAdded={isAdded}
                     isExactMatch={isExactMatch}
                     enrolledCourse={addedCourse}

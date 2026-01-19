@@ -76,4 +76,11 @@ export default defineConfig({
       }
     })
   ],
+  esbuild: {
+    // Remove console.log, console.debug, console.info in production builds
+    // Keep console.error and console.warn for production debugging
+    // Note: 'pure' marks functions as side-effect-free and removes them during minification
+    pure: process.env.NODE_ENV === 'production' ? ['console.log', 'console.debug', 'console.info'] : [],
+    drop: process.env.NODE_ENV === 'production' ? ['debugger'] : [],
+  },
 })

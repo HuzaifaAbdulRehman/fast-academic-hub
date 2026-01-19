@@ -164,13 +164,13 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   const [displayLimit, setDisplayLimit] = useState(50) // Pagination limit
   const [expandedCards, setExpandedCards] = useState(new Set()) // Track which cards are expanded
 
-  // Rotating placeholder for search input
+  // Rotating placeholder for search input (aligned with current Spring 2026 timetable)
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const placeholders = [
-    'Search by course (DAA, Algo)...',
-    'Search by teacher (Sameer, Nasir)...',
-    'Search by section (5F, BCS-5F)...',
-    'Search by day (Monday, Friday)...',
+    'Search by course (AI, DSA, PF)...',
+    'Search by teacher (Sameer, Sandesh, Hajra)...',
+    'Search by section (BCS-6F, 6F)...',
+    'Search by day (Monday, Thursday)...',
   ]
 
   useEffect(() => {
@@ -288,7 +288,6 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             return
           }
         } catch (parseError) {
-          console.warn('Invalid localStorage data, clearing:', parseError)
           localStorage.removeItem('timetable')
         }
       }
@@ -305,7 +304,6 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         throw new Error('Invalid timetable format')
       }
     } catch (err) {
-      console.error('Error fetching timetable:', err)
       // Clear corrupted localStorage
       localStorage.removeItem('timetable')
 
@@ -486,7 +484,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     let coursesToSearch = []
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('Fuzzy search across all sections for department:', department)
+      // (console logs removed for production)
     }
 
     Object.keys(timetable).forEach(sectionKey => {
@@ -501,7 +499,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Validate courses is an array
     if (!Array.isArray(coursesToSearch)) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Invalid courses data, expected array')
+        // (console logs removed for production)
       }
       setFilteredCourses([])
       return
@@ -511,7 +509,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     let validCourses = coursesToSearch.filter(course => {
       if (!course || !course.courseCode || !course.courseName) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn('Skipping invalid course entry:', course)
+          // (console logs removed for production)
         }
         return false
       }
@@ -524,24 +522,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       validCourses = validCourses.filter(course => fuzzyMatch(searchTokens, course))
 
       if (process.env.NODE_ENV === 'development') {
-        console.log('Fuzzy search applied:', {
-          query: searchQuery,
-          tokens: searchTokens,
-          resultCount: validCourses.length
-        })
+        // (console logs removed for production)
       }
     }
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('Search results:', {
-        total: validCourses.length,
-        courses: validCourses.map(c => ({
-          code: c.courseCode,
-          name: c.courseName,
-          instructor: c.instructor,
-          section: c.section
-        }))
-      })
+      // (console logs removed for production)
     }
 
     // Courses from timetable.json are already aggregated with sessions array
@@ -593,7 +579,6 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
     if (isEnrolled) {
       // Safety check - should never reach here due to onClick guard
-      console.warn('Attempted to select already enrolled course:', course.courseCode)
       return
     }
 
@@ -696,7 +681,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Only proceed if we have valid courses
     if (appCourses.length === 0) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('No valid courses to add')
+        // (console logs removed for production)
       }
       setLoading(false)
       vibrate([20, 50, 20]) // Error vibration
@@ -705,8 +690,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
     // Add courses using context - use batch add function for multiple courses
     if (process.env.NODE_ENV === 'development') {
-      console.log('Adding courses to context:', appCourses)
-      console.log(`Total courses to add: ${appCourses.length}`)
+      // (console logs removed for production)
     }
     
     try {
@@ -765,7 +749,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Error adding courses:', error)
+        // (console logs removed for production)
       }
       setError('An error occurred while adding courses. Please try again.')
       setLoading(false)
@@ -776,7 +760,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Validate course object
     if (!course || !course.courseName || !course.courseCode) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Invalid course data in convertToAppFormat:', course)
+        // (console logs removed for production)
       }
       return null
     }
@@ -797,7 +781,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Validate we have at least one valid weekday
     if (weekdays.length === 0) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('No valid weekdays found for course:', course)
+        // (console logs removed for production)
       }
       return null
     }
@@ -825,27 +809,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
           room: s.room || 'TBA',
           slotCount: s.slotCount || 1  // Include slot count for LAB badge detection
         }
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Creating schedule slot:', {
-            originalDay: s.day,
-            normalizedDay: dayName,
-            timeSlot: s.timeSlot,
-            instructor: formatted.instructor,
-            room: s.room,
-            formatted: formatted
-          })
-        }
         return formatted
       })
       .filter(s => s.day && s.startTime && s.endTime) // Ensure all fields are valid
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('Course schedule array created:', {
-        courseName: course.courseName,
-        courseCode: course.courseCode,
-        scheduleLength: schedule.length,
-        schedule: schedule
-      })
+      // (console logs removed for production)
     }
 
     // Auto-generate short name for long course codes (>8 chars)

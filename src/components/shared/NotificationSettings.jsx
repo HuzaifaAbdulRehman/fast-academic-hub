@@ -42,12 +42,16 @@ export default function NotificationSettings({ onClose }) {
     }
 
     // Show install button immediately for all platforms (not installed)
-    console.log('App not installed, showing install button')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('App not installed, showing install button')
+    }
     setCanInstall(true)
 
     // Listen for beforeinstallprompt event (Android/Chrome)
     const handleBeforeInstallPrompt = (e) => {
-      console.log('beforeinstallprompt event fired')
+      if (process.env.NODE_ENV === 'development') {
+        console.log('beforeinstallprompt event fired')
+      }
       e.preventDefault()
       setDeferredPrompt(e)
       setCanInstall(true)
@@ -116,11 +120,15 @@ export default function NotificationSettings({ onClose }) {
         const { outcome } = await deferredPrompt.userChoice
 
         if (outcome === 'accepted') {
-          console.log('User accepted the install prompt')
+          if (process.env.NODE_ENV === 'development') {
+            console.log('User accepted the install prompt')
+          }
           setCanInstall(false)
           alert('App installed successfully! Check your home screen.')
         } else {
-          console.log('User dismissed the install prompt')
+          if (process.env.NODE_ENV === 'development') {
+            console.log('User dismissed the install prompt')
+          }
         }
 
         setDeferredPrompt(null)

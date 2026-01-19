@@ -26,6 +26,7 @@ export default function TimetableView() {
   const [showCacheReminder, setShowCacheReminder] = useState(false)
   const [expandedFields, setExpandedFields] = useState(new Set()) // Track expanded instructor/room fields
   const [collapsedDays, setCollapsedDays] = useState(new Set()) // Track collapsed days
+  const [activeDay, setActiveDay] = useState('All') // Filter which day to show
   const dayRefs = useRef({}) // Refs for scrolling to days
 
   // Create a stable dependency for useMemo by tracking course IDs and sections
@@ -238,6 +239,14 @@ export default function TimetableView() {
     }
   }
 
+  // Handle day selection (filters list instead of scrolling whole page)
+  const handleDaySelect = (day) => {
+    vibrate([10])
+    setActiveDay(day)
+    // Expand active day by default
+    setCollapsedDays(new Set())
+  }
+
   // Scroll to a specific day
   const scrollToDay = (day) => {
     vibrate([10])
@@ -381,28 +390,51 @@ export default function TimetableView() {
             </p>
           </div>
 
-          {/* Quick Day Navigation Bar */}
+          {/* Quick Day Navigation Bar with day filter */}
           <div className="bg-dark-card border border-dark-border rounded-xl sm:rounded-2xl p-2.5 sm:p-3 md:p-4">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-              {/* Day Pills */}
+              {/* Day Pills (include All) */}
               <div className="flex items-center gap-1.5 sm:gap-2 flex-1">
+                <button
+                  onClick={() => handleDaySelect('All')}
+                  className={`
+                    flex flex-col items-center justify-center gap-0.5 sm:gap-1 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl
+                    transition-all duration-200 active:scale-95 flex-shrink-0 min-w-0
+                    ${activeDay === 'All'
+                      ? 'bg-accent text-white border-2 border-accent shadow-lg shadow-accent/30'
+                      : 'bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border text-content-primary hover:border-accent/50'
+                    }
+                  `}
+                  aria-label="Show full timetable"
+                >
+                  <span className="text-[10px] sm:text-xs md:text-sm font-bold leading-tight whitespace-nowrap">
+                    All
+                  </span>
+                  <span className="text-[9px] sm:text-[10px] font-medium leading-tight">
+                    Week
+                  </span>
+                </button>
+
                 {DAYS.map(day => {
                   const classCount = scheduleByDay[day]?.length || 0
                   const isToday = day === todayDayName
                   const isCollapsed = collapsedDays.has(day)
+                  const isActive = activeDay === day
 
                   return (
                     <button
                       key={day}
-                      onClick={() => scrollToDay(day)}
+                      onClick={() => handleDaySelect(day)}
                       className={`
                         flex flex-col items-center justify-center gap-0.5 sm:gap-1 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl
                         transition-all duration-200 active:scale-95 flex-shrink-0 min-w-0
-                        ${isToday
+                        ${isActive
                           ? 'bg-accent text-white border-2 border-accent shadow-lg shadow-accent/30'
-                          : classCount > 0
+                          : isToday
                             ? 'bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border text-content-primary hover:border-accent/50'
-                            : 'bg-dark-bg border border-dark-border/50 text-content-tertiary hover:bg-dark-surface-raised'
+                            : classCount > 0
+                              ? 'bg-dark-surface-raised hover:bg-dark-surface-hover border border-dark-border text-content-primary hover:border-accent/50'
+                              : 'bg-dark-bg border border-dark-border/50 text-content-tertiary hover:bg-dark-surface-raised'
                         }
                       `}
                       aria-label={`Jump to ${day}'s schedule (${classCount} ${classCount === 1 ? 'class' : 'classes'})`}
@@ -461,7 +493,11 @@ export default function TimetableView() {
 
         {/* Days Schedule */}
         <div className="space-y-3 sm:space-y-4">
-        {DAYS.map(day => {
+        {(
+          activeDay === 'All'
+            ? DAYS
+            : [activeDay]
+        ).map(day => {
           const dayClasses = scheduleByDay[day]
           const hasClasses = dayClasses && dayClasses.length > 0
           const isCollapsed = collapsedDays.has(day)
@@ -553,26 +589,6 @@ export default function TimetableView() {
                             )}
                           </div>
                         </div>
-                        {classInfo.timeSlot && (
-                          <div className="px-2 py-1 bg-accent/10 rounded-lg ml-2 flex-shrink-0">
-                            <p className="text-[10px] sm:text-xs font-medium text-accent whitespace-nowrap">
-                              {(() => {
-                                // Convert timeSlot from 24-hour to 12-hour format (already merged for LABs)
-                                const [start, end] = classInfo.timeSlot.split('-')
-                                if (!start || !end) return classInfo.timeSlot
-
-                                const start12 = start.includes('AM') || start.includes('PM')
-                                  ? start.trim()
-                                  : formatTimeTo12Hour(start.trim())
-                                const end12 = end.includes('AM') || end.includes('PM')
-                                  ? end.trim()
-                                  : formatTimeTo12Hour(end.trim())
-
-                                return `${start12} - ${end12}`
-                              })()}
-                            </p>
-                          </div>
-                        )}
                       </div>
 
                       {/* Class Details - Vertical stack on all screens */}

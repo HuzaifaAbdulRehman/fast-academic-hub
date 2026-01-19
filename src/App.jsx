@@ -24,7 +24,9 @@ function AppContent() {
         e.preventDefault()
         const success = clearAllCaches()
         if (success) {
-          console.log('✅ All caches cleared! Reload the page to fetch fresh data.')
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ All caches cleared! Reload the page to fetch fresh data.')
+          }
           alert('Cache cleared successfully!\n\nReload the page (Ctrl+R or F5) to fetch fresh timetable data.')
         } else {
           console.error('❌ Failed to clear caches')

@@ -8,10 +8,14 @@ import { registerSW } from 'virtual:pwa-register'
 const updateSW = registerSW({
   onNeedRefresh() {
     // Optional: Show prompt to user about app update
-    console.log('New content available, please refresh.')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('New content available, please refresh.')
+    }
   },
   onOfflineReady() {
-    console.log('App ready to work offline')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('App ready to work offline')
+    }
   },
 })
 

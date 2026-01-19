@@ -10,7 +10,7 @@ public/timetable/
 ├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - TUESDAY.csv
 ├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - WEDNESDAY.csv
 ├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - THURSDAY.csv
-└── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  -  FRIDAY.csv
+└── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - FRIDAY.csv
 ```
 
 ## 🚀 How to Update Timetable

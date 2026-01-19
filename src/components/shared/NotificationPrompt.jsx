@@ -30,7 +30,9 @@ export default function NotificationPrompt() {
       const permission = await Notification.requestPermission()
 
       if (permission === 'granted') {
-        console.log('Notification permission granted')
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Notification permission granted')
+        }
 
         // Show a test notification
         new Notification('Absence Tracker', {
