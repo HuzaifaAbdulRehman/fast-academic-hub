@@ -186,7 +186,6 @@ export function calculateTotalClasses(course) {
       return total + getSessionCountOnDate(course, date)
     }, 0)
   } catch (error) {
-    console.error('Error calculating total classes:', error, course)
     return 0
   }
 }

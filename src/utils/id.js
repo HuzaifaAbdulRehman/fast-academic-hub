@@ -15,7 +15,7 @@ export function generateId(prefix = '') {
       }
     }
   } catch (error) {
-    console.warn('Falling back to non-cryptographic id generation:', error)
+    // Fallback to non-cryptographic id generation
   }
 
   const fallback = `${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 10)}`

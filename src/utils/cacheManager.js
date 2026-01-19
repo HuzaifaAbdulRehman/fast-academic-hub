@@ -10,10 +10,8 @@
 export function clearTimetableCache() {
   try {
     localStorage.removeItem('timetable')
-    console.log('✅ Timetable cache cleared')
     return true
   } catch (error) {
-    console.error('❌ Failed to clear timetable cache:', error)
     return false
   }
 }
@@ -25,10 +23,8 @@ export function clearTimetableCache() {
 export function clearAllCaches() {
   try {
     clearTimetableCache()
-    console.log('✅ All caches cleared')
     return true
   } catch (error) {
-    console.error('❌ Failed to clear caches:', error)
     return false
   }
 }
@@ -66,7 +62,6 @@ export function isTimetableCacheStale() {
 
     return cacheAge > TWENTY_FOUR_HOURS
   } catch (error) {
-    console.error('Error checking cache staleness:', error)
     return true
   }
 }
@@ -101,7 +96,6 @@ export function getTimetableFromCache() {
 
     return null
   } catch (error) {
-    console.error('Error reading timetable from cache:', error)
     return null
   }
 }

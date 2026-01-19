@@ -59,7 +59,7 @@ export default function GPAView() {
       try {
         setSavedSemesters(JSON.parse(saved))
       } catch (error) {
-        console.error('Error loading semesters:', error)
+        // Error loading semesters
       }
     }
   }, [])
@@ -631,7 +631,7 @@ export default function GPAView() {
       try {
         setSavedSemesters(JSON.parse(saved))
       } catch (error) {
-        console.error('Error reloading semesters:', error)
+        // Error reloading semesters
       }
     }
 

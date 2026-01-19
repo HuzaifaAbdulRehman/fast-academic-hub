@@ -41,10 +41,6 @@ export default function TimetableView() {
       schedule[day] = []
     })
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log('TimetableView - Total courses:', courses.length)
-      console.log('TimetableView - Courses key:', coursesKey)
-    }
     
     courses.forEach((course, index) => {
       // Build schedule from timetable data if available, otherwise from weekdays
@@ -90,9 +86,6 @@ export default function TimetableView() {
             }
           })
 
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Course "${course.name}" - Built schedule from weekdays:`, courseSchedule)
-        }
       }
       
       if (courseSchedule.length > 0) {
@@ -116,16 +109,8 @@ export default function TimetableView() {
             })
           }
         })
-      } else {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`Course "${course.name}" has no schedule or weekdays`)
-        }
       }
     })
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Final scheduleByDay:', schedule)
-    }
 
     // Sort each day's classes by start time (chronological order)
     // Secondary sort by course name for stability
@@ -143,14 +128,7 @@ export default function TimetableView() {
         return (a.courseName || '').localeCompare(b.courseName || '')
       })
 
-      if (process.env.NODE_ENV === 'development' && schedule[day].length > 0) {
-        console.log(`${day} schedule (sorted):`, schedule[day].map(c => `${c.startTime} - ${c.courseName}`))
-      }
     })
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ Sorting applied successfully to all days')
-    }
 
     return schedule
   }, [courses, coursesKey])

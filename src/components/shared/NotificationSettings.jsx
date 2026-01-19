@@ -28,30 +28,17 @@ export default function NotificationSettings({ onClose }) {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent)
     const isIOSStandalone = window.navigator.standalone
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log('PWA Install Detection:', { isStandalone, isIOS, isIOSStandalone })
-    }
-
     // Don't show install button if already installed
     if (isStandalone || isIOSStandalone) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('App already installed, hiding button')
-      }
       setCanInstall(false)
       return
     }
 
     // Show install button immediately for all platforms (not installed)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('App not installed, showing install button')
-    }
     setCanInstall(true)
 
     // Listen for beforeinstallprompt event (Android/Chrome)
     const handleBeforeInstallPrompt = (e) => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('beforeinstallprompt event fired')
-      }
       e.preventDefault()
       setDeferredPrompt(e)
       setCanInstall(true)
@@ -120,20 +107,12 @@ export default function NotificationSettings({ onClose }) {
         const { outcome } = await deferredPrompt.userChoice
 
         if (outcome === 'accepted') {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('User accepted the install prompt')
-          }
           setCanInstall(false)
           alert('App installed successfully! Check your home screen.')
-        } else {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('User dismissed the install prompt')
-          }
         }
 
         setDeferredPrompt(null)
       } catch (error) {
-        console.error('Install prompt error:', error)
         alert('📱 To install:\n\n1. Tap the menu (⋮) in the top-right\n2. Select "Install app" or "Add to Home Screen"\n3. Confirm installation\n\nThe app will appear on your home screen!')
       }
     } else {
@@ -183,7 +162,6 @@ export default function NotificationSettings({ onClose }) {
         // 5. Force hard reload to start completely fresh
         window.location.href = window.location.href + '?reset=true&t=' + Date.now()
       } catch (error) {
-        console.error('Error during data reset:', error)
         // Fallback: at minimum clear localStorage and reload
         localStorage.clear()
         window.location.reload()

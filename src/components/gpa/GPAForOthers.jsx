@@ -24,7 +24,6 @@ export default function GPAForOthers() {
         setStudents(parsed.students || [])
         setCourses(parsed.courses || [])
       } catch (error) {
-        console.error('Error loading data:', error)
         initializeDefaults()
       }
     } else {

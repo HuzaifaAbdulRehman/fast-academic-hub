@@ -152,10 +152,9 @@ export default function ExploreClassesView() {
     setError(null);
 
     try {
-      // Add cache-busting parameter when force refreshing
-      const cacheBuster = forceRefresh ? `?t=${Date.now()}` : "";
-      const response = await fetch(`/timetable/timetable.json${cacheBuster}`, {
-        cache: forceRefresh ? "reload" : "default",
+      // Always use cache-busting to avoid stale timetable after semester updates
+      const response = await fetch(`/timetable/timetable.json?t=${Date.now()}`, {
+        cache: "no-store",
       });
 
       if (!response.ok) {

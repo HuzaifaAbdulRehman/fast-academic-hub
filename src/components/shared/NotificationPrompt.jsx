@@ -30,10 +30,6 @@ export default function NotificationPrompt() {
       const permission = await Notification.requestPermission()
 
       if (permission === 'granted') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Notification permission granted')
-        }
-
         // Show a test notification
         new Notification('Absence Tracker', {
           body: 'Daily reminders enabled! You\'ll get notified about your attendance.',
@@ -45,7 +41,6 @@ export default function NotificationPrompt() {
       setShowPrompt(false)
       localStorage.setItem('notification-prompt-shown', 'true')
     } catch (error) {
-      console.error('Error requesting notification permission:', error)
       setShowPrompt(false)
       localStorage.setItem('notification-prompt-shown', 'true')
     }

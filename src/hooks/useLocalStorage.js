@@ -57,7 +57,7 @@ function createBackup(key, data) {
       }
     })
   } catch (error) {
-    console.warn(`Failed to create backup for ${key}:`, error)
+    // Failed to create backup
   }
 }
 
@@ -78,13 +78,12 @@ function tryRestoreFromBackup(key) {
       if (backupData) {
         const parsed = JSON.parse(backupData)
         if (validateData(key, parsed)) {
-          console.log(`Restored ${key} from backup ${backupKey}`)
           return parsed
         }
       }
     }
   } catch (error) {
-    console.warn(`Failed to restore from backup for ${key}:`, error)
+    // Failed to restore from backup
   }
 
   return null
@@ -112,8 +111,6 @@ export function useLocalStorage(key, initialValue) {
 
       // Validate the data structure
       if (!validateData(key, parsed)) {
-        console.error(`Invalid data structure for ${key}, attempting backup restore`)
-
         // Try to restore from backup
         const restored = tryRestoreFromBackup(key)
         if (restored !== null) {
@@ -123,14 +120,11 @@ export function useLocalStorage(key, initialValue) {
         }
 
         // Fall back to initial value
-        console.warn(`No valid backup found for ${key}, using initial value`)
         return initialValue
       }
 
       return parsed
     } catch (error) {
-      console.error(`Error loading ${key} from localStorage:`, error)
-
       // Try to restore from backup
       const restored = tryRestoreFromBackup(key)
       if (restored !== null) {
@@ -141,7 +135,7 @@ export function useLocalStorage(key, initialValue) {
       try {
         window.localStorage.removeItem(key)
       } catch (clearError) {
-        console.error(`Failed to clear corrupted ${key}:`, clearError)
+        // Failed to clear corrupted data
       }
 
       return initialValue
@@ -157,7 +151,6 @@ export function useLocalStorage(key, initialValue) {
 
       // Validate before saving
       if (!validateData(key, valueToStore)) {
-        console.error(`Attempted to save invalid data structure for ${key}`)
         return
       }
 
@@ -172,11 +165,8 @@ export function useLocalStorage(key, initialValue) {
       // Save to local storage
       window.localStorage.setItem(key, JSON.stringify(valueToStore))
     } catch (error) {
-      console.error(`Error saving ${key} to localStorage:`, error)
-
       // If save failed due to quota, try clearing old backups
       if (error.name === 'QuotaExceededError') {
-        console.warn('localStorage quota exceeded, clearing old backups...')
         try {
           const backups = JSON.parse(window.localStorage.getItem(`${key}_backups`) || '[]')
           backups.forEach(backupKey => {
@@ -188,7 +178,7 @@ export function useLocalStorage(key, initialValue) {
           window.localStorage.setItem(key, JSON.stringify(valueToStore))
           setStoredValue(valueToStore)
         } catch (retryError) {
-          console.error(`Failed to save ${key} even after clearing backups:`, retryError)
+          // Failed to save even after clearing backups
         }
       }
     }
@@ -209,7 +199,7 @@ export function useSyncedLocalStorage(key, initialValue) {
         try {
           setStoredValue(JSON.parse(e.newValue))
         } catch (error) {
-          console.error('Error syncing localStorage:', error)
+          // Error syncing localStorage
         }
       }
     }

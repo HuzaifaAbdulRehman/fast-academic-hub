@@ -20,11 +20,6 @@ class ErrorBoundary extends Component {
   componentDidCatch(error, errorInfo) {
     this.setState({ error, errorInfo })
 
-    // Log to console in development only
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error caught by boundary:', error, errorInfo)
-    }
-
     // TODO: Send to error tracking service (Sentry, LogRocket, etc.)
     // Example: Sentry.captureException(error, { extra: errorInfo })
   }

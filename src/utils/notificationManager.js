@@ -13,7 +13,6 @@ export const DEFAULT_NOTIFICATION_SETTINGS = {
 // Request notification permission
 export async function requestNotificationPermission() {
   if (!('Notification' in window)) {
-    console.warn('This browser does not support notifications')
     return false
   }
 
@@ -65,7 +64,6 @@ export function sendTestNotification() {
 
     return true
   } catch (error) {
-    console.error('Error sending notification:', error)
     return false
   }
 }
@@ -98,7 +96,6 @@ export function sendDailyReminder() {
 
     return true
   } catch (error) {
-    console.error('Error sending daily reminder:', error)
     return false
   }
 }
@@ -109,7 +106,6 @@ export function getNotificationSettings() {
     const settings = localStorage.getItem(NOTIFICATION_SETTINGS_KEY)
     return settings ? JSON.parse(settings) : DEFAULT_NOTIFICATION_SETTINGS
   } catch (error) {
-    console.error('Error reading notification settings:', error)
     return DEFAULT_NOTIFICATION_SETTINGS
   }
 }
@@ -120,7 +116,6 @@ export function saveNotificationSettings(settings) {
     localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(settings))
     return true
   } catch (error) {
-    console.error('Error saving notification settings:', error)
     return false
   }
 }

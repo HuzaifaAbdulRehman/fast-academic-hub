@@ -276,24 +276,26 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     setError(null)
 
     try {
-      // Try to get from localStorage first (for local development)
+      // Read local cache (fallback only)
       const stored = localStorage.getItem('timetable')
+      let storedData = null
       if (stored) {
         try {
-          const data = JSON.parse(stored)
-          // Validate it's actually timetable data
-          if (data && typeof data === 'object' && !Array.isArray(data)) {
-            setTimetable(data)
-            setLoading(false)
-            return
+          const parsed = JSON.parse(stored)
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            storedData = parsed
+          } else {
+            localStorage.removeItem('timetable')
           }
-        } catch (parseError) {
+        } catch {
           localStorage.removeItem('timetable')
         }
       }
 
-      // Try to fetch from JSON file (works in dev and production)
-      const response = await fetch('/timetable/timetable.json')
+      // Always fetch latest timetable (avoid stale browser caches)
+      const response = await fetch(`/timetable/timetable.json?t=${Date.now()}`, {
+        cache: 'no-store'
+      })
       const data = await response.json()
 
       if (data.data) {
@@ -304,8 +306,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         throw new Error('Invalid timetable format')
       }
     } catch (err) {
-      // Clear corrupted localStorage
-      localStorage.removeItem('timetable')
+      // Fallback to cached data if available
+      if (storedData) {
+        setTimetable(storedData)
+        setError(null)
+        return
+      }
 
       // Use mock data for development
       const mockData = {

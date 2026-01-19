@@ -160,12 +160,10 @@ export function AppProvider({ children }) {
   const addCourse = useCallback((courseData) => {
     // Validate required fields
     if (!courseData || typeof courseData !== 'object') {
-      console.error('Invalid course data: must be an object')
       return { success: false, error: 'INVALID_DATA', message: 'Invalid course data' }
     }
 
     if (!courseData.name || typeof courseData.name !== 'string' || courseData.name.trim() === '') {
-      console.error('Invalid course data: name is required')
       return { success: false, error: 'MISSING_NAME', message: 'Course name is required' }
     }
 
@@ -192,7 +190,6 @@ export function AppProvider({ children }) {
         ? `${courseData.courseCode || courseData.name} is already added in section ${existingCourse.section}. Remove it first to change sections.`
         : `${attemptedInfo} is already added`
 
-      console.warn('Duplicate course detected:', { existing: existingInfo, attempted: attemptedInfo })
       return {
         success: false,
         error: 'DUPLICATE',
@@ -207,7 +204,6 @@ export function AppProvider({ children }) {
 
     // Validate weekdays array
     if (!courseData.weekdays || !Array.isArray(courseData.weekdays) || courseData.weekdays.length === 0) {
-      console.error('Invalid course data: weekdays must be a non-empty array')
       return { success: false, error: 'INVALID_WEEKDAYS', message: 'Weekdays must be specified' }
     }
 
@@ -216,18 +212,15 @@ export function AppProvider({ children }) {
       typeof day === 'number' && day >= 0 && day <= 6
     )
     if (!validWeekdays) {
-      console.error('Invalid course data: weekdays must be numbers between 0-6')
       return { success: false, error: 'INVALID_WEEKDAYS', message: 'Invalid weekday values' }
     }
 
     // Validate dates if provided
     if (courseData.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(courseData.startDate)) {
-      console.error('Invalid course data: startDate must be in YYYY-MM-DD format')
       return { success: false, error: 'INVALID_DATE', message: 'Invalid start date format' }
     }
 
     if (courseData.endDate && !/^\d{4}-\d{2}-\d{2}$/.test(courseData.endDate)) {
-      console.error('Invalid course data: endDate must be in YYYY-MM-DD format')
       return { success: false, error: 'INVALID_DATE', message: 'Invalid end date format' }
     }
 
@@ -235,7 +228,6 @@ export function AppProvider({ children }) {
     if (courseData.creditHours !== undefined) {
       const creditHours = Number(courseData.creditHours)
       if (isNaN(creditHours) || creditHours < 0 || creditHours > 10) {
-        console.error('Invalid course data: creditHours must be a number between 0-10')
         return { success: false, error: 'INVALID_CREDIT_HOURS', message: 'Credit hours must be between 0-10' }
       }
     }
@@ -255,7 +247,7 @@ export function AppProvider({ children }) {
         endDate: normalizedEndDate
       })
     } catch (error) {
-      console.error('Failed to calculate total classes, falling back to heuristic value.', error)
+      // Fallback to heuristic value
     }
 
     const computedAllowedAbsences = courseData.allowedAbsences ??
@@ -319,7 +311,6 @@ export function AppProvider({ children }) {
 
   const addMultipleCourses = useCallback((coursesData) => {
     if (!Array.isArray(coursesData) || coursesData.length === 0) {
-      console.error('Invalid courses data: must be a non-empty array')
       return { success: false, added: [], duplicates: [], errors: [] }
     }
 
@@ -330,17 +321,14 @@ export function AppProvider({ children }) {
 
     coursesData.forEach((courseData, index) => {
       if (!courseData || typeof courseData !== 'object') {
-        console.error(`Invalid course data at index ${index}: must be an object`)
         errors.push({ index, error: 'INVALID_DATA', courseData })
         return
       }
       if (!courseData.name || typeof courseData.name !== 'string' || courseData.name.trim() === '') {
-        console.error(`Invalid course data at index ${index}: name is required`)
         errors.push({ index, error: 'MISSING_NAME', courseData })
         return
       }
       if (!courseData.weekdays || !Array.isArray(courseData.weekdays) || courseData.weekdays.length === 0) {
-        console.error(`Invalid course data at index ${index}: weekdays must be a non-empty array`)
         errors.push({ index, error: 'INVALID_WEEKDAYS', courseData })
         return
       }
@@ -366,7 +354,6 @@ export function AppProvider({ children }) {
     })
 
     if (validCourses.length === 0) {
-      console.warn('No valid courses to add after filtering')
       return { success: duplicates.length > 0, added: [], duplicates, errors }
     }
 
@@ -405,7 +392,7 @@ export function AppProvider({ children }) {
             endDate: normalizedEndDate
           })
         } catch (error) {
-          console.error('Failed to calculate total classes, falling back to heuristic value.', error)
+          // Fallback to heuristic value
         }
 
         const computedAllowedAbsences = courseData.allowedAbsences ??

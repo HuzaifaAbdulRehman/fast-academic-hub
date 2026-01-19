@@ -36,7 +36,6 @@ export default function CourseHeader({
     percentage = absencesAllowed > 0 ? (absencesUsed / absencesAllowed) * 100 : 0
     courseColor = getCourseColor(course)
   } catch (error) {
-    console.error('Error rendering course:', error, course)
     // Set default values to prevent crash
     stats = { absences: 0, percentage: 100 }
     absencesUsed = 0
