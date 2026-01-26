@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus, RefreshCcw, ChevronDown, ChevronUp } from 'lucide-react'
+import { Search, X, Check, MapPin, User, Clock, Calendar, BookOpen, Loader, RefreshCw, ArrowRight, ArrowLeft, AlertCircle, Plus, RefreshCcw, ChevronDown, ChevronUp, EyeOff, Lock } from 'lucide-react'
 import { dayToWeekday } from '../../utils/timetableParser'
 import { vibrate, isMobile } from '../../utils/uiHelpers'
 import { useApp } from '../../context/AppContext'
@@ -147,10 +147,9 @@ const fuzzyMatch = (searchTokens, course) => {
   )
 }
 
-export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false }) {
+export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false, allowUnrestrictedSelection = false, allowDuplicates = false, allowConflicts = false, excludedCourses = [] }) {
   const { addCourse, addMultipleCourses, courses, changeCourseSection, syncCoursesWithTimetable } = useApp()
   const [step, setStep] = useState('select') // 'select' or 'configure'
-  const [department, setDepartment] = useState('BCS') // Default to BCS
   const [searchQuery, setSearchQuery] = useState('') // Fuzzy search query
   const [timetable, setTimetable] = useState(null)
   const [filteredCourses, setFilteredCourses] = useState([])
@@ -496,7 +495,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   }
 
   const handleSearch = () => {
-    if (!timetable || !department) {
+    if (!timetable) {
       setFilteredCourses([])
       setHasSearched(false)
       return
@@ -505,19 +504,18 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
     // Mark that search has been performed
     setHasSearched(true)
 
-    // Search across ALL sections for the department
+    // Search across ALL departments and sections
     let coursesToSearch = []
 
     if (process.env.NODE_ENV === 'development') {
       // (console logs removed for production)
     }
 
+    // Search all sections regardless of department
     Object.keys(timetable).forEach(sectionKey => {
-      if (sectionKey.startsWith(department)) {
-        const sectionCourses = timetable[sectionKey]
-        if (Array.isArray(sectionCourses)) {
-          coursesToSearch.push(...sectionCourses)
-        }
+      const sectionCourses = timetable[sectionKey]
+      if (Array.isArray(sectionCourses)) {
+        coursesToSearch.push(...sectionCourses)
       }
     })
 
@@ -594,34 +592,75 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
   }
 
   const toggleCourse = (course) => {
-    // Double-check: Never allow selecting an already enrolled course
+    // In unrestricted mode, allow selecting any course regardless of enrollment or conflicts
+    if (allowUnrestrictedSelection) {
+      // First check if already selected in current session
+      const selectedMatch = selectedCourses.find(c => 
+        c.courseCode === course.courseCode && c.section === course.section
+      )
+
+      if (selectedMatch) {
+        // Deselect if already selected (same course + same section)
+        setSelectedCourses(selectedCourses.filter(c => 
+          !(c.courseCode === course.courseCode && c.section === course.section)
+        ))
+        vibrate([10])
+        return
+      }
+
+      // Also check if already enrolled in the app (for export mode)
+      const enrolledMatch = courses.find(c => 
+        c.courseCode === course.courseCode && c.section === course.section
+      )
+      
+      // Check if already in excludedCourses (tempCourses for export)
+      const excludedMatch = excludedCourses.find(c => 
+        c.courseCode === course.courseCode && c.section === course.section
+      )
+
+      if (enrolledMatch || excludedMatch) {
+        // Already enrolled or in excluded courses with same course+section - prevent selection
+        setToast({
+          message: `${course.courseCode} Section ${course.section} is already ${enrolledMatch ? 'in your timetable' : 'selected for export'}`,
+          type: 'info',
+          duration: 2000
+        })
+        vibrate([15, 30, 15])
+        return
+      }
+
+      // Add course (allows same course from different sections, but not same course+section twice)
+      setSelectedCourses([...selectedCourses, course])
+      vibrate([10])
+      return
+    }
+
+    // Normal mode: Check for enrolled courses
     const isEnrolled = courses.find(existingCourse => {
       if (course.courseCode && existingCourse.courseCode) {
-        return existingCourse.courseCode === course.courseCode
+        return existingCourse.courseCode === course.courseCode && existingCourse.section === course.section
       }
       return existingCourse.name === course.courseName
     })
 
     if (isEnrolled) {
       // Safety check - should never reach here due to onClick guard
+      // This prevents selecting the same course+section that's already enrolled
       return
     }
 
-    const selectedMatch = selectedCourses.find(c => c.courseCode === course.courseCode)
+    // Check if already selected in selectedCourses (for courses being added in this session)
+    const selectedMatch = selectedCourses.find(c => 
+      c.courseCode === course.courseCode && c.section === course.section
+    )
 
     if (selectedMatch) {
       // If clicking the same course in the same section, deselect it
-      if (selectedMatch.section === course.section) {
-        setSelectedCourses(selectedCourses.filter(c => c.courseCode !== course.courseCode))
-      } else {
-        // If clicking the same course in a different section, replace the old selection
-        setSelectedCourses([
-          ...selectedCourses.filter(c => c.courseCode !== course.courseCode),
-          course
-        ])
-      }
+      setSelectedCourses(selectedCourses.filter(c => 
+        !(c.courseCode === course.courseCode && c.section === course.section)
+      ))
     } else {
-      // New course selection
+      // New course selection (allows same course from different sections)
       setSelectedCourses([...selectedCourses, course])
     }
 
@@ -630,6 +669,13 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
   const handleNextToConfiguration = () => {
     if (!selectedCourses || selectedCourses.length === 0) return
+    
+    // In unrestricted mode, skip configuration and directly submit
+    if (allowUnrestrictedSelection) {
+      handleFinalSubmit()
+      return
+    }
+    
     setStep('configure')
     vibrate([10])
   }
@@ -644,6 +690,29 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
 
     // Immediate haptic feedback on button press
     vibrate(15)
+
+    // In unrestricted mode (for export), skip date validation and course addition
+    // Just convert courses and pass them to callback
+    if (allowUnrestrictedSelection) {
+      const appCourses = selectedCourses
+        .map(course => {
+          const converted = convertToAppFormat(course)
+          return converted
+        })
+        .filter(course => course !== null)
+
+      if (appCourses.length > 0) {
+        // Pass courses to callback WITHOUT saving them permanently
+        // The callback in TimetableExport will handle adding them to tempCourses only
+        onCoursesSelected(appCourses)
+        setToast({ message: `Added ${appCourses.length} course${appCourses.length > 1 ? 's' : ''} to export`, type: 'success' })
+        vibrate([10, 50, 10])
+        setLoading(false)
+        // Reset selection after adding (don't close modal, allow adding more)
+        setSelectedCourses([])
+      }
+      return
+    }
 
     // Validate required fields - Start Date is mandatory
     if (!startDate.year || !startDate.month || !startDate.day) {
@@ -889,7 +958,13 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-50 ${
         isMobileDevice ? 'flex items-end' : 'flex items-center justify-center p-4'
       }`}
-      onClick={onClose}
+      onMouseDown={(e) => {
+        // Only close if clicking directly on the backdrop, not on any child elements
+        // Use onMouseDown instead of onClick to avoid interfering with select dropdowns
+        if (e.target === e.currentTarget) {
+          onClose()
+        }
+      }}
     >
       <div
         className={`bg-dark-surface/98 backdrop-blur-xl border border-dark-border/50 shadow-glass-lg w-full ${
@@ -897,7 +972,10 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             ? 'rounded-t-3xl max-h-[92vh] animate-slide-up'
             : 'rounded-2xl max-w-4xl max-h-[90vh] animate-scale-in'
         } flex flex-col`}
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => {
+          // Stop propagation to prevent backdrop from closing
+          e.stopPropagation()
+        }}
       >
         {/* Drag Handle (Mobile) */}
         {isMobileDevice && (
@@ -947,35 +1025,12 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
             </div>
           </div>
 
-          {/* Department and Fuzzy Search */}
+          {/* Direct Search - No Department Filter */}
           <div className="space-y-1.5 sm:space-y-2 md:space-y-2.5 mb-1 sm:mb-2">
-            {/* Department Dropdown */}
+            {/* Search Input */}
             <div>
               <label className="text-xs sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
-                Department
-              </label>
-              <select
-                value={department}
-                onChange={(e) => {
-                  setDepartment(e.target.value)
-                  // Reset search when department changes
-                  setHasSearched(false)
-                  setFilteredCourses([])
-                }}
-                className="w-full px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 bg-dark-bg border border-dark-border rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base text-content-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all"
-              >
-                {DEPARTMENTS.map(dept => (
-                  <option key={dept.code} value={dept.code}>
-                    {dept.code} - {dept.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Fuzzy Search Input */}
-            <div>
-              <label className="text-xs sm:text-xs font-medium text-content-secondary mb-1 sm:mb-1.5 block">
-                Search by Course, Instructor, Section, or Day
+                Search All Departments - Course, Instructor, Section, or Day
               </label>
               <div className="flex gap-1.5 sm:gap-2">
                 <div className="relative flex-1">
@@ -1259,8 +1314,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               </div>
               <p className="text-sm sm:text-base text-content-secondary mb-1">
                 {searchQuery
-                  ? `No courses found matching "${searchQuery}" in ${department}`
-                  : `No courses found in ${department}`}
+                  ? `No courses found matching "${searchQuery}"`
+                  : `No courses found. Try searching by course code, instructor, section, or day.`}
               </p>
               <p className="text-xs sm:text-sm text-content-tertiary mb-6 sm:mb-8">
                 Try different keywords (e.g., course code, instructor name, section, or day)
@@ -1313,7 +1368,6 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               <p className="text-xs sm:text-sm text-content-secondary mb-3">
                 Found {filteredCourses.length} course{filteredCourses.length > 1 ? 's' : ''}
                 {searchQuery && <> matching "<span className="text-accent font-medium">{searchQuery}</span>"</>}
-                {' '}in <span className="text-accent font-medium">{department}</span>
                 {displayedCourses.length < filteredCourses.length && (
                   <> (showing {displayedCourses.length})</>
                 )}
@@ -1322,9 +1376,17 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {displayedCourses.map((course) => {
                 // Find if this course is selected (in selectedCourses state)
-                const selectedCourseMatch = selectedCourses.find(c => c.courseCode === course.courseCode)
+                // Check for exact match: same courseCode AND same section
+                const selectedCourseMatch = selectedCourses.find(c => 
+                  c.courseCode === course.courseCode && c.section === course.section
+                )
                 const isSelected = !!selectedCourseMatch
-                const isSelectedInSameSection = isSelected && selectedCourseMatch?.section === course.section
+                const isSelectedInSameSection = isSelected
+                
+                // Also check if same course from different section is selected (for display purposes)
+                const selectedCourseDifferentSection = selectedCourses.find(c => 
+                  c.courseCode === course.courseCode && c.section !== course.section
+                )
 
                 // Check if this card is expanded
                 const cardKey = `${course.courseCode}-${course.section}`
@@ -1341,6 +1403,19 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                 const isAlreadyAdded = !!existingCourseMatch
                 const existingSection = existingCourseMatch?.section
                 const isSameSection = existingSection === course.section
+                
+                // For unrestricted mode: check if already enrolled with same section
+                const enrolledSameSection = allowUnrestrictedSelection && courses.find(c => 
+                  c.courseCode === course.courseCode && c.section === course.section
+                )
+                
+                // Also check if already in excludedCourses (tempCourses for export)
+                const inExcludedCourses = allowUnrestrictedSelection && excludedCourses.find(c => 
+                  c.courseCode === course.courseCode && c.section === course.section
+                )
+                
+                // Combined check: already enrolled OR in excluded courses
+                const isLocked = enrolledSameSection || inExcludedCourses
 
                 // Toggle expand/collapse for schedule
                 const handleToggleExpand = (e) => {
@@ -1361,33 +1436,84 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                   <div
                     key={cardKey}
                     onClick={() => {
-                      // Completely prevent interaction with already enrolled courses
-                      if (isAlreadyAdded) {
-                        // Optional: Show toast reminder
-                        setToast({
-                          message: `${course.courseCode} is already enrolled${!isSameSection ? ` in section ${existingSection}` : ''}. Go to Courses tab to change sections.`,
-                          type: 'info',
-                          duration: 3000
-                        })
-                        vibrate([15, 30, 15]) // Short info vibration
+                      // In unrestricted mode, allow selecting any course
+                      if (allowUnrestrictedSelection) {
+                        // Check if already enrolled with same course+section
+                        const enrolledMatch = courses.find(c => 
+                          c.courseCode === course.courseCode && c.section === course.section
+                        )
+                        
+                        // Check if already in excludedCourses (tempCourses)
+                        const excludedMatch = excludedCourses.find(c => 
+                          c.courseCode === course.courseCode && c.section === course.section
+                        )
+                        
+                        if (enrolledMatch || excludedMatch) {
+                          // Already enrolled or in excluded courses - show message
+                          setToast({
+                            message: `${course.courseCode} Section ${course.section} is already ${enrolledMatch ? 'in your timetable' : 'selected for export'}`,
+                            type: 'info',
+                            duration: 2000
+                          })
+                          vibrate([15, 30, 15])
+                          return
+                        }
+                        
+                        // toggleCourse will handle deselecting if already selected
+                        // and prevent adding duplicates
+                        toggleCourse(course)
                         return
+                      }
+
+                      // Normal mode: Allow selecting same course from different section, but not same section
+                      if (isAlreadyAdded) {
+                        if (isSameSection) {
+                          // Same course + same section - prevent selection
+                          setToast({
+                            message: `${course.courseCode} Section ${existingSection} is already enrolled. Go to Courses tab to change sections.`,
+                            type: 'info',
+                            duration: 3000
+                          })
+                          vibrate([15, 30, 15]) // Short info vibration
+                          return
+                        } else {
+                          // Same course but different section - allow selection
+                          toggleCourse(course)
+                          return
+                        }
                       }
 
                       // Only allow selection of non-enrolled courses
                       toggleCourse(course)
                     }}
                     className={`relative bg-dark-surface rounded-xl border-l-[3px] border-r border-t border-b p-4 transition-all duration-300 ease-out flex flex-col ${
-                      isAlreadyAdded
-                        ? 'border-l-yellow-500/60 border-yellow-600/40 dark:border-yellow-500/30 bg-yellow-500/8 dark:bg-yellow-500/5 cursor-not-allowed opacity-80 pointer-events-auto'
-                        : isSelected
-                        ? 'border-l-accent border-accent/60 dark:border-accent/50 bg-accent/8 dark:bg-accent/5 cursor-pointer hover:shadow-glass-sm'
-                        : 'border-l-content-tertiary border-dark-border hover:border-l-accent hover:border-accent/40 dark:hover:border-accent/30 cursor-pointer hover:shadow-glass-sm'
+                      allowUnrestrictedSelection
+                        ? (isLocked
+                          ? 'border-l-red-500/60 border-red-600/40 dark:border-red-500/30 bg-red-500/8 dark:bg-red-500/5 cursor-not-allowed opacity-80 pointer-events-auto'
+                          : isSelected
+                          ? 'border-l-accent border-accent/60 dark:border-accent/50 bg-accent/8 dark:bg-accent/5 cursor-pointer hover:shadow-glass-sm'
+                          : 'border-l-content-tertiary border-dark-border hover:border-l-accent hover:border-accent/40 dark:hover:border-accent/30 cursor-pointer hover:shadow-glass-sm')
+                        : (isAlreadyAdded
+                          ? 'border-l-yellow-500/60 border-yellow-600/40 dark:border-yellow-500/30 bg-yellow-500/8 dark:bg-yellow-500/5 cursor-not-allowed opacity-80 pointer-events-auto'
+                          : isSelected
+                          ? 'border-l-accent border-accent/60 dark:border-accent/50 bg-accent/8 dark:bg-accent/5 cursor-pointer hover:shadow-glass-sm'
+                          : 'border-l-content-tertiary border-dark-border hover:border-l-accent hover:border-accent/40 dark:hover:border-accent/30 cursor-pointer hover:shadow-glass-sm')
                     }`}
                   >
 
                     {/* Status Indicator - Top Right - Clean and minimal */}
                     <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 z-10 max-w-[calc(100%-6rem)] sm:max-w-[calc(100%-8rem)]">
-                      {isAlreadyAdded && isSameSection ? (
+                      {isLocked ? (
+                        // Already enrolled or in excluded courses - show locked/hidden icon
+                        <div
+                          className="w-11 h-11 flex items-center justify-center"
+                          title={`${course.courseCode} Section ${course.section} is already ${enrolledSameSection ? 'in your timetable' : 'selected for export'}`}
+                        >
+                          <div className="w-6 h-6 rounded-lg border-2 border-red-500/50 bg-red-500/10 flex items-center justify-center transition-all">
+                            <Lock className="w-4 h-4 text-red-500" />
+                          </div>
+                        </div>
+                      ) : !allowUnrestrictedSelection && isAlreadyAdded && isSameSection ? (
                         // Only show top badge for same-section matches
                         <span
                           className="text-[10px] sm:text-xs font-medium px-2 py-0.5 rounded cursor-help transition-all text-green-700 dark:text-green-400 bg-green-500/10 hover:bg-green-500/20"
@@ -1395,7 +1521,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                         >
                           Added
                         </span>
-                      ) : !isAlreadyAdded && isSelected ? (
+                      ) : (allowUnrestrictedSelection || !isAlreadyAdded) && isSelected ? (
                         // Course selected but not yet added
                         isSelectedInSameSection ? (
                           // Selected in same section - simple checkmark with proper touch target
@@ -1423,7 +1549,7 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                             </div>
                           </div>
                         )
-                      ) : !isAlreadyAdded ? (
+                      ) : (allowUnrestrictedSelection || !isAlreadyAdded) ? (
                         // Not selected, not added - empty checkbox with proper touch target
                         <div
                           className="w-11 h-11 flex items-center justify-center"
@@ -1438,8 +1564,8 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                     <div className={
                       isSelected && !isSelectedInSameSection
                         ? "pr-36"  // Wide padding for enhanced selection badge
-                        : (isAlreadyAdded && isSameSection)
-                        ? "pr-20"  // Medium padding for "Added" badge
+                        : (isLocked || (isAlreadyAdded && isSameSection))
+                        ? "pr-20"  // Medium padding for "Added" badge or locked icon
                         : "pr-14"  // Standard padding for simple checkboxes (44px touch target + spacing)
                     }>
                       {/* Row 1: Course Code + Section Badge */}
@@ -1609,8 +1735,17 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
                   disabled={selectedCourses.length === 0}
                   className="flex-1 px-3 py-2.5 sm:px-3 sm:py-2.5 md:px-5 md:py-3 bg-gradient-to-br from-accent to-accent-hover text-dark-bg font-semibold text-xs sm:text-xs md:text-sm rounded-lg sm:rounded-xl transition-all hover:shadow-accent-lg hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-1 sm:gap-2"
                 >
-                  <span className="hidden sm:inline">Next: Configure Dates</span>
-                  <span className="sm:hidden">Next</span>
+                  {allowUnrestrictedSelection ? (
+                    <>
+                      <span className="hidden sm:inline">Add to Export</span>
+                      <span className="sm:hidden">Add</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="hidden sm:inline">Next: Configure Dates</span>
+                      <span className="sm:hidden">Next</span>
+                    </>
+                  )}
                   <ArrowRight className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                 </button>
             ) : (
