@@ -7,6 +7,7 @@ import { getTodayISO } from '../../utils/dateHelpers'
 import { useDebounce } from '../../hooks/useDebounce'
 import { getHighlightedText } from '../../hooks/useClassSearch'
 import { generateShortName } from '../../utils/courseNameHelper'
+import { clearTimetableCache, isTimetableUpdated, setTimetableVersion, clearServiceWorkerCache } from '../../utils/cacheManager'
 import CourseForm from './CourseForm'
 import Toast from '../shared/Toast'
 import ConfirmDialog from '../shared/ConfirmDialog'
@@ -147,7 +148,7 @@ const fuzzyMatch = (searchTokens, course) => {
 }
 
 export default function TimetableSelector({ onCoursesSelected, onClose, showManualOption = false }) {
-  const { addCourse, addMultipleCourses, courses, changeCourseSection } = useApp()
+  const { addCourse, addMultipleCourses, courses, changeCourseSection, syncCoursesWithTimetable } = useApp()
   const [step, setStep] = useState('select') // 'select' or 'configure'
   const [department, setDepartment] = useState('BCS') // Default to BCS
   const [searchQuery, setSearchQuery] = useState('') // Fuzzy search query
@@ -297,6 +298,24 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
         cache: 'no-store'
       })
       const data = await response.json()
+
+      // Auto-sync: Check if timetable has been updated
+      if (data.lastUpdated && isTimetableUpdated(data.lastUpdated)) {
+        // New version detected - clear all caches automatically
+        console.log('🔄 New timetable version detected, clearing caches...')
+        clearTimetableCache()
+        await clearServiceWorkerCache()
+        
+        // Sync existing courses with updated timetable
+        if (data.data) {
+          syncCoursesWithTimetable(data.data)
+        }
+      }
+      
+      // Store the version timestamp for future comparisons
+      if (data.lastUpdated) {
+        setTimetableVersion(data.lastUpdated)
+      }
 
       if (data.data) {
         setTimetable(data.data)

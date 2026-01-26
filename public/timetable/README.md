@@ -7,7 +7,7 @@ Place your FAST NUCES timetable CSV files in this directory with these exact nam
 ```
 public/timetable/
 ├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - MONDAY.csv
-├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - TUESDAY.csv
+├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - TUESDAY .csv
 ├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - WEDNESDAY.csv
 ├── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - THURSDAY.csv
 └── FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  -  FRIDAY.csv

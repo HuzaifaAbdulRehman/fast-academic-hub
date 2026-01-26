@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useApp } from '../../context/AppContext'
-import { generateWeeks, formatDateShort, courseHasClassOnDate } from '../../utils/dateHelpers'
+import { generateWeeksFromSemesterStart, formatDateShort, courseHasClassOnDate } from '../../utils/dateHelpers'
 import { getDayStatus, getSessionStatus } from '../../utils/attendanceCalculator'
 import { SESSION_STATUS } from '../../utils/constants'
 import { Check, X, Minus, Circle, Trash2, CheckSquare, Square, ArrowLeftRight } from 'lucide-react'
@@ -12,6 +12,9 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   const { courses, attendance, toggleDay, toggleSession, deleteCourse, markDaysAbsent, reorderCourse } = useApp()
   const [deleteConfirm, setDeleteConfirm] = useState(null) // { course }
   const [longPressTimer, setLongPressTimer] = useState(null)
+  const scrollContainerRef = useRef(null)
+  const currentWeekRef = useRef(null)
+  const hasScrolledToCurrentWeek = useRef(false)
 
   // Use external state if provided, otherwise use internal state
   const [internalBulkSelectMode, setInternalBulkSelectMode] = useState(false)
@@ -39,9 +42,10 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   }, [courses])
 
   // Generate weeks with dates - memoized
+  // Weeks are ordered with current week first, then previous weeks (scroll up to see)
   const weeks = useMemo(() => {
-    // Generate weeks
-    let generatedWeeks = generateWeeks(startDate, weeksToShow)
+    // Generate weeks from semester start (Jan 19, 2026) with current week first
+    let generatedWeeks = generateWeeksFromSemesterStart(startDate, weeksToShow)
 
     // Filter out dates beyond course end dates
     if (latestEndDate) {
@@ -53,6 +57,27 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
 
     return generatedWeeks
   }, [startDate, weeksToShow, latestEndDate])
+
+  // Auto-scroll to current week on mount and when weeks change
+  useEffect(() => {
+    if (currentWeekRef.current && scrollContainerRef.current && !hasScrolledToCurrentWeek.current) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        if (currentWeekRef.current && scrollContainerRef.current) {
+          const container = scrollContainerRef.current
+          const currentWeekElement = currentWeekRef.current
+          
+          // Calculate scroll position to show current week at the top
+          const containerTop = container.getBoundingClientRect().top
+          const weekTop = currentWeekElement.getBoundingClientRect().top
+          const scrollOffset = weekTop - containerTop + container.scrollTop
+          
+          container.scrollTop = scrollOffset
+          hasScrolledToCurrentWeek.current = true
+        }
+      }, 100)
+    }
+  }, [weeks])
 
   // Handle day toggle (mark all classes on that date)
   const handleDayClick = (date) => {
@@ -119,8 +144,10 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   const handleCellClick = (e, courseId, date) => {
     e.stopPropagation() // Prevent day toggle when clicking cell
 
-    // Prevent clicks on pre-enrollment cells
-    if (isBeforeEnrollment(courseId, date)) {
+    // Allow attendance marking from week 1 (no enrollment date restriction)
+    // Only check if class exists on that date
+    const course = courses.find(c => c.id === courseId)
+    if (!course || !courseHasClassOnDate(course, date)) {
       return
     }
 
@@ -161,11 +188,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
   const getCellClassName = (courseId, date, hasClass) => {
     if (!hasClass) return 'cursor-not-allowed opacity-40'
 
-    // Check if before enrollment - grayed out, non-interactive
-    if (isBeforeEnrollment(courseId, date)) {
-      return 'cursor-not-allowed bg-dark-bg/50 opacity-40 relative'
-    }
-
+    // All cells are fully interactive from week 1 (no enrollment restriction)
     const status = getSessionStatus(courseId, date, attendance)
 
     if (status === SESSION_STATUS.ABSENT) {
@@ -187,16 +210,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
       )
     }
 
-    // Check if before enrollment - show grayed state
-    if (isBeforeEnrollment(courseId, date)) {
-      return (
-        <div className="flex flex-col items-center justify-center gap-0.5" role="img" aria-label="Not enrolled yet">
-          <Minus className="w-3 h-3 mx-auto text-content-disabled/50" />
-          <span className="text-[8px] sm:text-[9px] text-content-disabled/70 font-medium whitespace-nowrap">Not enrolled</span>
-        </div>
-      )
-    }
-
+    // All dates are fully interactive - show attendance status
     const status = getSessionStatus(courseId, date, attendance)
 
     if (status === SESSION_STATUS.ABSENT) {
@@ -238,6 +252,7 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
     <div className="card p-0 relative" role="region" aria-label="Attendance tracker table">
       {/* Scrollable Table Container */}
       <div
+        ref={scrollContainerRef}
         className="overflow-auto max-h-[calc(100dvh-7.5rem)] sm:max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-14rem)] scroll-smooth pb-12 sm:pb-14"
         role="table"
         aria-label="Course attendance grid"
@@ -271,7 +286,10 @@ export default function AttendanceTable({ startDate, weeksToShow, onEditCourse, 
             {weeks.map((week) => (
               <React.Fragment key={week.weekNumber}>
                 {/* Week Header Row */}
-                <tr className="bg-dark-bg week-header-row">
+                <tr 
+                  ref={week.isCurrentWeek ? currentWeekRef : null}
+                  className="bg-dark-bg week-header-row"
+                >
                   <td className="py-1 sm:py-1.5 md:py-2 px-1 sm:px-2 md:px-4 sticky-week-label sticky left-0 z-[8] bg-dark-bg">
                     <span className="text-[9px] sm:text-[10px] md:text-xs uppercase tracking-wider text-content-tertiary font-medium">
                       {week.label}

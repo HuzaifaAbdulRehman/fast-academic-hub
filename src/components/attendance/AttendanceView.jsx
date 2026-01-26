@@ -146,25 +146,10 @@ export default function AttendanceView() {
     return () => setToast(null)
   }, [])
 
-  // Calculate attendance start date - earliest enrollment date (not week-aligned)
-  // This prevents showing empty pre-enrollment days at the start
+  // Use fixed semester start date: January 19, 2026 (Week 1)
   const attendanceStartDate = useMemo(() => {
-    if (!courses || courses.length === 0) return getTodayISO()
-
-    // Find earliest enrollment date across all courses
-    const enrollmentDates = courses
-      .map(c => c.enrollmentStartDate || c.startDate)
-      .filter(Boolean)
-      .map(d => new Date(d))
-
-    if (enrollmentDates.length === 0) return getTodayISO()
-
-    const earliestEnrollment = new Date(Math.min(...enrollmentDates))
-
-    // Return the actual enrollment date (not week start)
-    // The week generation logic will handle full weeks automatically
-    return earliestEnrollment.toISOString().split('T')[0]
-  }, [courses])
+    return '2026-01-19' // Week 1 starts from Jan 19, 2026
+  }, [])
 
   if (courses.length === 0) {
     return (

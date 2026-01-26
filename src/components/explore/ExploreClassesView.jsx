@@ -26,7 +26,7 @@ import {
 } from "../../utils/conflictDetection";
 import { vibrate } from "../../utils/uiHelpers";
 import { getTodayISO, formatTimeTo12Hour } from "../../utils/dateHelpers";
-import { clearTimetableCache } from "../../utils/cacheManager";
+import { clearTimetableCache, isTimetableUpdated, setTimetableVersion, clearServiceWorkerCache } from "../../utils/cacheManager";
 import { generateShortName } from "../../utils/courseNameHelper";
 import { useDebounce } from "../../hooks/useDebounce";
 import ClassCard from "./ClassCard";
@@ -40,7 +40,7 @@ import PullToRefresh from "react-simple-pull-to-refresh";
  * Features: Fuzzy search, inline filters, conflict detection, animated interactions, responsive grid
  */
 export default function ExploreClassesView() {
-  const { addCourse, addMultipleCourses, deleteCourse, courses } = useApp();
+  const { addCourse, addMultipleCourses, deleteCourse, courses, syncCoursesWithTimetable } = useApp();
 
   // State
   const [searchInput, setSearchInput] = useState("");
@@ -163,9 +163,48 @@ export default function ExploreClassesView() {
 
       const data = await response.json();
 
+      // Auto-sync: Check if timetable has been updated
+      if (data.lastUpdated && isTimetableUpdated(data.lastUpdated)) {
+        // New version detected - clear all caches automatically
+        console.log('🔄 New timetable version detected, clearing caches...');
+        clearTimetableCache();
+        await clearServiceWorkerCache();
+        
+        // Sync existing courses with updated timetable
+        if (data.data) {
+          const syncResult = syncCoursesWithTimetable(data.data);
+          
+          if (syncResult.updated.length > 0) {
+            const updatedNames = syncResult.updated.slice(0, 3).map(c => c.courseCode || c.name).join(', ');
+            const moreCount = syncResult.updated.length > 3 ? ` +${syncResult.updated.length - 3} more` : '';
+            setToast({
+              message: `Timetable updated! ${syncResult.updated.length} course${syncResult.updated.length > 1 ? 's' : ''} synced: ${updatedNames}${moreCount}`,
+              type: "success",
+              duration: 4000,
+            });
+          } else {
+            setToast({
+              message: "Timetable updated! Refreshing data...",
+              type: "success",
+              duration: 2000,
+            });
+          }
+        } else {
+          setToast({
+            message: "Timetable updated! Refreshing data...",
+            type: "success",
+            duration: 2000,
+          });
+        }
+      }
+
       // Cache the raw timetable data for change section feature
       if (data.data) {
         localStorage.setItem('timetable', JSON.stringify(data.data));
+        // Store the version timestamp for future comparisons
+        if (data.lastUpdated) {
+          setTimetableVersion(data.lastUpdated);
+        }
       }
 
       // Flatten timetable structure into array of classes

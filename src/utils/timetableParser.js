@@ -150,15 +150,15 @@ const COURSE_NAMES = {
 
 // Time slots mapping (based on your CSV)
 const TIME_SLOTS = {
-  1: '08:00-08:50',
-  2: '08:55-09:45',
-  3: '09:50-10:40',
-  4: '10:45-11:35',
-  5: '11:40-12:30',
-  6: '12:35-13:25',
-  7: '13:30-14:20',
-  8: '14:25-15:15',
-  9: '15:20-16:05'
+  1: '09:00-09:45',
+  2: '09:45-10:30',
+  3: '10:30-11:15',
+  4: '11:15-12:00',
+  5: '12:00-12:45',
+  6: '12:45-13:30',
+  7: '13:30-14:15',
+  8: '14:15-15:00',
+  9: '15:00-15:45'
 }
 
 /**
@@ -183,8 +183,11 @@ function parseCellEntry(cellText, room, day, slotNumber) {
   // 2. Lab courses: "CN Lab BCS-5F"
   // 3. Multi-word courses: "Intro to D. Sci Lab BDS-3A"
   // 4. Hyphenated courses: "DS-Lab BDS-3B"
+  // 5. Courses with extra info: "CS4048-Data Sci. BCS-6B  (F,G,H,J)"
   // Strategy: Match everything before the section pattern as the course code
-  const sectionMatch = firstLine.match(/\s+([A-Z]{2,}[A-Z]?-?\d+[A-Z]{0,2})(?:\s|$)/)
+  // Section pattern: 2+ uppercase letters, optional hyphen, digits, optional letters
+  // Allow for extra info in parentheses or spaces after section
+  const sectionMatch = firstLine.match(/\s+([A-Z]{2,}[A-Z]?-?\d+[A-Z]{0,2})(?:\s|\(|$)/)
 
   if (!sectionMatch) return null
 

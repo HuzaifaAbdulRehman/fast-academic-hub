@@ -8,6 +8,7 @@ import PullToRefresh from 'react-simple-pull-to-refresh'
 import { clearTimetableCache } from '../../utils/cacheManager'
 import { formatTimeTo12Hour } from '../../utils/dateHelpers'
 import { vibrate } from '../../utils/uiHelpers'
+import TimetableExport from './TimetableExport'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
@@ -359,13 +360,28 @@ export default function TimetableView() {
 
         {/* Header */}
         <div className="mb-4 sm:mb-6">
-          <div className="flex-1 min-w-0 mb-3 sm:mb-4">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-content-primary mb-1 sm:mb-2">
-              Your Weekly Schedule
-            </h2>
-            <p className="text-content-secondary text-xs sm:text-sm">
-              Complete timetable with rooms, timings, and instructors
-            </p>
+          <div className="flex items-start justify-between mb-3 sm:mb-4">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-content-primary mb-1 sm:mb-2">
+                Your Weekly Schedule
+              </h2>
+              <p className="text-content-secondary text-xs sm:text-sm">
+                Complete timetable with rooms, timings, and instructors
+              </p>
+            </div>
+            <div className="ml-4 flex-shrink-0">
+              <TimetableExport 
+                scheduleByDay={scheduleByDay} 
+                courses={courses}
+                onExportSuccess={() => {
+                  setToast({
+                    message: 'Timetable exported successfully!',
+                    type: 'success',
+                    duration: 2000
+                  })
+                }}
+              />
+            </div>
           </div>
 
           {/* Quick Day Navigation Bar with day filter */}

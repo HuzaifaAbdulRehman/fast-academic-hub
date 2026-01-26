@@ -119,6 +119,68 @@ export function generateWeeks(startDate, numberOfWeeks = 4) {
 }
 
 /**
+ * Generate weeks starting from a fixed semester start date (Jan 19, 2026)
+ * Returns weeks ordered with current week first, then previous weeks
+ * @param {string} semesterStartDate - ISO date string for semester start (default: 2026-01-19)
+ * @param {number} numberOfWeeks - Number of weeks to generate
+ * @returns {Array} Array of weeks with current week first
+ */
+export function generateWeeksFromSemesterStart(semesterStartDate = '2026-01-19', numberOfWeeks = 16) {
+  const semesterStart = startOfWeek(startOfDay(new Date(semesterStartDate)), { weekStartsOn: 1 })
+  const today = startOfDay(new Date())
+  const todayWeekStart = startOfWeek(today, { weekStartsOn: 1 })
+  
+  // Calculate which week number today is (Week 1 starts from semesterStart)
+  const weeksSinceStart = Math.floor((todayWeekStart - semesterStart) / (1000 * 60 * 60 * 24 * 7))
+  const currentWeekNumber = weeksSinceStart + 1
+  
+  // Generate all weeks from semester start
+  const endDate = addWeeks(semesterStart, numberOfWeeks)
+  const allWeeks = eachWeekOfInterval(
+    { start: semesterStart, end: endDate },
+    { weekStartsOn: 1 }
+  )
+
+  const weeks = allWeeks.map((weekStart, index) => {
+    const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 })
+    const days = eachDayOfInterval({ start: weekStart, end: weekEnd })
+    const weekNumber = index + 1
+    const isCurrentWeek = weekNumber === currentWeekNumber
+
+    return {
+      weekNumber,
+      startDate: toISODate(weekStart),
+      endDate: toISODate(weekEnd),
+      label: `Week ${weekNumber} • ${format(weekStart, 'MMM d')}-${format(weekEnd, 'd')}`,
+      isCurrentWeek,
+      days: days.map(day => ({
+        date: toISODate(day),
+        dayName: getWeekdayName(day),
+        dayShort: getWeekdayShort(day),
+        dayOfWeek: getDay(day),
+        isToday: checkIsToday(day),
+        isFuture: checkIsFuture(day),
+        isPast: checkIsPast(day),
+      }))
+    }
+  })
+
+  // Reorder: previous weeks (oldest first), current week, future weeks
+  // This allows scrolling UP to see previous weeks (Week 1, Week 2, etc.)
+  const currentWeek = weeks.find(w => w.isCurrentWeek)
+  const previousWeeks = weeks.filter(w => w.weekNumber < currentWeekNumber) // Oldest first (Week 1, Week 2, ...)
+  const futureWeeks = weeks.filter(w => w.weekNumber > currentWeekNumber)
+
+  // Return: [...previous weeks (oldest first), current week, ...future weeks]
+  // Current week will be scrolled into view at the top
+  return [
+    ...previousWeeks,
+    ...(currentWeek ? [currentWeek] : []),
+    ...futureWeeks
+  ]
+}
+
+/**
  * Get all dates between start and end that match the given weekdays
  * @param {string} startDate - ISO date string
  * @param {string} endDate - ISO date string

@@ -15,13 +15,14 @@ const TIMETABLE_DIR = path.join(__dirname, '../public/timetable')
 const OUTPUT_FILE = path.join(TIMETABLE_DIR, 'timetable.json')
 
 // Day file mapping
-const DAY_FILES = {
-  'Monday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - MONDAY.csv',
-  'Tuesday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - TUESDAY.csv',
-  'Wednesday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - WEDNESDAY.csv',
-  'Thursday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - THURSDAY.csv',
-  'Friday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  -  FRIDAY.csv'
-}
+  // Update these filenames to match your actual CSV files
+  const DAY_FILES = {
+    'Monday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - MONDAY.csv',
+    'Tuesday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - TUESDAY .csv',
+    'Wednesday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - WEDNESDAY.csv',
+    'Thursday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  - THURSDAY.csv',
+    'Friday': 'FAST NUCES - Karachi Campus - SPRING 2026 TimeTable (All BS Programs)  -  FRIDAY.csv'
+  }
 
 async function main() {
   console.log('🚀 Starting timetable CSV parsing...')

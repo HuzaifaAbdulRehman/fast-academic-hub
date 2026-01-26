@@ -552,6 +552,125 @@ export function AppProvider({ children }) {
   }, [setCourses, setAttendance])
 
   /**
+   * Sync existing courses with updated timetable data
+   * Updates schedule, weekdays, instructor, room, timeSlot when timetable changes
+   * @param {Object} timetableData - New timetable data from timetable.json
+   * @returns {Object} - { updated: [], notFound: [] } - List of updated courses and courses not found in new timetable
+   */
+  const syncCoursesWithTimetable = useCallback((timetableData) => {
+    if (!timetableData || typeof timetableData !== 'object') {
+      return { updated: [], notFound: [] }
+    }
+
+    const updated = []
+    const notFound = []
+
+    // Flatten timetable data into a map for quick lookup
+    const timetableMap = new Map()
+    Object.keys(timetableData).forEach(sectionKey => {
+      const sectionCourses = timetableData[sectionKey]
+      if (Array.isArray(sectionCourses)) {
+        sectionCourses.forEach(course => {
+          if (course.courseCode && course.section) {
+            const key = `${course.courseCode}-${course.section}`
+            timetableMap.set(key, course)
+          }
+        })
+      }
+    })
+
+    // Update courses that match timetable entries
+    setCourses(prev => prev.map(course => {
+      // Only sync courses that came from timetable (have courseCode and section)
+      if (!course.courseCode || !course.section) {
+        return course
+      }
+
+      const key = `${course.courseCode}-${course.section}`
+      const timetableCourse = timetableMap.get(key)
+
+      if (!timetableCourse) {
+        notFound.push({
+          courseCode: course.courseCode,
+          section: course.section,
+          name: course.name
+        })
+        return course // Keep course as-is if not found in timetable
+      }
+
+      // Build new schedule from timetable sessions
+      const newSchedule = timetableCourse.sessions?.map(session => ({
+        day: session.day,
+        startTime: session.timeSlot?.split('-')[0]?.trim() || '',
+        endTime: session.timeSlot?.split('-')[1]?.trim() || '',
+        room: session.room || '',
+        building: session.building || '',
+        slotCount: session.slotCount || 1
+      })) || []
+
+      // Build new weekdays from sessions
+      const dayNameToNumber = {
+        'Sunday': 0,
+        'Monday': 1,
+        'Tuesday': 2,
+        'Wednesday': 3,
+        'Thursday': 4,
+        'Friday': 5,
+        'Saturday': 6
+      }
+      const newWeekdays = [...new Set(
+        timetableCourse.sessions?.map(s => dayNameToNumber[s.day]).filter(d => d !== undefined) || []
+      )].sort()
+
+      // Get first session for timeSlot
+      const firstSession = timetableCourse.sessions?.[0]
+      const newTimeSlot = firstSession?.timeSlot || course.timeSlot
+
+      // Check if anything actually changed
+      const scheduleChanged = JSON.stringify(course.schedule) !== JSON.stringify(newSchedule)
+      const weekdaysChanged = JSON.stringify(course.weekdays?.sort()) !== JSON.stringify(newWeekdays)
+      const instructorChanged = course.instructor !== timetableCourse.instructor
+      const roomChanged = course.room !== (firstSession?.room || timetableCourse.room)
+      const timeSlotChanged = course.timeSlot !== newTimeSlot
+
+      if (scheduleChanged || weekdaysChanged || instructorChanged || roomChanged || timeSlotChanged) {
+        updated.push({
+          courseCode: course.courseCode,
+          section: course.section,
+          name: course.name,
+          changes: {
+            schedule: scheduleChanged,
+            weekdays: weekdaysChanged,
+            instructor: instructorChanged,
+            room: roomChanged,
+            timeSlot: timeSlotChanged
+          }
+        })
+
+        // Update course with new timetable data
+        // IMPORTANT: Attendance records are stored separately by date (courseId + date),
+        // so updating schedule/weekdays does NOT affect existing attendance records.
+        // Past attendance is automatically preserved because it's keyed by date, not schedule.
+        return {
+          ...course,
+          schedule: newSchedule, // Update schedule for timetable display
+          weekdays: newWeekdays, // Update weekdays (attendance uses dates, not weekdays)
+          instructor: timetableCourse.instructor || course.instructor,
+          room: firstSession?.room || timetableCourse.room || course.room,
+          roomNumber: firstSession?.room || timetableCourse.room || course.roomNumber,
+          building: firstSession?.building || timetableCourse.building || course.building,
+          timeSlot: newTimeSlot,
+          creditHours: timetableCourse.creditHours || course.creditHours
+        }
+      }
+
+      return course // No changes
+    }))
+
+    return { updated, notFound }
+  }, [setCourses])
+
+  /**
    * Reorder course columns (move left or right)
    */
   const reorderCourse = useCallback((courseId, direction) => {
@@ -859,6 +978,7 @@ export function AppProvider({ children }) {
     deleteAllCourses,
     reorderCourse,
     changeCourseSection,
+    syncCoursesWithTimetable,
 
     // Attendance management
     toggleSession,
