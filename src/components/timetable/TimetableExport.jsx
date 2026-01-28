@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo } from "react";
 import html2canvas from "html2canvas";
-import { Download, Plus, X } from "lucide-react";
+import { Download, Plus, X, Loader2 } from "lucide-react";
 import { formatTimeTo12Hour } from "../../utils/dateHelpers";
 import { useApp } from "../../context/AppContext";
 import TimetableSelector from "../courses/TimetableSelector";
@@ -230,6 +230,10 @@ export default function TimetableExport({
     setShowExportModal(false);
 
     try {
+      // Let React paint the "Exporting..." state before doing heavy work (prevents UI feeling frozen)
+      await new Promise((resolve) => requestAnimationFrame(() => resolve()));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       // High quality export with 3x scale for crisp mobile viewing
       const canvas = await html2canvas(exportRef.current, {
         backgroundColor: "#1a1a1e",
@@ -310,7 +314,11 @@ export default function TimetableExport({
           disabled={isExporting || totalCoursesForExport === 0}
           className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent to-accent-hover text-white rounded-lg font-semibold hover:shadow-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Download className="w-4 h-4" />
+          {isExporting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
           {isExporting ? "Exporting..." : "Export as Image"}
         </button>
       </div>
@@ -797,8 +805,30 @@ export default function TimetableExport({
                 disabled={isExporting || totalCoursesForExport === 0}
                 className="flex-1 px-4 py-2.5 bg-gradient-to-r from-accent to-accent-hover text-white rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isExporting ? "Exporting..." : "Export as Image"}
+                <span className="inline-flex items-center justify-center gap-2">
+                  {isExporting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {isExporting ? "Generating image..." : "Export as Image"}
+                </span>
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Exporting Overlay (professional feedback while html2canvas runs) */}
+      {isExporting && (
+        <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-4 pointer-events-none">
+          <div className="w-full max-w-md bg-dark-surface-raised/90 border border-dark-border rounded-2xl shadow-2xl backdrop-blur-xl p-4 flex items-center gap-3">
+            <div className="p-2 bg-accent/10 rounded-lg flex-shrink-0">
+              <Loader2 className="w-5 h-5 text-accent animate-spin" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-content-primary">
+                Exporting timetable…
+              </div>
+              <div className="text-xs text-content-tertiary">
+                Generating a high‑quality image. This can take a moment.
+              </div>
             </div>
           </div>
         </div>
