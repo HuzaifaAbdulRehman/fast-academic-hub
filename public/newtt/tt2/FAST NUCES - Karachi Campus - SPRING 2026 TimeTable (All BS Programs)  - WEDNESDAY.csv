@@ -21,7 +21,9 @@ E-2 Academic Block I (50),"CS3002-IS BAI-8A
  Farhan Ali Memon",
 E-3 Academic Block I (50),"CS4001-PPIT BAI-8B
  Bilal Ahsan","MG3035-IB BCS-8A
- Michael Simon",,,,"MG3035-IB BCS-8A
+ Michael Simon","CS4104-AML BCS-8A
+ Minhal Raza","CS4104-AML BCS-8A
+ Minhal Raza",,"MG3035-IB BCS-8A
  Michael Simon","CS4045-DLP BCS-8A
 Syed Faisal Ali","MG3035-IB BCS-8B
  Michael Simon",
@@ -29,12 +31,14 @@ E-4 Academic Block I (50),"SE 4001-SRE BSE-8A
  Maqsood Khatoon","MG4007-MHR BCS-8A
  Asma Gul","IO4041-IOT BCS-8B
  Dr. Aqsa Aslam","IO4041-IOT BCS-8B
- Dr. Aqsa Aslam",,"MG1001-FOM BCY-8B
- Musera Bhutto","CS4048-DSci. BCS-8A
+ Dr. Aqsa Aslam",,,"CS4048-DSci. BCS-8A
  Dr. Nouman Durrani","MG4007-MHR BCS-8B
  Musera Bhutto",
-E-5 Academic Block I (50),,"MG4011-Entrepr BAI-8B
- Shoaib Anwer",,,,"MG4033-DM BCS-8A
+E-5 Academic Block I (50),"CS3006-PDC BCS-8C
+Muhammad Kashif","MG4033-DM BCS-8A
+ Umer Farooq","AI4015-AAI BCS-8A
+ Dr. Farrukh Shahid","AI4015-AAI BCS-8A
+ Dr. Farrukh Shahid",,"MG4033-DM BCS-8A
  Umer Farooq","IO4041-IOT BCS-8A
  Dr. Aqsa Aslam","MG4033-DM BCS-8B
  Umer Farooq",
@@ -45,34 +49,32 @@ E-6 Academic Block I (50),,"MG4011-Entrepr. BCS-8A
  Zehra Mukhtiar","CS4053-RS BCS-8A
 Dr. Farrukh Shahid","MG4011-Entrepr. BCS-8B
  Aleena Fayyaz",
-R-11 Academic Block I (50),,"MG4033-DM BCS-8A
- Umer Farooq","CY4045-BLCK BCY-8A
- Nouman Rajput","CY4045-BLCK BCY-8A
- Nouman Rajput",,"MG1001-FOM BCY-8A
- Aleena Fayyaz","SE4008-PMD BSE-8A
- Ali Fatmi","CS3002-IS BAI-8C
+R-11 Academic Block I (50),,"MG4011-Entrepr BAI-8A
+ Asiya Zaheer","CS4035-CG BCS-8A
+ Javeria Farooq","CS4035-CG BCS-8A
+ Javeria Farooq",,"MG1001-FOM BCY-8A
+ Aleena Fayyaz","CS4084-QC BCS-8A
+ Sumaiya Zahid","CS3002-IS BAI-8C
  Muhammad Usman",
-R-12 Academic Block I (70),,"SS2014- German Lang BCS-8A
-Dr. Fahad Samad","CS4104-AML BCS-8A
- Minhal Raza","CS4104-AML BCS-8A
- Minhal Raza",,"SS2014- German Lang BCS-8A
-Dr. Fahad Samad","CS4084-QC BCS-8A
- Sumaiya Zahid","CS4001-PPIT BAI-8A
+R-12 Academic Block I (70),,"MG4011-Entrepr BAI-8B
+ Shoaib Anwer","CY4045-BLCK BCY-8A
+ Nouman Rajput","CY4045-BLCK BCY-8A
+ Nouman Rajput",,"MG1001-FOM BCY-8B
+ Musera Bhutto","SE4008-PMD BSE-8A
+ Ali Fatmi","CS4001-PPIT BAI-8A
  Bilal Ahsan",
 R-109 Academic Block I (50),,"MG4011-Entrepr BAI-8C
- Magdalene Gloria","CS4035-CG BCS-8A
- Javeria Farooq","CS4035-CG BCS-8A
- Javeria Farooq",,"CS3002-IS BAI-8B
- Muhammad Usman","CS4059-FCV BCS-8B
+ Magdalene Gloria","SE4096-DSSE BSE-8A
+ Dr. Muhammad Yaseen","SE4096-DSSE BSE-8A
+ Dr. Muhammad Yaseen",,"CS3002-IS BAI-8B
+ Muhammad Usman","AI4002-CV BCS-8A
  Bilal Ahsan","CS3001-CN BCY-4A
-Shoaib Raza ",
+Shoaib Raza ","CS3006-PDC BCS-8C
+Muhammad Kashif"
 A-1 Academic Block II (50),,"SE 4001-SRE BSE-8B
- Maqsood Khatoon","AI4015-AAI BCS-8A
- Dr. Farrukh Shahid","AI4015-AAI BCS-8A
- Dr. Farrukh Shahid",,"CS4001-PPIT-8C
+ Maqsood Khatoon",,,,"CS4001-PPIT-8C
  Saeeda Kanwal","CS3001-CN BSE-6A
-Hira Tunio","CS4031-CC BCS-6E
- Shahar Bano",
+Hira Tunio",,
 A-2Academic Block II (50),,"CS4045-DLP BCS-6B
 Dr. Jawwad Shamsi","CS4044-FSPM BCS-6A (A,B,C,D,E)
 Ubaid Aftab",,"CS3014-AHCI BCS-6B
@@ -153,8 +155,7 @@ Dr. Mushtaq Ahmed ",,
 C-12 Academic Block II (50),"SS2010-CS BSEE-6AB 
 Tahira Abdul Hakeem",EE1001-LCA BSEE-2B                                                                      Engr. Muhammad Ahsan Khan,EE1001-LCA BSEE-2A                                                                          Engr. Muhammad Ahsan Khan,NSB BSEE-8A                                           Engr. Zakir Hussain,EE1001-LCA BSCE-2A                                                       Engr. Muhammad Ahsan Khan,EE1001-LCA BSCE-2B + BSEE-2C                                                       Engr. Muhammad Ahsan Khan,,,
 C-13 Academic Block II (50),MT1006-DE BSEE-2A                                                    Dr. Ahsan Nadeem,EE3006-EBD BSEE-6AB                                                                 Engr. Haris Mohsin,EE3006-EBD BSEE-6AB                                                                 Engr. Haris Mohsin,MT1004-LA BSEE-2B                                                          Engr. Maham Ghouri,MT1004-LA BSEE-2B                                                          Engr. Maham Ghouri,MT1006-DE BSCE-2A                                                    Engr. Quratul Ain,CS2018-OS BSEE-6AB                                           Engr. Asim Mehmood,CS1004-OOP BSEE-6AB                                           Engr. Asim Mehmood,
-C-14 Academic Block II (50),"RESERVED For Quratulain 
-BS CE-2B 28 jan",MG4011-EPS BSEE-8A                                           Engr. Asim Mehmood,MG4011-EPS BSEE-8A                                           Engr. Asim Mehmood,MT1004-LA BSEE-2A                                                                          Engr. Muhammad Amjad,MT1004-LA BSEE-2A                                                                          Engr. Muhammad Amjad,"Eng-II BSBA-2A
+C-14 Academic Block II (50),,MG4011-EPS BSEE-8A                                           Engr. Asim Mehmood,MG4011-EPS BSEE-8A                                           Engr. Asim Mehmood,MT1004-LA BSEE-2A                                                                          Engr. Muhammad Amjad,MT1004-LA BSEE-2A                                                                          Engr. Muhammad Amjad,"Eng-II BSBA-2A
  Javeriya Ahmed Hussain",,"MM  BSBA-2A
 Asiya Zaheer ","BMII BSBA-4A
 Aneesa Nawaz"
@@ -170,8 +171,7 @@ Javeria Farooq","CS4031-CC BCS-6B
  Zulfiqar Rafique",
 C-17 Academic Block II (59),,"SE3003-WE BSE-6B
 Ali Fatmi","CS2008-NC BCS-6A
-Jamil Usmani","CS4031-CC BCS-6E
- Shahar Bano","AI2002-AI BCS-6D
+Jamil Usmani",,"AI2002-AI BCS-6D
 Dr. Fahad Sherwani","NS1001-AP BCS-2A
 Muhammad Rahim","NS1001-AP BCS-2A
 Muhammad Rahim","CS4031-CC BCS-6C
@@ -187,8 +187,7 @@ Engr. Abdul Rahman","AI2002-AI BCS-6F
 Usama Antuley","CS3009-SE BCS-6F
 Engr. Abdul Rahman"
 C-19 Academic Block II (50),"CS3014-AHCI BCS-6F
-Kashan Hussain","MG4011-Entrepr BAI-8A
- Asiya Zaheer",,"CS4044-FSPM BCS-6B (F,G,H,J)
+Kashan Hussain",,,"CS4044-FSPM BCS-6B (F,G,H,J)
 Ubaid Aftab","CS4044-FSPM BCS-6B (F,G,H,J)
 Ubaid Aftab","CS2012-TBW BCS-6F
 Mariam Aftab","CS2012-TBW BCS-6D
@@ -208,12 +207,10 @@ Ali Naseer Shah","AI2002-AI BCY-6B
 Sandesh Kumar","CS3009-SE BCS-6H
 Ahmed Qaiser (VF)","CS2012-TBW BCS-6H
 Nazia Imam","CS2012-TBW BCS-6H
-Nazia Imam","CS4031-CC BCS-6H
- Muhammad Kashif"
+Nazia Imam",
 D-23 Academic Block II (50),"CS4031-CC BCS-6D
  Muhammad Kashif",,,,,,,,
-D-24 Academic Block II (50),,,"RESERVED For Abdullah
-28 jan","MT1013-CAL BCS-2A
+D-24 Academic Block II (50),,,,"MT1013-CAL BCS-2A
 Rabia Sageer","MT1013-CAL BCS-2A
 Rabia Sageer","MT2005-Prob BDS-4B
 Muhammad Amjad","MT2005-Prob BDS-4B
@@ -230,8 +227,7 @@ Jibran Rasheed Khan",
 D-26 Academic Block II (50),"CS3004-SDA BCS-4D
 Dr. Muhammad Yaseen","CS2006-OS BCS-4D
 Dr. Ghufran Ahmed","CS2006-OS BCS-4D
-Dr. Ghufran Ahmed","RESERVED For Quratulain 
-BS CE-2A28 jan","MT2005-Prob BCS-4C
+Dr. Ghufran Ahmed",,"MT2005-Prob BCS-4C
 Dr. Khusro Mian","AI2002-AI BCS-4C
 Dr. Shakil","CS3004-SDA BCS-4C
 Syed Ahmed Khan","AI2002-AI BCS-4J
@@ -240,8 +236,7 @@ D-27 Academic Block II (50),"MT2005-Prob BCS-4E
 Syed Ashad","CS2005-DBS BCS-4J
 Shoaib Rauf",,,"AI2002-AI BCS-4D
 Abeeha Sattar","CS2006-OS BCS-4E
-Minhal Raza","RESERVED For Abdullah
-28 jan","CS2006-OS BCS-4A
+Minhal Raza",,"CS2006-OS BCS-4A
 Dr. Ghufran Ahmed","CS3004-SDA BCS-4E
 Syed Ahmed Khan"
 D-28 Academic Block II (50),"CS2005-DBS BCS-4F
@@ -305,9 +300,7 @@ Abuzar Zafar","CY3004-FMA BCY-6A
 Abuzar Zafar","CL2006-OS Lab BAI-4A
 Khadeejah Ashraf",,,"AL2002-AI Lab BCS-4B
 Atif",,
-Academic Block I LAB-4 (46),,,"SE4096-DSSE BSE-8A
- Dr. Muhammad Yaseen","SE4096-DSSE BSE-8A
- Dr. Muhammad Yaseen",,,"CL2005-DBS Lab BCS-4D
+Academic Block I LAB-4 (46),,,,,,,"CL2005-DBS Lab BCS-4D
 Osama Tahir",,
 Academic Block III LAB-5 (52),"AL2002-AI Lab BCS-4G
 Riaz Ahmed",,,"AL2002-AI Lab BCS-4F

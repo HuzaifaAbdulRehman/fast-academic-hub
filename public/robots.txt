@@ -1,0 +1,11 @@
+# robots.txt for FAST Academic Hub
+User-agent: *
+Allow: /
+
+# Disallow admin/internal paths (if any)
+Disallow: /api/
+Disallow: /dev-dist/
+
+# Sitemap (add when you have a sitemap)
+# Sitemap: https://your-domain.com/sitemap.xml
+

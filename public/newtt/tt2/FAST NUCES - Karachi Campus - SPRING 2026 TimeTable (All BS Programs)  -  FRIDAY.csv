@@ -34,13 +34,7 @@ Uqba Fatima(VF)","SS1015-PST BDS-4B
 Uqba Fatima(VF)",,"SS2034 - Arabic Lang. BDS-4B
 Abdullah Siddiqui","SS2034 - Arabic Lang. BDS-4B
 Abdullah Siddiqui"
-A-3 Academic Block II (50),"SS1015-PST BCS-4F
-Dr. Faseeh Ahmed (VF)","SS1015-PST BCS-4F
-Dr. Faseeh Ahmed (VF)",,"SS1015-PST BCS-4H
-Dr. Faseeh Ahmed (VF)","SS1015-PST BCS-4H
-Dr. Faseeh Ahmed (VF)",,,"SS1015-PST BCS-4G
-Dr. Faseeh Ahmed (VF)","SS1015-PST BCS-4G
-Dr. Faseeh Ahmed (VF)"
+A-3 Academic Block II (50),,,,,,,,,
 A-4 Academic Block II (50),,,,,,,,,
 A-5 Academic Block II (50),"DAB-1 BSFT-2B
 Shoaib Anwer","Eng-II BSFT-2B
@@ -87,7 +81,7 @@ B-11 Academic Block II (53),,"DSB BSBA-6A
 Muhammad Khalid",,,"BL BSFT-6A
 Umer Farooq",,"DAB-II BSFT-4A
  Jahangir Tanveer",,
-C-12 Academic Block II (50),MT1009-LADE BSEE-4ABC                                           Ms. Rabia Sagheer,MT1009-LADE BSEE-4ABC                                           Ms. Rabia Sagheer,,ME2001-BME BSEE-6AB                                           Engr. M. Amjad,ME2001-BME BSEE-6AB                                           Engr. M. Amjad,,,,
+C-12 Academic Block II (50),MT1009-LADE BSEE-4ABC                                           Dr. Fahad Riaz,MT1009-LADE BSEE-4ABC                                           Dr. Fahad Riaz,,ME2001-BME BSEE-6AB                                           Engr. M. Amjad,ME2001-BME BSEE-6AB                                           Engr. M. Amjad,,,,
 C-13 Academic Block II (50),EE2010-EMS BSEE-6AB                                           Engr. Rukhsar Ali,CS2018-OS BSEE-6AB                                           Engr. Asim Mehmood,CS2018-OS BSEE-6AB                                           Engr. Asim Mehmood,SS2043-CCE BSEE-2A                                                                             Dr. Wajiha Raheeq,SS2043-CCE BSEE-2A                                                                             Dr. Wajiha Raheeq,,EE1005-DLD BSEE-4A                                          Dr. Hina Gohar,EE2008-SS BSEE-4A                                          Dr. Haider mehdi,EE2008-SS BSEE-4B                                                                            Dr. Haider mehdi
 C-14 Academic Block II (50),"PST  BSFT-4A
 Dr. Shahnawaz Khan","PST  BSFT-4A
@@ -104,8 +98,8 @@ Dr. Shakil","MT2005-Prob BCS-4A
 Nadeem Arif Khan","CS2005-DBS BCS-4A
 Basit Jasani","CS3004-SDA BCS-4A
 Dr. Muhammad Yaseen","CS3004-SDA BCS-4A
-Dr. Muhammad Yaseen","AI2002-AI BCS-4A
-Dr. Shakil",,,
+Dr. Muhammad Yaseen",,,"AI2002-AI BCS-4A
+Dr. Shakil",
 C-18 Academic Block II (50),"AI2002-AI BCS-4B
 Abeeha Sattar","CS3004-SDA BCS-4B
 Mahrukh Khan","CS2006-OS BCS-4B
@@ -118,7 +112,9 @@ Maimoona","CS2005-DBS BCS-4K
 Ghulam Qadir","CS2005-DBS BCS-4C
 Hajra Ahmed","MT2005-Prob BCS-4D
 Nadeem Arif Khan",,,
-C-21 Academic Block II (50),,,,,"AI2002-AI BCS-4D
+C-21 Academic Block II (50),"SS1015-PST BCS-4F
+Dr. Faseeh Ahmed (VF)","SS1015-PST BCS-4F
+Dr. Faseeh Ahmed (VF)",,,"AI2002-AI BCS-4D
 Abeeha Sattar","CS2006-OS BCS-4E
 Minhal Raza",,,"CS3004-SDA BCS-4E
 Syed Ahmed Khan"
@@ -130,9 +126,13 @@ Dr. Farrukh salim",
 D-23 Academic Block II (50),"MT2005-Prob BCS-4H
 Nadeem Arif Khan","CS2005-DBS BCS-4D
 Talha Shahid","CS2005-DBS BCS-4D
-Talha Shahid",,,"CS2006-OS BCS-4J
+Talha Shahid","SS1015-PST BCS-4H
+Dr. Faseeh Ahmed (VF)","SS1015-PST BCS-4H
+Dr. Faseeh Ahmed (VF)","CS2006-OS BCS-4J
 Ubaidullah","AI2002-AI BCS-4B
-Abeeha Sattar",,
+Abeeha Sattar","SS1015-PST BCS-4G
+Dr. Faseeh Ahmed (VF)","SS1015-PST BCS-4G
+Dr. Faseeh Ahmed (VF)"
 D-24 Academic Block II (50),"SS1015-PST BCS-4J
 Muhammad Abdullah (VF)","SS1015-PST BCS-4J
 Muhammad Abdullah (VF)",,"MT2005-Prob BCS-4J
@@ -184,8 +184,8 @@ Khadija Shireen","SS1014-EW BSE-2B
 Khadija Shireen","SS2043-CCE BCY-2A
 Aneesa Nawaz",,,
 E-32 Academic Block II (52),,"SS2043-CCE BCS-2J
-Ashad Ali","SS2043-CCE BCS-2J
-Ashad Ali","MT1008-MVC BCY-2A
+Rabia Sagheer","SS2043-CCE BCS-2J
+Rabia Sagheer","MT1008-MVC BCY-2A
 Aneesa Nawaz","SS1014-EW BCY-2A
 Reema Brohi","CS1004-OOP BCS-2J
 Sobia Iftikhar","CS1004-OOP BAI-2A
@@ -198,8 +198,8 @@ Abuzar Zafar","MT1008-MVC BCS-2J
 Urooj","EE1005-DLD BCY-2B
 Abuzar Zafar",,"SS1015-PST BCS-2D
  Muhammad Adeel","SS2043-CCE BCS-2K
-Ashad Ali","SS2043-CCE BCS-2K
-Ashad Ali"
+Rabia Sagheer","SS2043-CCE BCS-2K
+Rabia Sagheer"
 E-34 Academic Block II (52),"MT1008-MVC BAI-2C
 Moheez Ur Rahim","MT1008-MVC BAI-2C
 Moheez Ur Rahim","SS1019-UOS BAI-2C
@@ -230,16 +230,16 @@ Qurat ul Ain",,,,,,"Eng-II lab BSFT-2D
 COMPUTING LABS,,,,,,,,,
 Academic Block I LAB-1 (49),"CS3001-CN Lab BCY-4A
 Waseem Rauf",,,"RESERVED FOR ZEHRA KHAN (Student Affairs)
-30- Jan",,,"CL2006-OS Lab BSE-4A
-Ramsha Iqbal",,
+30- Jan",,,,,
 Academic Block I CY LAB-2 (48),"CL2006-OS Lab BCS-4E
-Khadija tul kubra ",,,,,,,,
+Ramsha Iqbal",,,,,,,,
 Academic Block I LAB-3 (47),"CL2005-DBS Lab BDS-4A
 Ramsha Jatt",,,"CL1004-OOP Lab BCS-2E
 Izzah Salam",,,"CL2005-DBS Lab BCS-4H
 Saira Ayub",,
 Academic Block I LAB-4 (46),"CL2006-OS Lab BDS-4B
-Khadeejah Ashraf",,,,,,,,
+Khadeejah Ashraf",,,,,,"CL2006-OS Lab BSE-4A
+Khadija tul kubra",,
 Academic Block III LAB-5 (52),"CL2006-OS Lab BCS-4C
 Ravia Ijaz",,,"CL2005-DBS Lab BCS-4F
 Sheeraz Iqbal",,,"CL2005-DBS Lab BSE-4B

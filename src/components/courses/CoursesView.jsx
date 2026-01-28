@@ -574,7 +574,6 @@ export default function CoursesView({ onNavigate }) {
       {/* Toast Notifications */}
       {toast && (
         <Toast
-          key={`${toast.message}-${Date.now()}`}
           message={toast.message}
           type={toast.type}
           duration={toast.duration}

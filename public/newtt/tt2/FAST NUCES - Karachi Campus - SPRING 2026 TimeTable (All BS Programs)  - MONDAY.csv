@@ -38,7 +38,8 @@ Dr. Fahad Sherwani","CS3014-AHCI BCS-6E
 Ghulam Murtaza","CS3014-AHCI BCS-6E
 Ghulam Murtaza",,"CS3006-PDC BAI-6A
 Farooq Zaidi"
-E-6 Academic Block I (50),,"CS4068-NPS BCS-6B
+E-6 Academic Block I (50),"CS2012-TBW BCS-6F
+Mariam Aftab","CS4068-NPS BCS-6B
 Shoaib Raza","SE4032-BPE BSE-6A
 Rubab Manzar","SE4032-BPE BSE-6A
 Rubab Manzar","AI2002-AI BCS-6F
@@ -52,20 +53,18 @@ Dr. Hassan Saeed","CS4045-DLP BAI-6A
 Dr. Kamran Ali","CY4045-BLKC BCY-6A
 Nouman Rajput","CY4045-BLKC BCY-6A
 Nouman Rajput",,"SE4002-FSPM BSE-6A
-Minhal Raza","CS4031-CC BCS-6H
- Muhammad Kashif","CS3009-SE BCS-6J
+Minhal Raza","CS2012-TBW BCS-6J
+Mariam Aftab","CS3009-SE BCS-6J
 Hajra Ahmed","AI2002-AI BCS-6J
 Usama Antuley"
-R-12 Academic Block I (70),"CS4031-CC BCS-6G
- Ghulam Murtaza",,"CY3004-FMA BCY-6A
+R-12 Academic Block I (70),,,"CY3004-FMA BCY-6A
 Abuzar Zafar","CY3004-FMA BCY-6A
 Abuzar Zafar","EE3009-CA BCS-6A
 Dr. Zulfiqar Ali Memon","CS2005-DBS BSE-4B
 Dr. Anam Qureshi","CS3009-SE BCS-6A
 Sobia Iftikhar","CS2005-DBS BSE-4A
 Dr. Anam Qureshi",
-R-109 Academic Block I (50),,,, ,,,,"CS4031-CC BCS-6F
- Zulfiqar Rafique",
+R-109 Academic Block I (50),,,, ,,,,,
 A-1 Academic Block II (50),"CS3009-SE BCS-6J
 Hajra Ahmed",,"CS4053-RS BAI-6A
 Zain ul Hassan","CS4053-RS BAI-6A
@@ -140,11 +139,9 @@ C-13 Academic Block II (50),CS1011-Prog. for Engrs. BSEE-2B                     
 C-14 Academic Block II (50),EE2010-EMS BSEE-6AB                                           Engr. Rukhsar Ali,EE2010-EMS BSEE-6AB                                           Engr. Rukhsar Ali,MG3008-EE BSEE-6AB                                                                              Dr. Burhan Khan,EE4049-NSB BSEE-8A                                           Engr. Zakir Hussain,EE4049-NSB BSEE-8A                                           Engr. Zakir Hussain,"EE1005-DLD BSEE-4C
 Dr. Hina Gohar",MG3008-EE BSEE-6AB                                                                              Dr. Burhan Khan,ME2001-BME BSEE-6AB                                           Engr. M. Amjad,
 C-15 Academic Block II (50),,CS2011-FDB BSEE-8A                                                                 Dr. Ahsan Nadeem,CS2011-FDB BSEE-8A                                                                 Dr. Ahsan Nadeem,SS2011-TCS BSEE-4A                                           Ms. Javeriya Ahmed Hussain,SS2011-TCS BSEE-4A                                           Ms. Javeriya Ahmed Hussain,,MT1004-LA BSEE-2A                                          Engr. M. Amjad,SS1015-PST BSEE-2C + BSCE-2B                                           Ms. Khusboo,
-C-16 Academic Block II (50),"CS2012-TBW BCS-6F
-Mariam Aftab","CS2006-OS BDS-4B
+C-16 Academic Block II (50),,"CS2006-OS BDS-4B
 Saeeda Kanwal","CS2006-OS BDS-4B
-Saeeda Kanwal",,,,"CS2012-TBW BCS-6J
-Mariam Aftab",,
+Saeeda Kanwal",,,,,,
 C-17 Academic Block II (59),"CS3004-SDA BCS-4C
 Syed Ahmed Khan",,"BC BSFT-6A
 Maimoona",,"CS2012-TBW BCS-6G

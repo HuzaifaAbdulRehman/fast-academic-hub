@@ -1,19 +1,24 @@
+import { useState } from 'react'
 import { useApp } from '../../context/AppContext'
 import { calculateAttendanceStats } from '../../utils/attendanceCalculator'
 import { COURSE_COLORS } from '../../utils/constants'
 import { Trash2, Edit } from 'lucide-react'
+import ConfirmModal from '../shared/ConfirmModal'
 
 export default function CourseCard({ course }) {
   const { attendance, deleteCourse } = useApp()
   const stats = calculateAttendanceStats(course, attendance)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   // Get course color
   const courseColor = COURSE_COLORS.find(c => c.name === course.color) || COURSE_COLORS[0]
 
   const handleDelete = () => {
-    if (confirm(`Delete "${course.name}"? This will remove all attendance records.`)) {
-      deleteCourse(course.id)
-    }
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDelete = () => {
+    deleteCourse(course.id)
   }
 
   return (
@@ -95,6 +100,18 @@ export default function CourseCard({ course }) {
           </p>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDelete}
+        title="Delete Course"
+        message={`Are you sure you want to delete "${course.name}"? This will remove all attendance records.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   )
 }

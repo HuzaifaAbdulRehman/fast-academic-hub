@@ -1,8 +1,8 @@
 {
-  "totalSections": 87,
-  "totalCourses": 664,
+  "totalSections": 86,
+  "totalCourses": 669,
   "daysProcessed": 5,
-  "lastUpdated": "2026-01-26T17:04:25.246Z",
+  "lastUpdated": "2026-01-28T01:49:11.875Z",
   "data": {
     "BCS-6B": [
       {
@@ -593,20 +593,13 @@
         "courseName": "EE3009-CA",
         "section": "BCS-6A",
         "instructor": "Dr. Zulfiqar Ali Memon",
-        "creditHours": 4,
+        "creditHours": 3,
         "sessions": [
           {
             "day": "Monday",
             "timeSlot": "12:00-12:45",
             "room": "R-12 Academic Block I (70)",
             "slotNumber": 5,
-            "slotCount": 1
-          },
-          {
-            "day": "Tuesday",
-            "timeSlot": "14:15-15:00",
-            "room": "R-12 Academic Block I (70)",
-            "slotNumber": 8,
             "slotCount": 1
           },
           {
@@ -701,6 +694,41 @@
         "slotCount": 1
       },
       {
+        "courseCode": "CS3014-AHCI",
+        "courseName": "CS3014-AHCI",
+        "section": "BCS-6A",
+        "instructor": "Ghulam Murtaza",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Tuesday",
+            "timeSlot": "13:30-14:15",
+            "room": "A-6 Academic Block II (50)",
+            "slotNumber": 7,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "11:15-12:00",
+            "room": "A-2Academic Block II (50)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "14:15-15:00",
+            "room": "A-3 Academic Block II (50)",
+            "slotNumber": 8,
+            "slotCount": 1
+          }
+        ],
+        "day": "Tuesday",
+        "timeSlot": "13:30-14:15",
+        "room": "A-6 Academic Block II (50)",
+        "slotNumber": 7,
+        "slotCount": 1
+      },
+      {
         "courseCode": "AL2002-AI Lab",
         "courseName": "AL2002-AI Lab",
         "section": "BCS-6A",
@@ -720,34 +748,6 @@
         "room": "Academic Block II Lab-12 (47)",
         "slotNumber": 7,
         "slotCount": 3
-      },
-      {
-        "courseCode": "CS3014-AHCI",
-        "courseName": "CS3014-AHCI",
-        "section": "BCS-6A",
-        "instructor": "Ghulam Murtaza",
-        "creditHours": 2,
-        "sessions": [
-          {
-            "day": "Thursday",
-            "timeSlot": "09:00-09:45",
-            "room": "A-2Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "11:15-12:00",
-            "room": "A-2Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 1
-          }
-        ],
-        "day": "Thursday",
-        "timeSlot": "09:00-09:45",
-        "room": "A-2Academic Block II (50)",
-        "slotNumber": 1,
-        "slotCount": 1
       }
     ],
     "BAI-6A": [
@@ -982,6 +982,41 @@
         "timeSlot": "14:15-15:00",
         "room": "E-1 Academic Block I (50)",
         "slotNumber": 8,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS4031-CC",
+        "courseName": "CS4031-CC",
+        "section": "BCS-6G",
+        "instructor": "Ghulam Murtaza",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Monday",
+            "timeSlot": "09:00-09:45",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 1,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "09:00-09:45",
+            "room": "A-2Academic Block II (50)",
+            "slotNumber": 1,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "15:00-15:45",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 9,
+            "slotCount": 1
+          }
+        ],
+        "day": "Monday",
+        "timeSlot": "09:00-09:45",
+        "room": "R-12 Academic Block I (70)",
+        "slotNumber": 1,
         "slotCount": 1
       },
       {
@@ -1786,6 +1821,41 @@
         "slotCount": 1
       },
       {
+        "courseCode": "CS4031-CC",
+        "courseName": "CS4031-CC",
+        "section": "BCS-6H",
+        "instructor": "Muhammad Kashif",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Monday",
+            "timeSlot": "13:30-14:15",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 7,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "15:00-15:45",
+            "room": "D-22 Academic Block II (50)",
+            "slotNumber": 9,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "11:15-12:00",
+            "room": "D-22 Academic Block II (50)",
+            "slotNumber": 4,
+            "slotCount": 1
+          }
+        ],
+        "day": "Monday",
+        "timeSlot": "13:30-14:15",
+        "room": "R-11 Academic Block I (50)",
+        "slotNumber": 7,
+        "slotCount": 1
+      },
+      {
         "courseCode": "CS2012-TBW",
         "courseName": "CS2012-TBW",
         "section": "BCS-6H",
@@ -2040,6 +2110,41 @@
         "slotCount": 3
       },
       {
+        "courseCode": "CS4031-CC",
+        "courseName": "CS4031-CC",
+        "section": "BCS-6E",
+        "instructor": "Shahar Bano",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Wednesday",
+            "timeSlot": "14:15-15:00",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 8,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "11:15-12:00",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "13:30-14:15",
+            "room": "D-23 Academic Block II (50)",
+            "slotNumber": 7,
+            "slotCount": 1
+          }
+        ],
+        "day": "Wednesday",
+        "timeSlot": "14:15-15:00",
+        "room": "A-1 Academic Block II (50)",
+        "slotNumber": 8,
+        "slotCount": 1
+      },
+      {
         "courseCode": "CS3009-SE",
         "courseName": "CS3009-SE",
         "section": "BCS-6E",
@@ -2073,169 +2178,6 @@
         "room": "C-18 Academic Block II (50)",
         "slotNumber": 6,
         "slotCount": 1
-      }
-    ],
-    "BCS-6F": [
-      {
-        "courseCode": "CS2012-TBW",
-        "courseName": "CS2012-TBW",
-        "section": "BCS-6F",
-        "instructor": "Mariam Aftab",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Monday",
-            "timeSlot": "09:00-09:45",
-            "room": "E-6 Academic Block I (50)",
-            "slotNumber": 1,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "12:45-13:30",
-            "room": "C-19 Academic Block II (50)",
-            "slotNumber": 6,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "12:00-12:45",
-            "room": "C-19 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 1
-          }
-        ],
-        "day": "Monday",
-        "timeSlot": "09:00-09:45",
-        "room": "E-6 Academic Block I (50)",
-        "slotNumber": 1,
-        "slotCount": 1
-      },
-      {
-        "courseCode": "AI2002-AI",
-        "courseName": "AI2002-AI",
-        "section": "BCS-6F",
-        "instructor": "Usama Antuley",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Monday",
-            "timeSlot": "12:00-12:45",
-            "room": "E-6 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 1
-          },
-          {
-            "day": "Tuesday",
-            "timeSlot": "10:30-11:15",
-            "room": "R-11 Academic Block I (50)",
-            "slotNumber": 3,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "14:15-15:00",
-            "room": "C-18 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 1
-          }
-        ],
-        "day": "Monday",
-        "timeSlot": "12:00-12:45",
-        "room": "E-6 Academic Block I (50)",
-        "slotNumber": 5,
-        "slotCount": 1
-      },
-      {
-        "courseCode": "CS3014-AHCI",
-        "courseName": "CS3014-AHCI",
-        "section": "BCS-6F",
-        "instructor": "Kashan Hussain",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Tuesday",
-            "timeSlot": "11:15-12:00",
-            "room": "A-7 Academic Block II (50)",
-            "slotNumber": 4,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "09:00-09:45",
-            "room": "C-19 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "14:15-15:00",
-            "room": "C-19 Academic Block II (50)",
-            "slotNumber": 8,
-            "slotCount": 1
-          }
-        ],
-        "day": "Tuesday",
-        "timeSlot": "11:15-12:00",
-        "room": "A-7 Academic Block II (50)",
-        "slotNumber": 4,
-        "slotCount": 1
-      },
-      {
-        "courseCode": "CS3009-SE",
-        "courseName": "CS3009-SE",
-        "section": "BCS-6F",
-        "instructor": "Engr. Abdul Rahman",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Tuesday",
-            "timeSlot": "12:00-12:45",
-            "room": "A-7 Academic Block II (50)",
-            "slotNumber": 5,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "15:00-15:45",
-            "room": "C-18 Academic Block II (50)",
-            "slotNumber": 9,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "13:30-14:15",
-            "room": "C-19 Academic Block II (50)",
-            "slotNumber": 7,
-            "slotCount": 1
-          }
-        ],
-        "day": "Tuesday",
-        "timeSlot": "12:00-12:45",
-        "room": "A-7 Academic Block II (50)",
-        "slotNumber": 5,
-        "slotCount": 1
-      },
-      {
-        "courseCode": "AL2002-AI Lab",
-        "courseName": "AL2002-AI Lab",
-        "section": "BCS-6F",
-        "instructor": "Abdullah Shaikh",
-        "creditHours": 1,
-        "sessions": [
-          {
-            "day": "Thursday",
-            "timeSlot": "09:00-11:15",
-            "room": "Academic Block II Lab-12 (47)",
-            "slotNumber": 1,
-            "slotCount": 3
-          }
-        ],
-        "day": "Thursday",
-        "timeSlot": "09:00-11:15",
-        "room": "Academic Block II Lab-12 (47)",
-        "slotNumber": 1,
-        "slotCount": 3
       }
     ],
     "BSE-6A": [
@@ -2447,6 +2389,204 @@
         "timeSlot": "11:15-13:30",
         "room": "Academic Block III LAB-5 (52)",
         "slotNumber": 4,
+        "slotCount": 3
+      }
+    ],
+    "BCS-6F": [
+      {
+        "courseCode": "AI2002-AI",
+        "courseName": "AI2002-AI",
+        "section": "BCS-6F",
+        "instructor": "Usama Antuley",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Monday",
+            "timeSlot": "12:00-12:45",
+            "room": "E-6 Academic Block I (50)",
+            "slotNumber": 5,
+            "slotCount": 1
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "10:30-11:15",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 3,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "14:15-15:00",
+            "room": "C-18 Academic Block II (50)",
+            "slotNumber": 8,
+            "slotCount": 1
+          }
+        ],
+        "day": "Monday",
+        "timeSlot": "12:00-12:45",
+        "room": "E-6 Academic Block I (50)",
+        "slotNumber": 5,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS4031-CC",
+        "courseName": "CS4031-CC",
+        "section": "BCS-6F",
+        "instructor": "Zulfiqar Rafique",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Monday",
+            "timeSlot": "14:15-15:00",
+            "room": "R-109 Academic Block I (50)",
+            "slotNumber": 8,
+            "slotCount": 1
+          },
+          {
+            "day": "Tuesday",
+            "timeSlot": "15:00-15:45",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 9,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "12:45-13:30",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 6,
+            "slotCount": 1
+          }
+        ],
+        "day": "Monday",
+        "timeSlot": "14:15-15:00",
+        "room": "R-109 Academic Block I (50)",
+        "slotNumber": 8,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS2012-TBW",
+        "courseName": "CS2012-TBW",
+        "section": "BCS-6F",
+        "instructor": "Mariam Aftab",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Monday",
+            "timeSlot": "09:00-09:45",
+            "room": "C-16 Academic Block II (50)",
+            "slotNumber": 1,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "12:45-13:30",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 6,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "12:00-12:45",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 5,
+            "slotCount": 1
+          }
+        ],
+        "day": "Monday",
+        "timeSlot": "09:00-09:45",
+        "room": "C-16 Academic Block II (50)",
+        "slotNumber": 1,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS3014-AHCI",
+        "courseName": "CS3014-AHCI",
+        "section": "BCS-6F",
+        "instructor": "Kashan Hussain",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:15-12:00",
+            "room": "A-7 Academic Block II (50)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "09:00-09:45",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 1,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "14:15-15:00",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 8,
+            "slotCount": 1
+          }
+        ],
+        "day": "Tuesday",
+        "timeSlot": "11:15-12:00",
+        "room": "A-7 Academic Block II (50)",
+        "slotNumber": 4,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS3009-SE",
+        "courseName": "CS3009-SE",
+        "section": "BCS-6F",
+        "instructor": "Engr. Abdul Rahman",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Tuesday",
+            "timeSlot": "12:00-12:45",
+            "room": "A-7 Academic Block II (50)",
+            "slotNumber": 5,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "15:00-15:45",
+            "room": "C-18 Academic Block II (50)",
+            "slotNumber": 9,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "13:30-14:15",
+            "room": "C-19 Academic Block II (50)",
+            "slotNumber": 7,
+            "slotCount": 1
+          }
+        ],
+        "day": "Tuesday",
+        "timeSlot": "12:00-12:45",
+        "room": "A-7 Academic Block II (50)",
+        "slotNumber": 5,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "AL2002-AI Lab",
+        "courseName": "AL2002-AI Lab",
+        "section": "BCS-6F",
+        "instructor": "Abdullah Shaikh",
+        "creditHours": 1,
+        "sessions": [
+          {
+            "day": "Thursday",
+            "timeSlot": "09:00-11:15",
+            "room": "Academic Block II Lab-12 (47)",
+            "slotNumber": 1,
+            "slotCount": 3
+          }
+        ],
+        "day": "Thursday",
+        "timeSlot": "09:00-11:15",
+        "room": "Academic Block II Lab-12 (47)",
+        "slotNumber": 1,
         "slotCount": 3
       }
     ],
@@ -2918,41 +3058,6 @@
     ],
     "BCS-6J": [
       {
-        "courseCode": "CS2012-TBW",
-        "courseName": "CS2012-TBW",
-        "section": "BCS-6J",
-        "instructor": "Mariam Aftab",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Monday",
-            "timeSlot": "13:30-14:15",
-            "room": "R-11 Academic Block I (50)",
-            "slotNumber": 7,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "09:00-09:45",
-            "room": "D-22 Academic Block II (50)",
-            "slotNumber": 1,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "09:45-10:30",
-            "room": "C-17 Academic Block II (59)",
-            "slotNumber": 2,
-            "slotCount": 1
-          }
-        ],
-        "day": "Monday",
-        "timeSlot": "13:30-14:15",
-        "room": "R-11 Academic Block I (50)",
-        "slotNumber": 7,
-        "slotCount": 1
-      },
-      {
         "courseCode": "CS3009-SE",
         "courseName": "CS3009-SE",
         "section": "BCS-6J",
@@ -3020,6 +3125,76 @@
         "timeSlot": "15:00-15:45",
         "room": "R-11 Academic Block I (50)",
         "slotNumber": 9,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS2012-TBW",
+        "courseName": "CS2012-TBW",
+        "section": "BCS-6J",
+        "instructor": "Mariam Aftab",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Monday",
+            "timeSlot": "13:30-14:15",
+            "room": "C-16 Academic Block II (50)",
+            "slotNumber": 7,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "09:00-09:45",
+            "room": "D-22 Academic Block II (50)",
+            "slotNumber": 1,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "09:45-10:30",
+            "room": "C-17 Academic Block II (59)",
+            "slotNumber": 2,
+            "slotCount": 1
+          }
+        ],
+        "day": "Monday",
+        "timeSlot": "13:30-14:15",
+        "room": "C-16 Academic Block II (50)",
+        "slotNumber": 7,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS4031-CC",
+        "courseName": "CS4031-CC",
+        "section": "BCS-6J",
+        "instructor": "Zulfiqar Rafique",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Tuesday",
+            "timeSlot": "09:00-09:45",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 1,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "11:15-12:00",
+            "room": "D-23 Academic Block II (50)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "14:15-15:00",
+            "room": "D-23 Academic Block II (50)",
+            "slotNumber": 8,
+            "slotCount": 1
+          }
+        ],
+        "day": "Tuesday",
+        "timeSlot": "09:00-09:45",
+        "room": "A-1 Academic Block II (50)",
+        "slotNumber": 1,
         "slotCount": 1
       },
       {
@@ -3555,20 +3730,20 @@
         "courseCode": "CL2006-OS Lab",
         "courseName": "CL2006-OS Lab",
         "section": "BSE-4A",
-        "instructor": "Khadija tul kubra",
+        "instructor": "Ramsha Iqbal",
         "creditHours": 1,
         "sessions": [
           {
             "day": "Friday",
             "timeSlot": "13:30-15:45",
-            "room": "Academic Block I LAB-4 (46)",
+            "room": "Academic Block I LAB-1 (49)",
             "slotNumber": 7,
             "slotCount": 3
           }
         ],
         "day": "Friday",
         "timeSlot": "13:30-15:45",
-        "room": "Academic Block I LAB-4 (46)",
+        "room": "Academic Block I LAB-1 (49)",
         "slotNumber": 7,
         "slotCount": 3
       }
@@ -3786,9 +3961,9 @@
           },
           {
             "day": "Friday",
-            "timeSlot": "14:15-15:00",
+            "timeSlot": "12:45-13:30",
             "room": "C-17 Academic Block II (59)",
-            "slotNumber": 8,
+            "slotNumber": 6,
             "slotCount": 1
           }
         ],
@@ -5282,7 +5457,7 @@
         "courseCode": "CL2006-OS Lab",
         "courseName": "CL2006-OS Lab",
         "section": "BCS-4E",
-        "instructor": "Ramsha Iqbal",
+        "instructor": "Khadija tul kubra",
         "creditHours": 1,
         "sessions": [
           {
@@ -5682,34 +5857,6 @@
         "slotCount": 3
       },
       {
-        "courseCode": "SS1014-EW",
-        "courseName": "SS1014-EW",
-        "section": "BAI-2A",
-        "instructor": "Qurat ul Ain",
-        "creditHours": 2,
-        "sessions": [
-          {
-            "day": "Tuesday",
-            "timeSlot": "09:00-09:45",
-            "room": "E-33 Academic Block II (52)",
-            "slotNumber": 1,
-            "slotCount": 1
-          },
-          {
-            "day": "Friday",
-            "timeSlot": "12:45-13:30",
-            "room": "E-35 Academic Block II (52)",
-            "slotNumber": 6,
-            "slotCount": 1
-          }
-        ],
-        "day": "Tuesday",
-        "timeSlot": "09:00-09:45",
-        "room": "E-33 Academic Block II (52)",
-        "slotNumber": 1,
-        "slotCount": 1
-      },
-      {
         "courseCode": "EE1005-DLD",
         "courseName": "EE1005-DLD",
         "section": "BAI-2A",
@@ -5777,6 +5924,34 @@
         "timeSlot": "14:15-15:00",
         "room": "E-35 Academic Block II (52)",
         "slotNumber": 8,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "SS1014-EW",
+        "courseName": "SS1014-EW",
+        "section": "BAI-2A",
+        "instructor": "Qurat ul Ain",
+        "creditHours": 2,
+        "sessions": [
+          {
+            "day": "Thursday",
+            "timeSlot": "12:00-12:45",
+            "room": "E-30 Academic Block II (52)",
+            "slotNumber": 5,
+            "slotCount": 1
+          },
+          {
+            "day": "Friday",
+            "timeSlot": "12:45-13:30",
+            "room": "E-35 Academic Block II (52)",
+            "slotNumber": 6,
+            "slotCount": 1
+          }
+        ],
+        "day": "Thursday",
+        "timeSlot": "12:00-12:45",
+        "room": "E-30 Academic Block II (52)",
+        "slotNumber": 5,
         "slotCount": 1
       },
       {
@@ -9562,6 +9737,27 @@
         "slotCount": 3
       },
       {
+        "courseCode": "EL2010-EMS Lab",
+        "courseName": "EL2010-EMS Lab",
+        "section": "BSEE-4C",
+        "instructor": "TBA",
+        "creditHours": 1,
+        "sessions": [
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:15-13:30",
+            "room": "Academic Block II Electromechanical Systems Lab",
+            "slotNumber": 4,
+            "slotCount": 3
+          }
+        ],
+        "day": "Tuesday",
+        "timeSlot": "11:15-13:30",
+        "room": "Academic Block II Electromechanical Systems Lab",
+        "slotNumber": 4,
+        "slotCount": 3
+      },
+      {
         "courseCode": "EL1005-DLD Lab",
         "courseName": "EL1005-DLD Lab",
         "section": "BSEE-4C",
@@ -11188,21 +11384,21 @@
           {
             "day": "Friday",
             "timeSlot": "11:15-12:00",
-            "room": "D-23 Academic Block II (50)",
+            "room": "A-3 Academic Block II (50)",
             "slotNumber": 4,
             "slotCount": 1
           },
           {
             "day": "Friday",
             "timeSlot": "12:00-12:45",
-            "room": "D-23 Academic Block II (50)",
+            "room": "A-3 Academic Block II (50)",
             "slotNumber": 5,
             "slotCount": 1
           }
         ],
         "day": "Friday",
         "timeSlot": "11:15-12:00",
-        "room": "D-23 Academic Block II (50)",
+        "room": "A-3 Academic Block II (50)",
         "slotNumber": 4,
         "slotCount": 1
       },
@@ -11703,21 +11899,21 @@
           {
             "day": "Friday",
             "timeSlot": "09:00-09:45",
-            "room": "C-21 Academic Block II (50)",
+            "room": "A-3 Academic Block II (50)",
             "slotNumber": 1,
             "slotCount": 1
           },
           {
             "day": "Friday",
             "timeSlot": "09:45-10:30",
-            "room": "C-21 Academic Block II (50)",
+            "room": "A-3 Academic Block II (50)",
             "slotNumber": 2,
             "slotCount": 1
           }
         ],
         "day": "Friday",
         "timeSlot": "09:00-09:45",
-        "room": "C-21 Academic Block II (50)",
+        "room": "A-3 Academic Block II (50)",
         "slotNumber": 1,
         "slotCount": 1
       },
@@ -13141,21 +13337,21 @@
           {
             "day": "Friday",
             "timeSlot": "14:15-15:00",
-            "room": "D-23 Academic Block II (50)",
+            "room": "A-3 Academic Block II (50)",
             "slotNumber": 8,
             "slotCount": 1
           },
           {
             "day": "Friday",
             "timeSlot": "15:00-15:45",
-            "room": "D-23 Academic Block II (50)",
+            "room": "A-3 Academic Block II (50)",
             "slotNumber": 9,
             "slotCount": 1
           }
         ],
         "day": "Friday",
         "timeSlot": "14:15-15:00",
-        "room": "D-23 Academic Block II (50)",
+        "room": "A-3 Academic Block II (50)",
         "slotNumber": 8,
         "slotCount": 1
       }
@@ -14601,7 +14797,7 @@
         "courseCode": "SS2043-CCE",
         "courseName": "SS2043-CCE",
         "section": "BCS-2J",
-        "instructor": "Rabia Sagheer",
+        "instructor": "Ashad Ali",
         "creditHours": 2,
         "sessions": [
           {
@@ -14876,7 +15072,7 @@
         "courseCode": "SS2043-CCE",
         "courseName": "SS2043-CCE",
         "section": "BCS-2K",
-        "instructor": "Rabia Sagheer",
+        "instructor": "Ashad Ali",
         "creditHours": 2,
         "sessions": [
           {
@@ -16567,28 +16763,28 @@
           {
             "day": "Tuesday",
             "timeSlot": "11:15-12:00",
-            "room": "R-11 Academic Block I (50)",
+            "room": "R-12 Academic Block I (70)",
             "slotNumber": 4,
             "slotCount": 1
           },
           {
             "day": "Wednesday",
             "timeSlot": "13:30-14:15",
-            "room": "R-11 Academic Block I (50)",
+            "room": "R-12 Academic Block I (70)",
             "slotNumber": 7,
             "slotCount": 1
           },
           {
             "day": "Thursday",
             "timeSlot": "09:45-10:30",
-            "room": "R-11 Academic Block I (50)",
+            "room": "R-12 Academic Block I (70)",
             "slotNumber": 2,
             "slotCount": 1
           }
         ],
         "day": "Tuesday",
         "timeSlot": "11:15-12:00",
-        "room": "R-11 Academic Block I (50)",
+        "room": "R-12 Academic Block I (70)",
         "slotNumber": 4,
         "slotCount": 1
       },
@@ -16625,41 +16821,6 @@
         "timeSlot": "12:00-12:45",
         "room": "R-12 Academic Block I (70)",
         "slotNumber": 5,
-        "slotCount": 1
-      },
-      {
-        "courseCode": "AI4002-CV",
-        "courseName": "AI4002-CV",
-        "section": "BCS-8A",
-        "instructor": "Bilal Ahsan",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Tuesday",
-            "timeSlot": "11:15-12:00",
-            "room": "R-109 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "13:30-14:15",
-            "room": "R-109 Academic Block I (50)",
-            "slotNumber": 7,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "09:45-10:30",
-            "room": "R-109 Academic Block I (50)",
-            "slotNumber": 2,
-            "slotCount": 1
-          }
-        ],
-        "day": "Tuesday",
-        "timeSlot": "11:15-12:00",
-        "room": "R-109 Academic Block I (50)",
-        "slotNumber": 4,
         "slotCount": 1
       },
       {
@@ -16803,41 +16964,6 @@
         "slotCount": 1
       },
       {
-        "courseCode": "CS4104-AML",
-        "courseName": "CS4104-AML",
-        "section": "BCS-8A",
-        "instructor": "Minhal Raza",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Wednesday",
-            "timeSlot": "10:30-11:15",
-            "room": "E-3 Academic Block I (50)",
-            "slotNumber": 3,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "11:15-12:00",
-            "room": "E-3 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "12:00-12:45",
-            "room": "Academic Block I LAB-3 (47)",
-            "slotNumber": 5,
-            "slotCount": 1
-          }
-        ],
-        "day": "Wednesday",
-        "timeSlot": "10:30-11:15",
-        "room": "E-3 Academic Block I (50)",
-        "slotNumber": 3,
-        "slotCount": 1
-      },
-      {
         "courseCode": "MG4007-MHR",
         "courseName": "MG4007-MHR",
         "section": "BCS-8A",
@@ -16881,65 +17007,30 @@
         "sessions": [
           {
             "day": "Wednesday",
-            "timeSlot": "09:45-10:30",
-            "room": "E-5 Academic Block I (50)",
-            "slotNumber": 2,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
             "timeSlot": "12:45-13:30",
             "room": "E-5 Academic Block I (50)",
             "slotNumber": 6,
             "slotCount": 1
           },
           {
+            "day": "Wednesday",
+            "timeSlot": "09:45-10:30",
+            "room": "R-11 Academic Block I (50)",
+            "slotNumber": 2,
+            "slotCount": 1
+          },
+          {
             "day": "Thursday",
             "timeSlot": "09:00-09:45",
-            "room": "E-5 Academic Block I (50)",
+            "room": "R-12 Academic Block I (70)",
             "slotNumber": 1,
             "slotCount": 1
           }
         ],
         "day": "Wednesday",
-        "timeSlot": "09:45-10:30",
+        "timeSlot": "12:45-13:30",
         "room": "E-5 Academic Block I (50)",
-        "slotNumber": 2,
-        "slotCount": 1
-      },
-      {
-        "courseCode": "AI4015-AAI",
-        "courseName": "AI4015-AAI",
-        "section": "BCS-8A",
-        "instructor": "Dr. Farrukh Shahid",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Wednesday",
-            "timeSlot": "10:30-11:15",
-            "room": "E-5 Academic Block I (50)",
-            "slotNumber": 3,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "11:15-12:00",
-            "room": "E-5 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "12:00-12:45",
-            "room": "E-5 Academic Block I (50)",
-            "slotNumber": 5,
-            "slotCount": 1
-          }
-        ],
-        "day": "Wednesday",
-        "timeSlot": "10:30-11:15",
-        "room": "E-5 Academic Block I (50)",
-        "slotNumber": 3,
+        "slotNumber": 6,
         "slotCount": 1
       },
       {
@@ -16978,6 +17069,69 @@
         "slotCount": 1
       },
       {
+        "courseCode": "SS2014- German Lang",
+        "courseName": "SS2014- German Lang",
+        "section": "BCS-8A",
+        "instructor": "Dr. Fahad Samad",
+        "creditHours": 2,
+        "sessions": [
+          {
+            "day": "Wednesday",
+            "timeSlot": "09:45-10:30",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 2,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "12:45-13:30",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 6,
+            "slotCount": 1
+          }
+        ],
+        "day": "Wednesday",
+        "timeSlot": "09:45-10:30",
+        "room": "R-12 Academic Block I (70)",
+        "slotNumber": 2,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS4104-AML",
+        "courseName": "CS4104-AML",
+        "section": "BCS-8A",
+        "instructor": "Minhal Raza",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Wednesday",
+            "timeSlot": "10:30-11:15",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 3,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "11:15-12:00",
+            "room": "R-12 Academic Block I (70)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "12:00-12:45",
+            "room": "Academic Block I LAB-3 (47)",
+            "slotNumber": 5,
+            "slotCount": 1
+          }
+        ],
+        "day": "Wednesday",
+        "timeSlot": "10:30-11:15",
+        "room": "R-12 Academic Block I (70)",
+        "slotNumber": 3,
+        "slotCount": 1
+      },
+      {
         "courseCode": "CS4035-CG",
         "courseName": "CS4035-CG",
         "section": "BCS-8A",
@@ -16987,14 +17141,14 @@
           {
             "day": "Wednesday",
             "timeSlot": "10:30-11:15",
-            "room": "R-11 Academic Block I (50)",
+            "room": "R-109 Academic Block I (50)",
             "slotNumber": 3,
             "slotCount": 1
           },
           {
             "day": "Wednesday",
             "timeSlot": "11:15-12:00",
-            "room": "R-11 Academic Block I (50)",
+            "room": "R-109 Academic Block I (50)",
             "slotNumber": 4,
             "slotCount": 1
           },
@@ -17008,7 +17162,42 @@
         ],
         "day": "Wednesday",
         "timeSlot": "10:30-11:15",
-        "room": "R-11 Academic Block I (50)",
+        "room": "R-109 Academic Block I (50)",
+        "slotNumber": 3,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "AI4015-AAI",
+        "courseName": "AI4015-AAI",
+        "section": "BCS-8A",
+        "instructor": "Dr. Farrukh Shahid",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Wednesday",
+            "timeSlot": "10:30-11:15",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 3,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "11:15-12:00",
+            "room": "A-1 Academic Block II (50)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "12:00-12:45",
+            "room": "E-5 Academic Block I (50)",
+            "slotNumber": 5,
+            "slotCount": 1
+          }
+        ],
+        "day": "Wednesday",
+        "timeSlot": "10:30-11:15",
+        "room": "A-1 Academic Block II (50)",
         "slotNumber": 3,
         "slotCount": 1
       }
@@ -17530,41 +17719,6 @@
         "room": "A-1 Academic Block II (50)",
         "slotNumber": 6,
         "slotCount": 1
-      },
-      {
-        "courseCode": "CS3006-PDC",
-        "courseName": "CS3006-PDC",
-        "section": "BCS-8C",
-        "instructor": "Muhammad Kashif",
-        "creditHours": 3,
-        "sessions": [
-          {
-            "day": "Wednesday",
-            "timeSlot": "09:00-09:45",
-            "room": "E-5 Academic Block I (50)",
-            "slotNumber": 1,
-            "slotCount": 1
-          },
-          {
-            "day": "Wednesday",
-            "timeSlot": "15:00-15:45",
-            "room": "R-109 Academic Block I (50)",
-            "slotNumber": 9,
-            "slotCount": 1
-          },
-          {
-            "day": "Thursday",
-            "timeSlot": "11:15-12:00",
-            "room": "R-109 Academic Block I (50)",
-            "slotNumber": 4,
-            "slotCount": 1
-          }
-        ],
-        "day": "Wednesday",
-        "timeSlot": "09:00-09:45",
-        "room": "E-5 Academic Block I (50)",
-        "slotNumber": 1,
-        "slotCount": 1
       }
     ],
     "BAI-8A": [
@@ -17585,7 +17739,7 @@
           {
             "day": "Wednesday",
             "timeSlot": "09:45-10:30",
-            "room": "R-11 Academic Block I (50)",
+            "room": "C-19 Academic Block II (50)",
             "slotNumber": 2,
             "slotCount": 1
           },
@@ -17762,7 +17916,7 @@
           {
             "day": "Wednesday",
             "timeSlot": "09:45-10:30",
-            "room": "R-12 Academic Block I (70)",
+            "room": "E-5 Academic Block I (50)",
             "slotNumber": 2,
             "slotCount": 1
           },
@@ -18106,28 +18260,28 @@
           {
             "day": "Tuesday",
             "timeSlot": "11:15-12:00",
-            "room": "R-12 Academic Block I (70)",
+            "room": "R-11 Academic Block I (50)",
             "slotNumber": 4,
             "slotCount": 1
           },
           {
             "day": "Wednesday",
             "timeSlot": "13:30-14:15",
-            "room": "R-12 Academic Block I (70)",
+            "room": "R-11 Academic Block I (50)",
             "slotNumber": 7,
             "slotCount": 1
           },
           {
             "day": "Thursday",
             "timeSlot": "09:45-10:30",
-            "room": "R-12 Academic Block I (70)",
+            "room": "R-11 Academic Block I (50)",
             "slotNumber": 2,
             "slotCount": 1
           }
         ],
         "day": "Tuesday",
         "timeSlot": "11:15-12:00",
-        "room": "R-12 Academic Block I (70)",
+        "room": "R-11 Academic Block I (50)",
         "slotNumber": 4,
         "slotCount": 1
       },
@@ -18141,14 +18295,14 @@
           {
             "day": "Wednesday",
             "timeSlot": "10:30-11:15",
-            "room": "R-109 Academic Block I (50)",
+            "room": "Academic Block I LAB-4 (46)",
             "slotNumber": 3,
             "slotCount": 1
           },
           {
             "day": "Wednesday",
             "timeSlot": "11:15-12:00",
-            "room": "R-109 Academic Block I (50)",
+            "room": "Academic Block I LAB-4 (46)",
             "slotNumber": 4,
             "slotCount": 1
           },
@@ -18162,7 +18316,7 @@
         ],
         "day": "Wednesday",
         "timeSlot": "10:30-11:15",
-        "room": "R-109 Academic Block I (50)",
+        "room": "Academic Block I LAB-4 (46)",
         "slotNumber": 3,
         "slotCount": 1
       }
@@ -18201,6 +18355,41 @@
         "timeSlot": "12:00-12:45",
         "room": "E-4 Academic Block I (50)",
         "slotNumber": 5,
+        "slotCount": 1
+      },
+      {
+        "courseCode": "CS4059-FCV",
+        "courseName": "CS4059-FCV",
+        "section": "BCS-8B",
+        "instructor": "Bilal Ahsan",
+        "creditHours": 3,
+        "sessions": [
+          {
+            "day": "Tuesday",
+            "timeSlot": "11:15-12:00",
+            "room": "R-109 Academic Block I (50)",
+            "slotNumber": 4,
+            "slotCount": 1
+          },
+          {
+            "day": "Wednesday",
+            "timeSlot": "13:30-14:15",
+            "room": "R-109 Academic Block I (50)",
+            "slotNumber": 7,
+            "slotCount": 1
+          },
+          {
+            "day": "Thursday",
+            "timeSlot": "09:45-10:30",
+            "room": "R-109 Academic Block I (50)",
+            "slotNumber": 2,
+            "slotCount": 1
+          }
+        ],
+        "day": "Tuesday",
+        "timeSlot": "11:15-12:00",
+        "room": "R-109 Academic Block I (50)",
+        "slotNumber": 4,
         "slotCount": 1
       },
       {
@@ -18546,7 +18735,7 @@
           {
             "day": "Thursday",
             "timeSlot": "09:00-09:45",
-            "room": "R-12 Academic Block I (70)",
+            "room": "A-1 Academic Block II (50)",
             "slotNumber": 1,
             "slotCount": 1
           }
@@ -18637,14 +18826,14 @@
           {
             "day": "Wednesday",
             "timeSlot": "10:30-11:15",
-            "room": "R-12 Academic Block I (70)",
+            "room": "R-11 Academic Block I (50)",
             "slotNumber": 3,
             "slotCount": 1
           },
           {
             "day": "Wednesday",
             "timeSlot": "11:15-12:00",
-            "room": "R-12 Academic Block I (70)",
+            "room": "R-11 Academic Block I (50)",
             "slotNumber": 4,
             "slotCount": 1
           },
@@ -18658,7 +18847,7 @@
         ],
         "day": "Wednesday",
         "timeSlot": "10:30-11:15",
-        "room": "R-12 Academic Block I (70)",
+        "room": "R-11 Academic Block I (50)",
         "slotNumber": 3,
         "slotCount": 1
       },
@@ -18702,7 +18891,7 @@
           {
             "day": "Wednesday",
             "timeSlot": "12:45-13:30",
-            "room": "R-12 Academic Block I (70)",
+            "room": "E-4 Academic Block I (50)",
             "slotNumber": 6,
             "slotCount": 1
           },
@@ -19772,29 +19961,6 @@
         "room": "B-11 Academic Block II (53)",
         "slotNumber": 4,
         "slotCount": 1
-      }
-    ],
-    "BSEE-6C": [
-      {
-        "courseCode": "EL2010-EMS Lab",
-        "courseName": "EL2010-EMS Lab",
-        "section": "BSEE-6C",
-        "instructor": "TBA",
-        "creditHours": 1,
-        "sessions": [
-          {
-            "day": "Tuesday",
-            "timeSlot": "11:15-13:30",
-            "room": "Academic Block II Electromechanical Systems Lab",
-            "slotNumber": 4,
-            "slotCount": 3
-          }
-        ],
-        "day": "Tuesday",
-        "timeSlot": "11:15-13:30",
-        "room": "Academic Block II Electromechanical Systems Lab",
-        "slotNumber": 4,
-        "slotCount": 3
       }
     ],
     "BSCE-2AB": [

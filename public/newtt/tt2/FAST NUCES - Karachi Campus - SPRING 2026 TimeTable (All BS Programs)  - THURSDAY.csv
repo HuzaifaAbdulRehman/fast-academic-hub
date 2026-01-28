@@ -38,7 +38,8 @@ E-4 Academic Block I (50),"MG4007-MHR BCS-8A
  Dr. Aqsa Aslam","MG4007-MHR BCS-8C
  Asma Gul","MG4011-Entrepr BSE-8A
  Zehra Mukhtiar",,
-E-5 Academic Block I (50),,"IO4041-IOT BCS-8A
+E-5 Academic Block I (50),"MG4033-DM BCS-8A
+ Umer Farooq","IO4041-IOT BCS-8A
  Dr. Aqsa Aslam","MG4033-DM BCS-8B
  Umer Farooq","MG4033-DM BCS-8B
  Umer Farooq","AI4015-AAI BCS-8A
@@ -54,29 +55,29 @@ Dr. Farrukh Shahid","MG4011-Entrepr. BCS-8B
  Sudais","CS4095-ECR BSR-8B
  Asim Mehmood",,
 R-11 Academic Block I (50),"CS4001-PPIT BAI-8A
- Bilal Ahsan","SE4008-PMD BSE-8A
- Ali Fatmi","CS3002-IS BAI-8B
+ Bilal Ahsan","CS4084-QC BCS-8A
+ Sumaiya Zahid","CS3002-IS BAI-8B
  Muhammad Usman","CS3002-IS BAI-8C
  Muhammad Usman","CS4035-CG BCS-8A
  Javeria Farooq","CS3002-IS BAI-8A
  Muhammad Usman","CS3006-PDC BCS-8B
 Muhammad Kashif","CS3006-PDC BCS-8A
 Muhammad Kashif",
-R-12 Academic Block I (70),"MG4033-DM BCS-8A
- Umer Farooq","CS4084-QC BCS-8A
- Sumaiya Zahid","CS4090-MLR BSR-8A
+R-12 Academic Block I (70),"CY2002-DF BCY-8A
+Waseem Rauf","SE4008-PMD BSE-8A
+ Ali Fatmi","CS4090-MLR BSR-8A
  Sudais","CS4090-MLR BSR-8B
  Sudais","CY4045-BLCK BCY-8A
  Nouman Rajput","EE3009-CA BCS-6A
 Dr. Zulfiqar Ali Memon","EE3009-CA BCS-6A
 Dr. Zulfiqar Ali Memon","CS3001-CN BCS-8A
 Dr. Fahad Samad",
-R-109 Academic Block I (50),,"CS4059-FCV BCS-8B
+R-109 Academic Block I (50),,"AI4002-CV BCS-8A
  Bilal Ahsan","MG4007-MHR BCS-8A
- Asma Gul",,"SE4096-DSSE BSE-8A
+ Asma Gul","CS3006-PDC BCS-8C
+Muhammad Kashif","SE4096-DSSE BSE-8A
  Dr. Muhammad Yaseen",,,,
-A-1 Academic Block II (50),"CY2002-DF BCY-8A
-Waseem Rauf","DS BCS-4B
+A-1 Academic Block II (50),,"DS BCS-4B
 Shafique Rehman","DS BCS-4B
 Shafique Rehman","CS1002-PF BCS-2B
 Dr. Nasiruddin","CS1002-PF BCS-2B
@@ -84,8 +85,8 @@ Dr. Nasiruddin","DS BCS-4A
 Shafique Rehman","MT1013-CAL BCS-2A
 Rabia Sageer","DS BCS-4A
 Shafique Rehman",
-A-2Academic Block II (50),"CS4031-CC BCS-6G
- Ghulam Murtaza","CS2012-TBW BCS-6C
+A-2Academic Block II (50),"CS3014-AHCI BCS-6A
+Ghulam Murtaza","CS2012-TBW BCS-6C
 Madiha Rehman","AI2002-AI BCS-6A
 Dr. Fahad Sherwani","CS3014-AHCI BCS-6A
 Ghulam Murtaza","EE1005-DLD BCS-2A
@@ -98,8 +99,7 @@ Alina Arshad","AI3003-ANN BAI-6A
 Saif ur Rehman",,"CS3009-SE BCS-6B
 Engr. Abdul Rahman","CS3014-AHCI BCS-6D
 Kashan Hussain","CS2012-TBW BCS-6B
-Madiha Rehman","CS3014-AHCI BCS-6A
-Ghulam Murtaza",
+Madiha Rehman",,
 A-4 Academic Block II (50),,,,,,,,,
 A-5 Academic Block II (50),"FMI BSFT-6A
 Dr. Anwar Mughees "," BRDM BSFT-6A
@@ -162,7 +162,7 @@ Dr. Mushtaq Ahmed","DAB-II BSFT-4A
  Zehra Mukhtiar ","FOM BSFT-2C
 Museara Bhutto"
 C-12 Academic Block II (50),,EE1001-LCA BSCE-2A                                                    Engr. Muhammad Ahsan Khan,EE1001-LCA BSCE-2B + BSEE-2C                                                                                  Engr. Muhammad Ahsan Khan,,EE1001-LCA BSEE-2B                                                        Engr. Muhammad Ahsan Khan,EE1001-LCA BSEE-2A                                                     Engr. Muhammad Ahsan Khan,SS1015-PST BSCE-2A                                                               Ms. Khusboo,,
-C-13 Academic Block II (50),MT1009-LADE BSEE-4ABC                                           Ms. Rabia Sagheer,MT1009-LADE BSEE-4ABC                                           Ms. Rabia Sagheer,EE2011-PRP BSEE-4C                                          Dr. Atif Saleem,EE2011-PRP BSEE-4C                                          Dr. Atif Saleem,EE2015-EMS BSEE-4A                                          Engr. Aqib Noor,EE2015-EMS BSEE-4B                                          Engr. Aqib Noor,EE2015-EMS BSEE-4B                                          Engr. Aqib Noor,EE2008-SS BSEE-4B                                          Dr. Haider Mehdi,EE2008-SS BSEE-4B                                          Dr. Haider Mehdi
+C-13 Academic Block II (50),MT1009-LADE BSEE-4ABC                                           Dr. Fahad Riaz,MT1009-LADE BSEE-4ABC                                           Dr. Fahad Riaz,EE2011-PRP BSEE-4C                                          Dr. Atif Saleem,EE2011-PRP BSEE-4C                                          Dr. Atif Saleem,EE2015-EMS BSEE-4A                                          Engr. Aqib Noor,EE2015-EMS BSEE-4B                                          Engr. Aqib Noor,EE2015-EMS BSEE-4B                                          Engr. Aqib Noor,EE2008-SS BSEE-4B                                          Dr. Haider Mehdi,EE2008-SS BSEE-4B                                          Dr. Haider Mehdi
 C-14 Academic Block II (50),MT1006-DE BSCE-2B + BSEE-2C                                                               Engr. Quratul Ain,MT1006-DE BSCE-2B + BSEE-2C                                                               Engr. Quratul Ain,CS2011-FDB BSEE-8A                                                                 Dr. Ahsan Nadeem,CS1011-Prog. for Engrs. BSEE-2B                                                                             Dr. Burhan Khan,CS1011-Prog. for Engrs. BSEE-2A                                                                             Dr. Burhan Khan,MG4011-EPS BSEE-8A                                           Engr. Asim Mehmood,,,
 C-15 Academic Block II (50),MT1006-DE BSEE-2A                                                    Dr. Ahsan Nadeem,MT1006-DE BSEE-2A                                                    Dr. Ahsan Nadeem,SS1015-PST BSEE-2B                                                    Ms. Khusboo,MT1006-DE BSCE-2A                                                               Engr. Quratul Ain,MT1006-DE BSCE-2A                                                               Engr. Quratul Ain,EE2008-SS BSEE-4A                                          Dr. Haider Mehdi,EE2008-SS BSEE-4A                                          Dr. Haider Mehdi,SS2043-CCE BSCE-2B + BSEE-2C                                                    Mr. Syed Ashad Ali,"MT1001-AC BSEE-2ABC + BSCE-2AB                                                    
 Ms. Rabia Sagheer"
@@ -181,8 +181,7 @@ Mariam Aftab","CS2012-TBW BCS-6D
 Mariam Aftab","AI2002-AI BCS-6D
 Dr. Fahad Sherwani",,,"AI2002-AI BCS-6G
 Javeria Farooq","CS3014-AHCI BCS-6G
-Jibran Rasheed Khan","CS4031-CC BCS-6G
- Ghulam Murtaza"
+Jibran Rasheed Khan",
 C-18 Academic Block II (50),,"CS3009-SE BCS-6E
 Shaheer Ahmed","CS3009-SE BCS-6E
 Shaheer Ahmed","AI2002-AI BCS-6E
@@ -194,8 +193,7 @@ Michael Simon ",
 C-19 Academic Block II (50),,"CS3014-AHCI BCS-6H
 Asif Fazwani (VF)","CS3014-AHCI BCS-6H
 Asif Fazwani (VF)",,"CS2012-TBW BCS-6F
-Mariam Aftab","CS4031-CC BCS-6F
- Zulfiqar Rafique","CS3009-SE BCS-6F
+Mariam Aftab",,"CS3009-SE BCS-6F
 Engr. Abdul Rahman","CS3014-AHCI BCS-6F
 Kashan Hussain",
 C-21 Academic Block II (50),,"CY3005-NS BCY-6A
@@ -208,20 +206,16 @@ Sobia Iftikhar",,
 D-22 Academic Block II (50),"AI2002-AI BCY-6B
 Sandesh Kumar","CY4001-SSD BCY-6B
 Ali Naseer Shah","WB BSFT-6A
-Sindhu ","CS4031-CC BCS-6H
- Muhammad Kashif","CS3009-SE BCS-6H
+Sindhu ",,"CS3009-SE BCS-6H
 Ahmed Qaiser (VF)","CS3009-SE BCS-6H
 Ahmed Qaiser (VF)","AI2002-AI BCY-6B
 Sandesh Kumar","AI2002-AI BCS-6H
 Dr. Fahad Sherwani",
 D-23 Academic Block II (50),,"MT1008-MVC BSE-2A
 Jamil Usmani","EE1005-DLD BSE-2A
-Hira Tunio","CS4031-CC BCS-6J
- Zulfiqar Rafique","CS3014-AHCI BCS-6J
+Hira Tunio",,"CS3014-AHCI BCS-6J
 Asif Fazwani (VF)","CS3009-SE BCS-6J
-Hajra Ahmed","CS4031-CC BCS-6E
- Shahar Bano","CS4031-CC BCS-6J
- Zulfiqar Rafique",
+Hajra Ahmed",,,
 D-24 Academic Block II (50),"CS1004-OOP BCS-2A
 Aashir Mahboob","EE1005-DLD BCS-2J
 Javed Queshi","SS1014-EW BCS-2A
@@ -271,8 +265,7 @@ Asma Masood",,"SS1015-PST BCS-2K
 Dr. Shahnawaz Khan","SS1015-PST BCS-2K
 Dr. Shahnawaz Khan"
 E-30 Academic Block II (52),,,,"CS1004-OOP BSE-2A
-Basit Jasani","SS1014-EW BAI-2A
-Qurat ul Ain","MT1008-MVC BCS-2F
+Basit Jasani",,"MT1008-MVC BCS-2F
 Dr. Shahid Ashraf","SS1015-PST BCS-2F
 Muhammad Adeel","MT1008-MVC BCS-2J
 Urooj","SS1019-UOS BCS-2J

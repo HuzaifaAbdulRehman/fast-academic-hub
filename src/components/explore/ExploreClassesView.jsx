@@ -166,7 +166,9 @@ export default function ExploreClassesView() {
       // Auto-sync: Check if timetable has been updated
       if (data.lastUpdated && isTimetableUpdated(data.lastUpdated)) {
         // New version detected - clear all caches automatically
-        console.log('🔄 New timetable version detected, clearing caches...');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔄 New timetable version detected, clearing caches...');
+        }
         clearTimetableCache();
         await clearServiceWorkerCache();
         
@@ -1171,7 +1173,6 @@ export default function ExploreClassesView() {
       {/* Toast Notifications */}
       {toast && (
         <Toast
-          key={`${toast.message}-${Date.now()}`}
           message={toast.message}
           type={toast.type}
           action={toast.action}

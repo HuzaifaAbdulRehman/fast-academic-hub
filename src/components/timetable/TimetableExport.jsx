@@ -319,13 +319,13 @@ export default function TimetableExport({
       <div ref={exportRef} className="fixed -left-[9999px] top-0">
         <div
           style={{
-            width: "1080px", // Standard mobile width (1080px for high-res displays)
-            maxWidth: "1080px",
+            width: "900px", // Optimized mobile width for better fit
+            maxWidth: "900px",
             backgroundColor: "#0f172a",
             color: "#f1f5f9",
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-            padding: "48px",
+            padding: "40px",
             boxSizing: "border-box",
           }}
         >

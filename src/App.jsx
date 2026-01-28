@@ -9,13 +9,14 @@ import TimetableView from './components/timetable/TimetableView'
 import AttendanceView from './components/attendance/AttendanceView'
 import GPAView from './components/gpa/GPAView'
 import InstallPrompt from './components/shared/InstallPrompt'
-import NotificationPrompt from './components/shared/NotificationPrompt'
 import BackToTop from './components/shared/BackToTop'
 import ErrorBoundary from './components/shared/ErrorBoundary'
+import Toast from './components/shared/Toast'
 import { clearAllCaches } from './utils/cacheManager'
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState('courses')
+  const [toast, setToast] = useState(null)
 
   // Global keyboard shortcut: Ctrl+Shift+R to clear all caches
   useEffect(() => {
@@ -24,9 +25,16 @@ function AppContent() {
         e.preventDefault()
         const success = clearAllCaches()
         if (success) {
-          alert('Cache cleared successfully!\n\nReload the page (Ctrl+R or F5) to fetch fresh timetable data.')
+          setToast({
+            message: 'Cache cleared successfully! Reload the page (Ctrl+R or F5) to fetch fresh timetable data.',
+            type: 'success',
+            duration: 5000
+          })
         } else {
-          alert('Failed to clear caches. Please try again.')
+          setToast({
+            message: 'Failed to clear caches. Please try again.',
+            type: 'error'
+          })
         }
       }
     }
@@ -60,8 +68,17 @@ function AppContent() {
 
       {/* Install and notification prompts */}
       <InstallPrompt />
-      <NotificationPrompt />
       <BackToTop />
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+          duration={toast.duration || 3000}
+        />
+      )}
     </div>
   )
 }

@@ -301,7 +301,9 @@ export default function TimetableSelector({ onCoursesSelected, onClose, showManu
       // Auto-sync: Check if timetable has been updated
       if (data.lastUpdated && isTimetableUpdated(data.lastUpdated)) {
         // New version detected - clear all caches automatically
-        console.log('🔄 New timetable version detected, clearing caches...')
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔄 New timetable version detected, clearing caches...')
+        }
         clearTimetableCache()
         await clearServiceWorkerCache()
         

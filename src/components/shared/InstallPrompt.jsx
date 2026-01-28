@@ -76,12 +76,12 @@ export default function InstallPrompt() {
 
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-content-primary mb-1">
-              Install Absence Tracker
+              Install FAST Academic Hub
             </h3>
             <p className="text-xs text-content-secondary mb-3">
               {isIOS
-                ? 'Tap the Share button, then "Add to Home Screen" to install this app.'
-                : 'Install this app for quick access and offline use.'}
+                ? 'Tap the Share button, then "Add to Home Screen" to install FAST Academic Hub.'
+                : 'Install FAST Academic Hub for quick access and offline use.'}
             </p>
 
             {!isIOS && deferredPrompt && (

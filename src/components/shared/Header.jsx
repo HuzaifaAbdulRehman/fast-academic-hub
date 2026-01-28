@@ -69,8 +69,8 @@ export default function Header() {
                   setShowSettings(true)
                 }}
                 className="p-2.5 sm:p-2.5 md:p-3 lg:p-3.5 rounded-lg bg-dark-surface-raised/50 hover:bg-dark-surface-raised border border-dark-border/30 transition-all text-content-secondary hover:text-accent active:scale-95"
-                title="Notification settings"
-                aria-label="Notification settings"
+                title="Settings"
+                aria-label="Settings"
               >
                 <Settings className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
               </button>

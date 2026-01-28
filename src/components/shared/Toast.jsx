@@ -11,7 +11,7 @@ export default function Toast({ message, type = 'success', onClose, action = nul
     }, autoDismissDuration)
 
     return () => clearTimeout(timer)
-  }, [duration, onClose, action])
+  }, [duration, onClose, action, message, type])
 
   const icons = {
     success: <CheckCircle2 className="w-5 h-5 text-attendance-safe" />,
@@ -28,9 +28,10 @@ export default function Toast({ message, type = 'success', onClose, action = nul
   }
 
   return (
-    <div className="fixed bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-50 animate-slide-up px-4 w-full max-w-md">
+    <div className="fixed bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-50 px-4 w-full max-w-md">
       <div
         className={`
+          animate-slide-up
           ${bgColors[type]}
           backdrop-blur-xl rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3
           shadow-glass-lg flex items-center gap-2 sm:gap-3 w-full

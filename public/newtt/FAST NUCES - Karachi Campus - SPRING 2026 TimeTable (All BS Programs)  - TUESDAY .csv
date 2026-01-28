@@ -50,25 +50,25 @@ Shoaib Raza",
 R-11 Academic Block I (50),"SE 4001-SRE BSE-8A
  Maqsood Khatoon","SE 4001-SRE BSE-8A
  Maqsood Khatoon","AI2002-AI BCS-6F
-Usama Antuley","SE4008-PMD BSE-8A
- Ali Fatmi","CS1004-OOP BCS-2K
+Usama Antuley","CS4084-QC BCS-8A
+ Sumaiya Zahid","CS1004-OOP BCS-2K
 Sumaiya Zahid","MG3035-IB BCS-8C
  Musera Bhutto",,,
 R-12 Academic Block I (70),,"CS4090-MLR BSR-8A
  Sudais","CS4090-MLR BSR-8B
- Sudais","CS4084-QC BCS-8A
- Sumaiya Zahid","CS3001-CN BCS-8A
+ Sudais","SE4008-PMD BSE-8A
+ Ali Fatmi","CS3001-CN BCS-8A
 Dr. Fahad Samad","CS3001-CN BCS-8A
-Dr. Fahad Samad",,,"CS2012-TBW BCS-6B
+Dr. Fahad Samad",,"EE3009-CA BCS-6A
+Dr. Zulfiqar Ali Memon","CS2012-TBW BCS-6B
 Madiha Rehman"
 R-109 Academic Block I (50),"CS3009-SE BCS-6C
 Hajra Ahmed",,"SS1002-IST BSE-6A
-Dr. Hassan Saeed","CS4059-FCV BCS-8B
+Dr. Hassan Saeed","AI4002-CV BCS-8A
  Bilal Ahsan","CS4031-CC BCS-6B
  Zulfiqar Rafique","MG4007-MHR BCS-8C
  Asma Gul",,,
-A-1 Academic Block II (50),"CS4031-CC BCS-6J
- Zulfiqar Rafique","CS4048-Data Sci. BCS-6B  (F,G,H,J)
+A-1 Academic Block II (50),,"CS4048-Data Sci. BCS-6B  (F,G,H,J)
 Dr. Rabia Tabassum","CS3006-PDC BCS-8A
 Muhammad Kashif","CS3001-CN BSE-6A
 Hira Tunio","CS3009-SE BCS-6C
@@ -108,8 +108,7 @@ Nazia Imam",,"CS4031-CC BCS-6A
  Shahar Bano","CS3009-SE BCS-6G
 Sobia Iftikhar","CS3009-SE BCS-6A
 Sobia Iftikhar","AI2002-AI BCS-4G
-Anaum Hamid","CS3014-AHCI BCS-6A
-Ghulam Murtaza","EE1005-DLD BCS-2G
+Anaum Hamid",,"EE1005-DLD BCS-2G
 Dr. Muhammad Adeel (VF)","EE1005-DLD BCS-2G
 Dr. Muhammad Adeel (VF)"
 A-7 Academic Block II (50),"CY4001-SSD BCY-6A
@@ -179,8 +178,7 @@ Nadeem Arif Khan","MT2005-Prob BCS-4J
 Dr. Khusro Mian","AI2002-AI BCS-4D
 Abeeha Sattar","SS1015-PST BCS-4D
 Afshan Hakim (VF)","CS2006-OS BCS-4F
-Rabia Ahmed Ansari","CS4031-CC BCS-6F
- Zulfiqar Rafique"
+Rabia Ahmed Ansari",
 C-18 Academic Block II (50),"CS3004-SDA BCS-4H
 Jibran Rasheed Khan","SS1015-PST BSE-4A
 Fatheia Khan (VF)","SS1015-PST BSE-4B
@@ -297,10 +295,11 @@ E-32 Academic Block II (52),"CS1004-OOP BCY-2A
 Abeer Gauher","MT1008-MVC BCY-2A
 Aneesa Nawaz","SS1015-PST BSE-2A
 Wajiha Najam (VF)","CS1004-OOP BSE-2A
-Basit Jasani",Reserved for Ms Urooj,"MT1008-MVC BCS-2H
+Basit Jasani",,"MT1008-MVC BCS-2H
 Urooj",,"EE1005-DLD BCS-2B
 Dr. Nouman Durrani",
-E-33 Academic Block II (52),,"MT1008-MVC BAI-2A
+E-33 Academic Block II (52),"SS1014-EW BAI-2A
+Qurat ul Ain","MT1008-MVC BAI-2A
 Moheez Ur Rahim","SS1015-PST BAI-2A
 Jahan Ara (VF)",,"EE1005-DLD BAI-2A
 Miqdad Khan","EE1005-DLD BAI-2A
@@ -379,6 +378,6 @@ Ishtiaq Ahmed",,,"EL1005-DLD Lab BCY-2B
 Saqib Shah",,,,,
 Academic Block II Electronics Lab,,,,,,,,,
 Academic Block II Engineering Workshop Lab,,,,,,,,,
-Academic Block II Electromechanical Systems Lab,EL2015-EMS Lab BSEE-4A                                                                                                                                                                                                    Engr. Aqib Noor,,,EL2010-EMS Lab BSEE-4C                                                                                                                                                                                                    Engr. Aamir Ali,,,EL2015-EMS Lab BSEE-4B                                                                                                                                                                                                    Engr. Aqib Noor,,
+Academic Block II Electromechanical Systems Lab,EL2015-EMS Lab BSEE-4A                                                                                                                                                                                                    Engr. Aqib Noor,,,EL2010-EMS Lab BSEE-6C                                                                                                                                                                                                    Engr. Aamir Ali,,,EL2015-EMS Lab BSEE-4B                                                                                                                                                                                                    Engr. Aqib Noor,,
 Academic Block II Power Lab,,,,,,,,,
 Academic Block II Physics Lab,,,,,,,,,
